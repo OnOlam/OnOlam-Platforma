@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Kod yozishni o'rgan. Hacker bo'l.</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+.hero{min-height:calc(100dvh - var(--nav-h));display:flex;align-items:center;position:relative;overflow:hidden;padding:80px 0;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.5;pointer-events:none;}
+.hero-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,65,.06) 0%,transparent 70%);pointer-events:none;animation:breathe 4s ease-in-out infinite;}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.7}50%{transform:translate(-50%,-50%) scale(1.1);opacity:1}}
+.hero .container{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--neon);background:var(--neon-faint);border:1px solid rgba(0,255,65,.2);padding:5px 14px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px;width:fit-content;}
+.hero-badge .dot{width:6px;height:6px;background:var(--neon);border-radius:50%;animation:neonPulse 2s ease infinite;box-shadow:0 0 6px var(--neon);}
+.hero-title{font-size:clamp(30px,5vw,54px);font-weight:800;line-height:1.05;letter-spacing:-.04em;margin-bottom:20px;}
+.hero-title .ln{color:var(--neon);text-shadow:0 0 30px rgba(0,255,65,.4);}
+.hero-title .ld{color:var(--text-2);}
+.hero-desc{font-size:15px;color:var(--text-2);line-height:1.75;max-width:440px;margin-bottom:36px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.hero-stat .num{font-size:22px;font-weight:800;color:var(--neon);}
+.hero-stat .lbl{font-size:11px;color:var(--text-3);margin-top:2px;}
+.hero-terminal{position:relative;}
+.hero-terminal .terminal{box-shadow:0 0 0 1px var(--border),0 40px 80px rgba(0,0,0,.7),0 0 60px rgba(0,255,65,.05);}
+.t-line{margin-bottom:2px;}.t-comment{color:var(--text-4);}.t-cmd{color:var(--text-1);}.t-cmd .tp{color:var(--neon);margin-right:8px;}.t-out{color:var(--text-2);padding-left:16px;}.t-ok{color:var(--neon);}.t-warn{color:var(--yellow);}.t-blank{height:8px;}
+.term-badge{position:absolute;bottom:-16px;right:-16px;background:var(--surface-2);border:1px solid var(--border-2);border-radius:var(--r-lg);padding:12px 16px;font-size:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.term-badge .tbn{font-size:20px;font-weight:800;color:var(--neon);}.term-badge .tbl{font-size:10px;color:var(--text-3);margin-top:1px;}
+.section{padding:96px 0;}.section-sm{padding:64px 0;}
+.section-head{margin-bottom:48px;}.section-head h2{margin-bottom:10px;}.section-head p{max-width:500px;}
+.sep{border-top:1px solid var(--border);}
+.courses-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.course-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;cursor:pointer;transition:var(--t-md);position:relative;overflow:hidden;}
+.course-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--neon),transparent);opacity:0;transition:var(--t-md);}
+.course-card:hover{border-color:rgba(0,255,65,.2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4);}
+.course-card:hover::after{opacity:1;}
+.course-icon{width:44px;height:44px;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;border:1px solid var(--border);background:var(--void-3);}
+.course-card h4{margin-bottom:6px;}.course-card .cdesc{font-size:12px;color:var(--text-3);margin-bottom:14px;}
+.course-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text-3);}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;}
+.feat{background:var(--void-2);padding:32px 28px;transition:var(--t-md);}.feat:hover{background:var(--surface);}
+.feat-icon{font-size:28px;margin-bottom:16px;}.feat h3{font-size:16px;margin-bottom:8px;}.feat p{font-size:13px;color:var(--text-3);line-height:1.65;}
+.pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:780px;margin:0 auto;}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:32px;transition:var(--t-md);}
+.price-card.pro{border-color:rgba(0,255,65,.3);background:linear-gradient(145deg,var(--surface),rgba(0,255,65,.03));box-shadow:0 0 40px rgba(0,255,65,.05);}
+.price-tier{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;}
+.price-card.pro .price-tier{color:var(--neon);}
+.price-num{font-size:42px;font-weight:800;line-height:1;margin-bottom:6px;letter-spacing:-.04em;}
+.price-num span{font-size:18px;color:var(--text-3);font-weight:400;}
+.price-desc{font-size:12px;color:var(--text-3);margin-bottom:24px;}
+.price-features{margin-bottom:28px;display:flex;flex-direction:column;gap:10px;}
+.pf-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-2);}
+.pf-icon{color:var(--neon);flex-shrink:0;margin-top:1px;}.pf-icon.x{color:var(--text-4);}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.testi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;}
+.testi-stars{color:var(--neon);font-size:12px;margin-bottom:12px;letter-spacing:2px;}
+.testi-text{font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:16px;}
+.testi-user{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:36px;height:36px;border-radius:var(--r-md);background:var(--surface-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.testi-user h5{font-size:13px;margin-bottom:1px;}.testi-user p{font-size:11px;color:var(--text-3);}
+.cta-section{padding:96px 0;text-align:center;position:relative;overflow:hidden;}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:300px;background:radial-gradient(ellipse,rgba(0,255,65,.05),transparent 70%);pointer-events:none;}
+.cta-section h2{margin-bottom:16px;}.cta-section p{max-width:440px;margin:0 auto 32px;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+@media(max-width:1024px){.courses-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:768px){
+  .hero .container{grid-template-columns:1fr;gap:40px;}.hero{padding:48px 0 64px;min-height:auto;}
+  .hero-orb{width:300px;height:300px;}.hero-desc{max-width:100%;}.hero-stats{gap:20px;}
+  .features-grid{grid-template-columns:1fr;}.pricing-grid{grid-template-columns:1fr;max-width:100%;}
+  .testi-grid{grid-template-columns:1fr;}.section{padding:56px 0;}.term-badge{display:none;}
+}
+@media(max-width:480px){.courses-grid{grid-template-columns:1fr;}.hero-btns,.cta-btns{flex-direction:column;align-items:stretch;}.hero-btns .btn,.cta-btns .btn{width:100%;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo">
+      <div class="logo-icon">⚡</div>On<span>Olam</span>
+    </a>
+    <div class="navbar-center">
+      <a href="#courses"  class="nav-link">Kurslar</a>
+      <a href="#pricing"  class="nav-link">Tariflar</a>
+      <a href="#features" class="nav-link">Imkoniyatlar</a>
+    </div>
+    <div class="navbar-right">
+      <a href="login.html">   <button class="btn btn-ghost btn-sm">Kirish</button></a>
+      <a href="register.html"><button class="btn btn-neon  btn-sm">Boshlash →</button></a>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <a href="#courses"  class="drawer-link"><span class="di">📚</span> Kurslar</a>
+    <a href="#features" class="drawer-link"><span class="di">⚡</span> Imkoniyatlar</a>
+    <a href="#pricing"  class="drawer-link"><span class="di">💳</span> Tariflar</a>
+    <div class="drawer-sep"></div>
+    <div class="drawer-actions">
+      <a href="login.html">   <button class="btn btn-ghost btn-full">Kirish</button></a>
+      <a href="register.html"><button class="btn btn-neon  btn-full">Bepul boshlash →</button></a>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="container">
+    <div>
+      <div class="hero-badge anim-up"><span class="dot"></span>Dasturlash + Kiberxavfsizlik</div>
+      <h1 class="hero-title anim-up anim-d1">
+        <span class="ln">Kod yoz.</span><br>
+        <span>Tizimni buz.</span><br>
+        <span class="ld">Hacker bo'l.</span>
+      </h1>
+      <p class="hero-desc anim-up anim-d2">HTML, CSS, JS, Python, SQL, Linux, Termux — barchasini amaliy loyihalar orqali o'rgan. Bepul. Terminal bilan. Sertifikat bilan.</p>
+      <div class="hero-btns anim-up anim-d3">
+        <a href="register.html"><button class="btn btn-neon btn-lg">Bepul boshlash &nbsp;→</button></a>
+        <a href="#courses">    <button class="btn btn-outline btn-lg">Kurslarga qarang</button></a>
+      </div>
+      <div class="hero-stats anim-up anim-d4">
+        <div class="hero-stat"><div class="num">30K+</div><div class="lbl">Foydalanuvchi</div></div>
+        <div class="hero-stat"><div class="num">8</div><div class="lbl">Dasturlash tili</div></div>
+        <div class="hero-stat"><div class="num">100%</div><div class="lbl">Amaliy darslar</div></div>
+      </div>
+    </div>
+    <div class="hero-terminal anim-up anim-d2">
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="terminal-dots"><span></span><span></span><span></span></div>
+          <span class="terminal-title">onolam@terminal ~ bash</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line t-comment"># OnOlam dasturlash platformasi</div>
+          <div class="t-blank"></div>
+          <div class="t-line t-cmd"><span class="tp">$</span>onolam --start</div>
+          <div class="t-line t-ok">✔ Platforma ishga tushdi</div>
+          <div class="t-blank"></div>
+          <div class="t-line t-cmd"><span class="tp">$</span>kurs --list</div>
+          <div class="t-line t-out">→ HTML      [████████░░] 80%</div>
+          <div class="t-line t-out">→ CSS       [██████░░░░] 60%</div>
+          <div class="t-line t-out">→ Python    [████░░░░░░] 40%</div>
+          <div class="t-line t-out">→ Linux     [██░░░░░░░░] 20%</div>
+          <div class="t-line t-out">→ Termux    [█░░░░░░░░░] 10%</div>
+          <div class="t-blank"></div>
+          <div class="t-line t-cmd"><span class="tp">$</span>sertifikat --olish<span class="cursor"></span></div>
+          <div class="t-line t-warn">⚠ Pro tarifga o'ting</div>
+        </div>
+      </div>
+      <div class="term-badge"><div class="tbn">⭐ 4.9</div><div class="tbl">Reyting</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- COURSES -->
+<section class="section" id="courses">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Kurslar</div>
+      <h2>8 ta dasturlash yo'nalishi</h2>
+      <p>Frontend, backend, terminal, Linux — hammasi bir platformada.</p>
+    </div>
+    <div class="courses-grid">
+      <a href="course-detail.html"><div class="course-card anim-up anim-d1"><div class="course-icon">🌐</div><h4>HTML</h4><p class="cdesc">Veb sahifalar tuzilishi. Teglar, formalar, semantika.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-free">Bepul</span></div></div></a>
+      <a href="course-detail.html"><div class="course-card anim-up anim-d2"><div class="course-icon">🎨</div><h4>CSS</h4><p class="cdesc">Stil, animatsiya, Flexbox, Grid, Responsive dizayn.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-free">Bepul</span></div></div></a>
+      <a href="course-detail.html"><div class="course-card anim-up anim-d3"><div class="course-icon">⚡</div><h4>JavaScript</h4><p class="cdesc">Dinamik veb, DOM, funksiyalar, async/await.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-free">Bepul</span></div></div></a>
+      <a href="course-detail.html"><div class="course-card anim-up anim-d4"><div class="course-icon">🐍</div><h4>Python</h4><p class="cdesc">Backend, avtomatlashtirish, ma'lumot tahlili.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-free">Bepul</span></div></div></a>
+      <a href="course-detail.html"><div class="course-card anim-up anim-d1"><div class="course-icon">🗄️</div><h4>SQL</h4><p class="cdesc">Ma'lumotlar bazasi, so'rovlar, JOIN, indekslar.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-free">Bepul</span></div></div></a>
+      <a href="course-detail.html"><div class="course-card anim-up anim-d2"><div class="course-icon">📱</div><h4>Termux</h4><p class="cdesc">Android terminalda Linux ishlating. Hacking asoslari.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-pro">Pro</span></div></div></a>
+      <a href="course-detail.html"><div class="course-card anim-up anim-d3"><div class="course-icon">🐧</div><h4>Linux</h4><p class="cdesc">Terminal buyruqlari, fayllar, skriptlar, server.</p><div class="course-meta"><span>5 dars</span><span class="badge badge-pro">Pro</span></div></div></a>
+      <div class="course-card anim-up anim-d4" style="border-style:dashed;opacity:.4;cursor:default;"><div class="course-icon" style="opacity:.5">🔒</div><h4>Kiberxavfsizlik</h4><p class="cdesc">Tez kunda. Ethical hacking, CTF, penetration testing.</p><div class="course-meta"><span>—</span><span class="badge badge-new">Breve</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Imkoniyatlar</div>
+      <h2>Nega OnOlam?</h2>
+      <p>Faqat text emas — real amaliyot, terminal, va community.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat"><div class="feat-icon">💻</div><h3>Brauzer terminali</h3><p>Hech narsa yuklamasdan brauzer ichida kod yozing va ishga tushiring. Pro uchun to'liq Linux muhiti.</p></div>
+      <div class="feat"><div class="feat-icon">🤖</div><h3>AI yordamchi</h3><p>Har bir darsda AI chat — savol bering, xatoni tushuntiring, kod review oling. Pro uchun cheksiz.</p></div>
+      <div class="feat"><div class="feat-icon">📹</div><h3>Video darslar</h3><p>Matn + video format. Ko'rish, o'qish, bajarish — uchtalasi birga. Pro foydalanuvchilar uchun.</p></div>
+      <div class="feat"><div class="feat-icon">🏆</div><h3>Sertifikatlar</h3><p>Kursni tugatgandan keyin rasmiy sertifikat oling. LinkedIn profilingizga qo'shing.</p></div>
+      <div class="feat"><div class="feat-icon">👥</div><h3>Pro Hamjamiyat</h3><p>Loyihalaringizni pro foydalanuvchilar bilan ulashing. Kod review, muhokama, qo'llab-quvvatlash.</p></div>
+      <div class="feat"><div class="feat-icon">📱</div><h3>Har qurilmada</h3><p>Kompyuter, telefon, planshet — istalgan qurilmadan o'rganing. Progress saqlanadi.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-head" style="text-align:center;margin-left:auto;margin-right:auto;max-width:500px;">
+      <div class="eyebrow" style="justify-content:center;">Tariflar</div>
+      <h2>Bepul boshlang, Pro bilan kengaying</h2>
+      <p>Barcha matn darslar bepul. Terminal, video va sertifikat — Pro bilan.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Free</div>
+        <div class="price-num">$0 <span>/ oy</span></div>
+        <div class="price-desc">Ro'yxatdan o'tganingizdan keyin darhol boshlang</div>
+        <div class="price-features">
+          <div class="pf-item"><span class="pf-icon">✔</span> Barcha matn darslar</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> 8 ta kurs yo'nalishi</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Brauzer kodi editoru</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Progress kuzatuvi</div>
+          <div class="pf-item"><span class="pf-icon x">✗</span><span style="color:var(--text-4)">Video darslar</span></div>
+          <div class="pf-item"><span class="pf-icon x">✗</span><span style="color:var(--text-4)">Terminal</span></div>
+          <div class="pf-item"><span class="pf-icon x">✗</span><span style="color:var(--text-4)">Sertifikat</span></div>
+          <div class="pf-item"><span class="pf-icon x">✗</span><span style="color:var(--text-4)">Pro Hamjamiyat</span></div>
+        </div>
+        <a href="register.html"><button class="btn btn-outline btn-full">Bepul boshlash</button></a>
+      </div>
+      <div class="price-card pro">
+        <div class="price-tier">Pro</div>
+        <div class="price-num">$9 <span>/ oy</span></div>
+        <div class="price-desc">Barcha imkoniyatlar — terminal, video, sertifikat</div>
+        <div class="price-features">
+          <div class="pf-item"><span class="pf-icon">✔</span> Barcha Free imkoniyatlar</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Video darslar</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> To'liq Linux terminali</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Rasmiy sertifikatlar</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> AI Chat (cheksiz)</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Pro Hamjamiyat</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Loyiha ulashish</div>
+          <div class="pf-item"><span class="pf-icon">✔</span> Ustoz bilan bog'lanish</div>
+        </div>
+        <a href="register.html"><button class="btn btn-neon btn-full">Pro boshlash →</button></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">Fikrlar</div>
+      <h2>Foydalanuvchilar nima deydi</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"OnOlam orqali HTML va CSS ni 2 haftada o'rgandim. Terminal rejimi juda qiziqarli."</p><div class="testi-user"><div class="testi-avatar">👨‍💻</div><div><h5>Sardor T.</h5><p>Frontend Developer</p></div></div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"Pro tarifga o'tganimdan keyin Termux va Linux kurslarini tamomlashdim. Sertifikat LinkedIn da ajoyib ko'rindi."</p><div class="testi-user"><div class="testi-avatar">🧑‍💻</div><div><h5>Aziz K.</h5><p>Linux Admin</p></div></div></div>
+      <div class="testi"><div class="testi-stars">★★★★★</div><p class="testi-text">"AI chat juda foydali. Har bir savolimga darhol javob berdi. Python kursini 3 haftada tamomlashdim."</p><div class="testi-user"><div class="testi-avatar">👩‍💻</div><div><h5>Malika B.</h5><p>Python Developer</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="eyebrow" style="justify-content:center;margin-bottom:16px;">Hoziroq boshlang</div>
+    <h2>Kod yozishni bugun o'rgan</h2>
+    <p>30,000+ foydalanuvchi allaqachon boshlagan. Navbat sizda.</p>
+    <div class="cta-btns">
+      <a href="register.html"><button class="btn btn-neon btn-lg">Bepul ro'yxatdan o'tish →</button></a>
+      <a href="#courses">    <button class="btn btn-outline btn-lg">Kurslarga qarang</button></a>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-copy">© 2026 <span>OnOlam</span>. Barcha huquqlar himoyalangan.</div>
+        <div style="margin-top:4px;font-size:11px;color:var(--text-4)">Kod yozishni o'rgan. Hacker bo'l.</div>
+      </div>
+      <div class="footer-links">
+        <a href="#">Haqimizda</a><a href="#courses">Kurslar</a>
+        <a href="#pricing">Tariflar</a><a href="#">Yordam</a><a href="#">Telegram</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/burger.js"></script>
+</body>
+</html>

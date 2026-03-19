@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Dars: Formalar va inputlar</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+/* ── LESSON PAGE — full layout ── */
+body{overflow:hidden;}
+@media(max-width:768px){body{overflow:auto;}}
+
+/* Top bar */
+.lesson-topbar{height:var(--nav-h);background:var(--void-2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;flex-shrink:0;}
+.ltb-back{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);cursor:pointer;transition:var(--t);padding:6px 10px;border-radius:var(--r-md);border:1px solid transparent;}
+.ltb-back:hover{color:var(--text-1);border-color:var(--border);background:var(--surface);}
+.ltb-divider{width:1px;height:20px;background:var(--border);}
+.ltb-course{font-size:12px;color:var(--text-3);}
+.ltb-lesson{font-size:13px;font-weight:700;color:var(--text-1);}
+.ltb-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.ltb-prog{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-3);}
+.ltb-prog-bar{width:100px;height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;}
+.ltb-prog-bar div{height:100%;background:linear-gradient(90deg,var(--neon-dim),var(--neon));}
+
+/* Main lesson layout */
+.lesson-wrap{display:flex;height:calc(100dvh - var(--nav-h));overflow:hidden;}
+
+/* ── LEFT: nav panel ── */
+.lesson-nav{width:260px;flex-shrink:0;border-right:1px solid var(--border);background:var(--void-2);display:flex;flex-direction:column;overflow-y:auto;}
+.ln-header{padding:16px;border-bottom:1px solid var(--border);}
+.ln-header h4{font-size:12px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.ln-header .progress{margin-bottom:4px;}
+.ln-header .pct{font-size:11px;color:var(--neon);}
+.ln-list{padding:8px;}
+.ln-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-md);cursor:pointer;transition:var(--t);margin-bottom:2px;border:1px solid transparent;}
+.ln-item:hover{background:var(--surface);border-color:var(--border);}
+.ln-item.active{background:var(--neon-faint);border-color:rgba(0,255,65,.15);}
+.ln-item .li-num{font-size:10px;color:var(--text-4);width:16px;flex-shrink:0;}
+.ln-item .li-icon{font-size:14px;flex-shrink:0;}
+.ln-item .li-title{font-size:12px;color:var(--text-2);flex:1;line-height:1.3;}
+.ln-item.active .li-title{color:var(--neon);font-weight:600;}
+.ln-item .li-done{font-size:12px;flex-shrink:0;}
+
+/* ── CENTER: content area ── */
+.lesson-center{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+
+/* Mode tabs */
+.mode-tabs{display:flex;align-items:center;gap:4px;padding:8px 16px;background:var(--void-3);border-bottom:1px solid var(--border);flex-shrink:0;}
+.mtab{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-3);padding:7px 14px;border-radius:var(--r-md);cursor:pointer;transition:var(--t);background:transparent;border:1px solid transparent;font-family:var(--font);}
+.mtab:hover{color:var(--text-1);background:var(--surface);}
+.mtab.active{color:var(--neon);background:var(--neon-faint);border-color:rgba(0,255,65,.15);}
+.mtab .pro-lock{font-size:10px;opacity:.6;}
+
+/* Content panels */
+.lesson-panels{flex:1;overflow:hidden;position:relative;}
+.lesson-panel{position:absolute;inset:0;overflow-y:auto;display:none;}
+.lesson-panel.active{display:block;}
+
+/* TEXT panel */
+.text-panel{padding:32px 40px;}
+.text-panel h2{font-size:20px;font-weight:800;margin-bottom:6px;}
+.text-panel .lesson-meta{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.text-panel .lesson-meta span{font-size:11px;color:var(--text-3);}
+.text-panel .lesson-meta .chip{font-size:10px;}
+.lesson-section{margin-bottom:28px;}
+.lesson-section h3{font-size:16px;font-weight:700;color:var(--neon);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.lesson-section h3::before{content:'';width:3px;height:18px;background:var(--neon);border-radius:2px;flex-shrink:0;}
+.lesson-section p{font-size:14px;color:var(--text-2);line-height:1.8;margin-bottom:12px;}
+.lesson-section ul{display:flex;flex-direction:column;gap:8px;margin-left:0;}
+.lesson-section ul li{font-size:14px;color:var(--text-2);line-height:1.7;padding-left:20px;position:relative;}
+.lesson-section ul li::before{content:'→';color:var(--neon);position:absolute;left:0;font-size:12px;}
+
+/* Code example in text */
+.code-example{background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin:16px 0;}
+.ce-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--void-3);border-bottom:1px solid var(--border);}
+.ce-header span{font-size:11px;color:var(--text-3);}
+.ce-copy{font-size:11px;color:var(--neon);cursor:pointer;background:transparent;border:none;font-family:var(--font);transition:var(--t);}
+.ce-copy:hover{color:#1aff55;}
+.ce-body{padding:16px 20px;overflow-x:auto;}
+.ce-body pre{font-size:13px;line-height:1.8;color:var(--neon);white-space:pre;}
+.ce-body .tag{color:#79c0ff;}.ce-body .attr{color:#ffab70;}.ce-body .val{color:#a5d6ff;}.ce-body .cmt{color:var(--text-4);}
+
+/* Info box */
+.info-box{display:flex;gap:12px;padding:14px 18px;border-radius:var(--r-lg);margin:16px 0;}
+.info-box.note{background:rgba(0,180,255,.06);border:1px solid rgba(0,180,255,.2);}
+.info-box.warn{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);}
+.info-box.tip {background:var(--neon-faint);border:1px solid rgba(0,255,65,.2);}
+.info-box .ib-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.info-box .ib-text{font-size:13px;color:var(--text-2);line-height:1.7;}
+.info-box .ib-text strong{color:var(--text-1);}
+
+/* Quiz */
+.quiz-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;margin:24px 0;}
+.quiz-block h4{font-size:14px;font-weight:700;margin-bottom:16px;}
+.quiz-options{display:flex;flex-direction:column;gap:8px;}
+.qopt{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--void-3);cursor:pointer;transition:var(--t);font-size:13px;color:var(--text-2);}
+.qopt:hover{border-color:var(--border-2);color:var(--text-1);}
+.qopt.correct{border-color:var(--neon);background:var(--neon-faint);color:var(--neon);}
+.qopt.wrong{border-color:var(--red);background:rgba(255,71,87,.06);color:var(--red);}
+.qopt .qo-num{width:24px;height:24px;border-radius:var(--r-sm);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+
+/* Lesson nav footer */
+.lesson-footer{flex-shrink:0;border-top:1px solid var(--border);padding:12px 20px;background:var(--void-2);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.lesson-footer .lf-info{font-size:12px;color:var(--text-3);}
+.lesson-footer .lf-info span{color:var(--neon);}
+
+/* VIDEO panel */
+.video-panel{display:flex;flex-direction:column;height:100%;}
+.video-wrap{background:#000;border-bottom:1px solid var(--border);aspect-ratio:16/9;position:relative;max-height:65%;}
+.video-wrap iframe{width:100%;height:100%;border:none;}
+.video-pro-overlay{position:absolute;inset:0;background:rgba(2,12,2,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;}
+.video-meta{padding:20px;overflow-y:auto;}
+.video-meta h3{font-size:15px;font-weight:700;margin-bottom:8px;}
+.video-meta p{font-size:13px;color:var(--text-3);}
+
+/* TERMINAL panel */
+.terminal-panel{display:flex;flex-direction:column;height:100%;background:var(--void);}
+.term-toolbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--void-3);border-bottom:1px solid var(--border);flex-shrink:0;}
+.term-toolbar span{font-size:11px;color:var(--text-3);}
+.term-btn{font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--r-sm);border:1px solid var(--border);background:transparent;color:var(--text-3);cursor:pointer;font-family:var(--font);transition:var(--t);}
+.term-btn:hover{border-color:var(--neon-dim);color:var(--neon);}
+.term-btn.run{color:var(--neon);border-color:rgba(0,255,65,.3);background:var(--neon-faint);}
+.term-btn.run:hover{background:rgba(0,255,65,.12);}
+.term-main{flex:1;display:flex;overflow:hidden;}
+.term-code{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--border);}
+.term-code-head{padding:8px 14px;background:var(--void-3);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-3);display:flex;align-items:center;justify-content:space-between;}
+.code-textarea{flex:1;background:transparent;color:var(--neon);font-family:var(--font);font-size:13px;padding:16px;border:none;resize:none;outline:none;line-height:1.8;}
+.code-textarea::placeholder{color:var(--text-4);}
+.term-output{width:45%;display:flex;flex-direction:column;background:var(--void);}
+.term-output-head{padding:8px 14px;background:var(--void-3);border-bottom:1px solid var(--border);font-size:11px;color:var(--text-3);}
+.term-output-body{flex:1;padding:14px;font-size:13px;line-height:1.8;overflow-y:auto;color:var(--neon);}
+.term-output-body .to-cmd{color:var(--text-2);}
+.term-output-body .to-ok{color:var(--neon);}
+.term-output-body .to-err{color:var(--red);}
+.term-pro-overlay{position:absolute;inset:0;background:rgba(2,12,2,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px;z-index:10;}
+
+/* AI CHAT panel */
+.chat-panel{display:flex;flex-direction:column;height:100%;}
+.chat-messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;}
+.chat-msg{display:flex;gap:10px;max-width:90%;}
+.chat-msg.bot{align-self:flex-start;}
+.chat-msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg-avatar{width:30px;height:30px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;border:1px solid var(--border);}
+.msg-avatar.bot-av{background:var(--neon-faint);border-color:rgba(0,255,65,.25);}
+.msg-avatar.user-av{background:var(--surface-2);}
+.msg-bubble{padding:12px 16px;border-radius:var(--r-lg);font-size:13px;line-height:1.7;max-width:100%;}
+.bot .msg-bubble{background:var(--surface);border:1px solid var(--border);color:var(--text-1);border-radius:0 var(--r-lg) var(--r-lg) var(--r-lg);}
+.user .msg-bubble{background:var(--neon-faint);border:1px solid rgba(0,255,65,.2);color:var(--text-1);border-radius:var(--r-lg) 0 var(--r-lg) var(--r-lg);}
+.msg-bubble code{font-size:12px;color:var(--neon);background:var(--void-3);padding:1px 5px;border-radius:3px;}
+.chat-input-area{border-top:1px solid var(--border);padding:14px 16px;background:var(--void-2);flex-shrink:0;}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end;}
+.chat-textarea{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);color:var(--text-1);font-family:var(--font);font-size:13px;padding:10px 14px;outline:none;resize:none;transition:var(--t);line-height:1.6;max-height:120px;min-height:42px;}
+.chat-textarea:focus{border-color:var(--neon-dim);box-shadow:0 0 0 3px var(--neon-faint);}
+.chat-textarea::placeholder{color:var(--text-4);}
+.chat-send{width:40px;height:40px;background:var(--neon);border:none;border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--t);flex-shrink:0;font-size:16px;}
+.chat-send:hover{background:#1aff55;transform:scale(1.05);}
+.chat-hints{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.chat-hint{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text-3);background:var(--void-3);cursor:pointer;transition:var(--t);white-space:nowrap;}
+.chat-hint:hover{border-color:var(--neon-dim);color:var(--neon);}
+.chat-pro-overlay{position:absolute;inset:0;background:rgba(2,12,2,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px;z-index:10;}
+.typing{display:flex;align-items:center;gap:4px;padding:4px 0;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--neon);animation:typingDot 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typingDot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+
+/* Responsive */
+@media(max-width:1100px){.lesson-nav{width:200px;}}
+@media(max-width:768px){
+  body{overflow:auto;}
+  .lesson-wrap{flex-direction:column;height:auto;overflow:visible;}
+  .lesson-nav{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border);max-height:200px;}
+  .lesson-center{height:auto;min-height:600px;}
+  .lesson-panels{position:static;height:auto;min-height:500px;}
+  .lesson-panel{position:static;}
+  .text-panel{padding:20px 16px;}
+  .term-main{flex-direction:column;}
+  .term-output{width:100%;height:200px;border-left:none;border-top:1px solid var(--border);}
+  .video-wrap{max-height:none;}
+}
+@media(max-width:480px){.mode-tabs{overflow-x:auto;flex-wrap:nowrap;gap:2px;}.mtab{white-space:nowrap;font-size:11px;padding:6px 10px;}}
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="lesson-topbar">
+  <a href="course-detail.html" class="ltb-back">← Orqaga</a>
+  <div class="ltb-divider"></div>
+  <span class="ltb-course">HTML Kursi</span>
+  <span style="color:var(--text-4)">/</span>
+  <span class="ltb-lesson">Dars 3: Formalar va inputlar</span>
+  <div class="ltb-right">
+    <div class="ltb-prog">
+      <span>3/5</span>
+      <div class="ltb-prog-bar"><div style="width:60%"></div></div>
+      <span style="color:var(--neon)">60%</span>
+    </div>
+    <div class="navbar-avatar" onclick="location.href='profile.html'" style="margin-left:8px;">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+    </div>
+  </div>
+</div>
+
+<!-- MAIN WRAP -->
+<div class="lesson-wrap">
+
+  <!-- LEFT NAV -->
+  <div class="lesson-nav">
+    <div class="ln-header">
+      <h4>HTML Kursi</h4>
+      <div class="progress"><div class="progress-fill" style="width:60%"></div></div>
+      <div class="pct">60% tugallandi</div>
+    </div>
+    <div class="ln-list">
+      <div class="ln-item" onclick="location.href='lesson.html'">
+        <span class="li-num">1</span>
+        <span class="li-icon">✅</span>
+        <span class="li-title">HTML bilan tanishish</span>
+        <span class="li-done" style="color:var(--neon)">✔</span>
+      </div>
+      <div class="ln-item" onclick="location.href='lesson.html'">
+        <span class="li-num">2</span>
+        <span class="li-icon">✅</span>
+        <span class="li-title">Teglar va atributlar</span>
+        <span class="li-done" style="color:var(--neon)">✔</span>
+      </div>
+      <div class="ln-item active">
+        <span class="li-num">3</span>
+        <span class="li-icon">▶</span>
+        <span class="li-title">Formalar va inputlar</span>
+        <span class="li-done" style="color:var(--yellow)">●</span>
+      </div>
+      <div class="ln-item" onclick="location.href='lesson.html'">
+        <span class="li-num">4</span>
+        <span class="li-icon">📄</span>
+        <span class="li-title">Jadvallar va ro'yxatlar</span>
+      </div>
+      <div class="ln-item" onclick="location.href='pricing.html'" style="opacity:.6;">
+        <span class="li-num">5</span>
+        <span class="li-icon">🔒</span>
+        <span class="li-title">Semantik HTML <span class="badge badge-pro" style="font-size:9px;margin-left:4px;">Pro</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="lesson-center">
+
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mtab active" id="tab-text"     onclick="switchMode('text')">📝 Matn</button>
+      <button class="mtab"        id="tab-video"    onclick="switchMode('video')">📹 Video <span class="pro-lock">🔒</span></button>
+      <button class="mtab"        id="tab-terminal" onclick="switchMode('terminal')">💻 Terminal <span class="pro-lock">🔒</span></button>
+      <button class="mtab"        id="tab-chat"     onclick="switchMode('chat')">🤖 AI Chat</button>
+    </div>
+
+    <!-- PANELS -->
+    <div class="lesson-panels">
+
+      <!-- TEXT -->
+      <div class="lesson-panel active" id="panel-text">
+        <div class="text-panel">
+          <h2>Dars 3: Formalar va inputlar</h2>
+          <div class="lesson-meta">
+            <span>⏱ 20 daqiqa</span>
+            <span>·</span>
+            <span class="chip chip-green">Faol dars</span>
+            <span>·</span>
+            <span>📝 Matn format</span>
+          </div>
+
+          <div class="lesson-section">
+            <h3>Forma nima?</h3>
+            <p>HTML <code>&lt;form&gt;</code> elementi foydalanuvchidan ma'lumot olish uchun ishlatiladi. Login, ro'yxatdan o'tish, izoh qoldirish — barchasi forma orqali amalga oshadi.</p>
+            <div class="info-box tip">
+              <span class="ib-icon">💡</span>
+              <div class="ib-text"><strong>Eslab qoling:</strong> Forma ichidagi ma'lumotlar server ga yuboriladi. Hozircha biz faqat HTML tuzilishini o'rganamiz.</div>
+            </div>
+          </div>
+
+          <div class="lesson-section">
+            <h3>Asosiy input turlari</h3>
+            <p>Har bir input elementida <code>type</code> atributi bo'ladi. Bu atribut inputning turini belgilaydi:</p>
+            <ul>
+              <li><code>type="text"</code> — oddiy matn kirish maydon</li>
+              <li><code>type="email"</code> — email manzil (@ belgisi talab qilinadi)</li>
+              <li><code>type="password"</code> — parol (belgilar yashirin ko'rinadi)</li>
+              <li><code>type="checkbox"</code> — belgi qo'yish (✔)</li>
+              <li><code>type="submit"</code> — formani yuborish tugmasi</li>
+            </ul>
+          </div>
+
+          <div class="lesson-section">
+            <h3>Kod misoli</h3>
+            <div class="code-example">
+              <div class="ce-header">
+                <span>forma.html</span>
+                <button class="ce-copy" onclick="copyExample(this)">Nusxa olish</button>
+              </div>
+              <div class="ce-body">
+                <pre><span class="tag">&lt;form&gt;</span>
+  <span class="cmt">&lt;!-- Ism maydoni --&gt;</span>
+  <span class="tag">&lt;label&gt;</span>Ismingiz:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">placeholder</span>=<span class="val">"Ism kiriting"</span><span class="tag">&gt;</span>
+
+  <span class="cmt">&lt;!-- Email maydoni --&gt;</span>
+  <span class="tag">&lt;label&gt;</span>Email:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">placeholder</span>=<span class="val">"user@gmail.com"</span><span class="tag">&gt;</span>
+
+  <span class="cmt">&lt;!-- Yuborish tugmasi --&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="val">"submit"</span><span class="tag">&gt;</span>Yuborish<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="lesson-section">
+            <h3>placeholder atributi</h3>
+            <p><code>placeholder</code> — input bo'sh bo'lganda ko'rsatiladigan yordamchi matn. Foydalanuvchi yoza boshlaganda yo'qoladi.</p>
+            <div class="info-box warn">
+              <span class="ib-icon">⚠️</span>
+              <div class="ib-text"><strong>Diqqat:</strong> <code>placeholder</code> ni label o'rniga ishlatmang. Har doim <code>&lt;label&gt;</code> ham qo'shing — bu accessibility uchun muhim.</div>
+            </div>
+          </div>
+
+          <div class="lesson-section">
+            <h3>required atributi</h3>
+            <p>Forma yuborilganda majburiy to'ldirilishi kerak bo'lgan maydonlarga <code>required</code> atributi qo'shiladi:</p>
+            <div class="code-example">
+              <div class="ce-header"><span>required.html</span><button class="ce-copy" onclick="copyExample(this)">Nusxa olish</button></div>
+              <div class="ce-body">
+                <pre><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">required</span> <span class="attr">placeholder</span>=<span class="val">"Majburiy"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">required</span><span class="tag">&gt;</span></pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUIZ -->
+          <div class="quiz-block">
+            <h4>🎯 Bilimni tekshiring</h4>
+            <p style="font-size:13px;color:var(--text-3);margin-bottom:16px;">Parol kiritish uchun qaysi input turi ishlatiladi?</p>
+            <div class="quiz-options">
+              <div class="qopt" onclick="checkAnswer(this, false)">
+                <div class="qo-num">A</div> type="text"
+              </div>
+              <div class="qopt" onclick="checkAnswer(this, false)">
+                <div class="qo-num">B</div> type="email"
+              </div>
+              <div class="qopt" onclick="checkAnswer(this, true)">
+                <div class="qo-num">C</div> type="password"
+              </div>
+              <div class="qopt" onclick="checkAnswer(this, false)">
+                <div class="qo-num">D</div> type="secret"
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="lesson-panel" id="panel-video">
+        <div class="video-panel">
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+            <div class="video-pro-overlay">
+              <span style="font-size:48px;">📹</span>
+              <h3>Video darslar — Pro</h3>
+              <p style="color:var(--text-2);font-size:13px;max-width:320px;">Video darslarni ko'rish uchun Pro tarifga o'ting. Barcha 8 kurs uchun full HD video darslar.</p>
+              <a href="pricing.html"><button class="btn btn-neon">Pro boshlash — $9/oy →</button></a>
+              <button class="btn btn-ghost btn-sm" onclick="switchMode('text')">← Matn darsga qaytish</button>
+            </div>
+          </div>
+          <div class="video-meta">
+            <h3>Dars 3: Formalar va inputlar</h3>
+            <p>Video davomiyligi: 12 daqiqa · Full HD · O'zbek tilida</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TERMINAL -->
+      <div class="lesson-panel" id="panel-terminal" style="position:relative;">
+        <div class="terminal-panel">
+          <div class="term-toolbar">
+            <div class="terminal-dots"><span></span><span></span><span></span></div>
+            <span style="margin-left:4px;">editor.html</span>
+            <div style="margin-left:auto;display:flex;gap:6px;">
+              <button class="term-btn" onclick="clearCode()">🗑 Clear</button>
+              <button class="term-btn" onclick="copyTermCode()">📋 Copy</button>
+              <button class="term-btn run" onclick="runCode()">▶ Run</button>
+            </div>
+          </div>
+          <div class="term-main">
+            <div class="term-code">
+              <div class="term-code-head">
+                <span>Kod yozing</span>
+                <span style="color:var(--neon)" id="lineCount">0 qator</span>
+              </div>
+              <textarea class="code-textarea" id="termCode" spellcheck="false" oninput="updateLines()" placeholder="HTML kod yozing..."><!-- Forma mashqi -->
+<form>
+  <label>Ism:</label>
+  <input type="text" placeholder="Ismingiz">
+
+  <label>Email:</label>
+  <input type="email" placeholder="email@gmail.com">
+
+  <button type="submit">Yuborish</button>
+</form></textarea>
+            </div>
+            <div class="term-output">
+              <div class="term-output-head">▶ Natija</div>
+              <div class="term-output-body" id="termOutput">
+                <div class="to-cmd"># Kodni ishga tushirish uchun ▶ Run bosing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Pro overlay for terminal -->
+        <div class="term-pro-overlay" id="termProOverlay">
+          <span style="font-size:48px;">💻</span>
+          <h3>Terminal — Pro</h3>
+          <p style="color:var(--text-2);font-size:13px;max-width:320px;">To'liq Linux terminali, Python interpreter, va real-time kod ishga tushirish uchun Pro tarifga o'ting.</p>
+          <a href="pricing.html"><button class="btn btn-neon">Pro boshlash →</button></a>
+          <button class="btn btn-ghost btn-sm" onclick="document.getElementById('termProOverlay').style.display='none'">Demo ko'rish</button>
+        </div>
+      </div>
+
+      <!-- AI CHAT -->
+      <div class="lesson-panel" id="panel-chat">
+        <div class="chat-panel">
+          <div class="chat-messages" id="chatMessages">
+            <div class="chat-msg bot">
+              <div class="msg-avatar bot-av">🤖</div>
+              <div class="msg-bubble">Salom! Men OnOlam AI yordamchisiman. HTML formalar haqida savollaringiz bormi? Istalgan narsani so'rashingiz mumkin — <code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>, validatsiya yoki boshqa mavzular bo'yicha.</div>
+            </div>
+            <div class="chat-msg bot">
+              <div class="msg-avatar bot-av">🤖</div>
+              <div class="msg-bubble">Masalan: <em>"placeholder va label farqi nima?"</em> yoki <em>"required atributi qanday ishlaydi?"</em> deb so'rasangiz bo'ladi.</div>
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <div class="chat-hints">
+              <div class="chat-hint" onclick="sendHint(this)">placeholder nima?</div>
+              <div class="chat-hint" onclick="sendHint(this)">required qanday ishlaydi?</div>
+              <div class="chat-hint" onclick="sendHint(this)">label muhimmi?</div>
+              <div class="chat-hint" onclick="sendHint(this)">Forma yuborishda nima bo'ladi?</div>
+            </div>
+            <div class="chat-input-row">
+              <textarea class="chat-textarea" id="chatInput" placeholder="Savol yozing..." rows="1"
+                onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"
+                oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+              <button class="chat-send" onclick="sendMsg()">➤</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LESSON FOOTER NAV -->
+    <div class="lesson-footer">
+      <a href="lesson.html"><button class="btn btn-ghost btn-sm">← Oldingi dars</button></a>
+      <div class="lf-info">Dars <span>3</span> / 5</div>
+      <button class="btn btn-neon btn-sm" onclick="markDone()">Tugatdim ✔ →</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="js/burger.js"></script>
+<script>
+// Mode switching
+function switchMode(mode){
+  document.querySelectorAll('.lesson-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+mode).classList.add('active');
+  document.getElementById('tab-'+mode).classList.add('active');
+}
+
+// Quiz
+let quizAnswered = false;
+function checkAnswer(el, correct){
+  if(quizAnswered) return;
+  quizAnswered = true;
+  el.classList.add(correct ? 'correct' : 'wrong');
+  if(!correct){
+    document.querySelectorAll('.qopt').forEach(o => {
+      if(o.getAttribute('onclick').includes('true')) o.classList.add('correct');
+    });
+  }
+}
+
+// Code copy
+function copyExample(btn){
+  const pre = btn.closest('.code-example').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(()=>{
+    btn.textContent='Nusxalandi!'; btn.style.color='var(--neon)';
+    setTimeout(()=>{btn.textContent='Nusxa olish';btn.style.color='';},1500);
+  });
+}
+
+// Terminal
+function updateLines(){
+  const lines = document.getElementById('termCode').value.split('\n').length;
+  document.getElementById('lineCount').textContent = lines + ' qator';
+}
+
+function clearCode(){
+  document.getElementById('termCode').value='';
+  document.getElementById('termOutput').innerHTML='<div class="to-cmd"># Kod tozalandi</div>';
+  updateLines();
+}
+
+function copyTermCode(){
+  navigator.clipboard.writeText(document.getElementById('termCode').value)
+    .then(()=>{ const b=event.target; b.textContent='📋 Copied!'; setTimeout(()=>b.textContent='📋 Copy',1400); });
+}
+
+function runCode(){
+  const code = document.getElementById('termCode').value;
+  const out  = document.getElementById('termOutput');
+  out.innerHTML = '<div class="to-cmd">$ running...</div>';
+  setTimeout(()=>{
+    out.innerHTML += '<div class="to-ok">✔ Ishga tushirildi — yangi oynada ko\'ring</div>';
+    const w = window.open('','_blank','width=700,height=500');
+    w.document.write(code); w.document.close();
+  }, 400);
+}
+updateLines();
+
+// AI Chat responses
+const aiReplies = {
+  'placeholder': '<code>placeholder</code> atributi — input ichida foydalanuvchi yoza boshlaguncha ko\'rinadigan yordamchi matn. Masalan: <code>placeholder="Ismingiz"</code>. Foydalanuvchi yoza boshlagan zahoti yo\'qoladi.',
+  'required': '<code>required</code> atributi — forma yuborilganda bu maydon albatta to\'ldirilishi kerakligini bildiradi. Agar bo\'sh qolsa, brauzer avtomatik xato ko\'rsatadi: <code>&lt;input required&gt;</code>',
+  'label': '<code>&lt;label&gt;</code> juda muhim! Birinchidan, screen reader (ko\'zi ojiz foydalanuvchilar uchun) inputni aniqlashga yordam beradi. Ikkinchidan, label ustiga bossangiz — input focus bo\'ladi. Bu UX uchun juda qulay!',
+  'forma': 'Forma yuborilganda (<code>type="submit"</code> bosilganda) ma\'lumotlar serverga HTTP request orqali yuboriladi. <code>action</code> atributi server manzilini, <code>method</code> atributi POST yoki GET metodini belgilaydi.',
+  'default': 'Yaxshi savol! HTML formalar bo\'yicha qo\'shimcha tushuntirish kerakmi? <code>input type</code>lari, <code>label</code>, validatsiya yoki boshqa mavzu haqida so\'rasangiz bo\'ladi.'
+};
+
+function getAIReply(msg){
+  const m = msg.toLowerCase();
+  if(m.includes('placeholder')) return aiReplies.placeholder;
+  if(m.includes('required') || m.includes('majburiy')) return aiReplies.required;
+  if(m.includes('label') || m.includes('muhim')) return aiReplies.label;
+  if(m.includes('yuborish') || m.includes('submit') || m.includes('server')) return aiReplies.forma;
+  return aiReplies.default;
+}
+
+function addMsg(text, who){
+  const msgs = document.getElementById('chatMessages');
+  const icon = who==='bot' ? '🤖' : '👤';
+  const avClass = who==='bot' ? 'bot-av' : 'user-av';
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + who;
+  div.innerHTML = `<div class="msg-avatar ${avClass}">${icon}</div><div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg bot';
+  div.id = 'typingIndicator';
+  div.innerHTML = `<div class="msg-avatar bot-av">🤖</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function sendMsg(){
+  const inp = document.getElementById('chatInput');
+  const msg = inp.value.trim();
+  if(!msg) return;
+  addMsg(msg, 'user');
+  inp.value = ''; inp.style.height='auto';
+  showTyping();
+  setTimeout(()=>{
+    document.getElementById('typingIndicator')?.remove();
+    addMsg(getAIReply(msg), 'bot');
+  }, 900 + Math.random()*600);
+}
+
+function sendHint(el){
+  document.getElementById('chatInput').value = el.textContent;
+  sendMsg();
+}
+
+function markDone(){
+  if(confirm('Darsni tugatdingizmi? Keyingi darsga o\'tasizmi?')){
+    location.href='lesson.html';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOlam — Darslar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --F:#102C26;--F2:#1a3d35;--F3:#0b201b;
+  --C:#F7E7CE;--C2:#ede0cc;--C3:#f9f0e2;
+  --W:#ffffff;
+  --mu:rgba(16,44,38,0.45);
+  --hh:62px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--C3);color:var(--F);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--C2)}
+::-webkit-scrollbar-thumb{background:var(--F);border-radius:4px}
+
+/* HEADER */
+header{
+  position:fixed;top:0;left:0;right:0;height:var(--hh);
+  background:var(--F);display:flex;align-items:center;
+  padding:0 18px;gap:14px;z-index:500;
+  box-shadow:0 2px 16px rgba(0,0,0,0.18);
+}
+.sb-toggle{
+  width:40px;height:40px;border-radius:10px;
+  border:1px solid rgba(247,231,206,0.15);
+  background:rgba(247,231,206,0.07);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;transition:background .2s;
+}
+.sb-toggle:hover{background:rgba(247,231,206,0.14)}
+.bars{display:flex;flex-direction:column;gap:4.5px;width:18px}
+.bar{height:2px;background:var(--C);border-radius:2px;transition:all .3s cubic-bezier(.4,0,.2,1);transform-origin:left center}
+.b1{width:18px}.b2{width:12px}.b3{width:15px}
+.sb-toggle.open .b1{transform:rotate(42deg) translate(1px,-1px);width:18px}
+.sb-toggle.open .b2{opacity:0;transform:scaleX(0)}
+.sb-toggle.open .b3{transform:rotate(-42deg) translate(1px,1px);width:18px}
+.h-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.h-mark{width:34px;height:34px;background:var(--C);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--F)}
+.h-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--C)}
+.h-search{flex:1;position:relative;max-width:500px}
+.h-search input{
+  width:100%;padding:9px 14px 9px 36px;
+  background:rgba(247,231,206,0.09);border:1px solid rgba(247,231,206,0.14);
+  border-radius:9px;color:var(--C);font-family:'DM Sans',sans-serif;font-size:13.5px;outline:none;transition:all .2s;
+}
+.h-search input:focus{background:rgba(247,231,206,0.15);border-color:rgba(247,231,206,0.38)}
+.h-search input::placeholder{color:rgba(247,231,206,0.38)}
+.h-si{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:rgba(247,231,206,0.38);font-size:14px;pointer-events:none}
+.sdrop{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--W);border:1.5px solid var(--C2);border-radius:12px;
+  overflow:hidden;display:none;box-shadow:0 14px 40px rgba(16,44,38,0.14);z-index:600;
+}
+.sdrop.show{display:block}
+.sdi{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--C3);transition:background .1s;color:var(--F)}
+.sdi:last-child{border-bottom:none}
+.sdi:hover{background:var(--C3)}
+.sdi-ico{width:26px;height:26px;border-radius:6px;background:var(--C2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.sdi-inf{flex:1}
+.sdi-t{font-weight:500;font-size:13px}
+.sdi-s{font-size:10.5px;color:var(--mu);margin-top:1px}
+.sdi-tag{font-family:'Space Mono',monospace;font-size:9px;padding:2px 7px;background:var(--C3);color:var(--F);border-radius:4px}
+.h-user{
+  margin-left:auto;display:flex;align-items:center;gap:8px;
+  padding:5px 10px 5px 6px;background:rgba(247,231,206,0.09);
+  border:1px solid rgba(247,231,206,0.14);border-radius:20px;cursor:pointer;flex-shrink:0;
+}
+.h-av{width:28px;height:28px;border-radius:50%;background:var(--C);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:12px;font-weight:700;color:var(--F)}
+.h-uname{font-size:12px;color:var(--C);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* LAYOUT */
+.layout{padding-top:var(--hh);min-height:100vh;display:flex}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;top:var(--hh);left:0;bottom:0;
+  width:260px;background:var(--W);border-right:1.5px solid var(--C2);
+  transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  z-index:400;overflow-y:auto;overflow-x:hidden;padding:16px 0 80px;
+}
+.sidebar.open{transform:translateX(0)}
+.sb-sec{padding:0 10px;margin-bottom:2px}
+.sb-lbl{padding:12px 8px 5px;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--mu)}
+.sb-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:500;color:var(--mu);transition:all .13s;margin-bottom:1px;user-select:none}
+.sb-item:hover{background:var(--C3);color:var(--F)}
+.sb-item.act{background:var(--F);color:var(--C)}
+.sb-ico{width:26px;height:26px;border-radius:6px;background:var(--C2);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.sb-item.act .sb-ico{background:rgba(247,231,206,0.18)}
+.sb-cnt{margin-left:auto;font-family:'Space Mono',monospace;font-size:9px;background:var(--C2);color:var(--mu);padding:2px 6px;border-radius:4px}
+.sb-item.act .sb-cnt{background:rgba(247,231,206,0.18);color:var(--C)}
+.sb-arr{margin-left:auto;font-size:11px;color:var(--mu)}
+.sb-back{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--F);margin-bottom:6px;transition:background .13s}
+.sb-back:hover{background:var(--C3)}
+.si{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--mu);transition:all .12s;margin-bottom:1px}
+.si:hover{background:var(--C3);color:var(--F)}
+.si.act{background:var(--F);color:var(--C)}
+.si-n{font-family:'Space Mono',monospace;font-size:9px;width:18px;flex-shrink:0;color:var(--mu)}
+.si.act .si-n{color:rgba(247,231,206,0.5)}
+.si-dot{width:5px;height:5px;border-radius:50%;background:var(--C2);flex-shrink:0}
+.si.act .si-dot{background:var(--C)}
+
+/* MAIN */
+.main{flex:1;min-width:0;padding:40px 44px 100px;max-width:840px;margin:0 auto;width:100%}
+
+/* welcome */
+.welcome{animation:fu .4s ease both}
+.w-ey{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
+.w-title{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--F);margin-bottom:8px}
+.w-sub{font-size:14px;color:var(--mu);line-height:1.7;margin-bottom:32px}
+.w-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.wc{background:var(--W);border:1.5px solid var(--C2);border-radius:14px;padding:20px 16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.wc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--F);transform:scaleX(0);transform-origin:left;transition:transform .22s}
+.wc:hover{border-color:var(--F);transform:translateY(-2px);box-shadow:0 8px 22px rgba(16,44,38,0.1)}
+.wc:hover::after{transform:scaleX(1)}
+.wc-i{font-size:24px;margin-bottom:10px}
+.wc-n{font-weight:700;font-size:13px;color:var(--F);margin-bottom:2px}
+.wc-c{font-family:'Space Mono',monospace;font-size:10px;color:var(--mu)}
+
+/* lesson */
+.lv{display:none;animation:fu .32s ease both}
+.lv.show{display:block}
+.pbar{height:3px;background:var(--C2);border-radius:3px;margin-bottom:26px;overflow:hidden}
+.pfill{height:100%;background:var(--F);border-radius:3px;transition:width .4s}
+.bc{display:flex;align-items:center;gap:5px;font-family:'Space Mono',monospace;font-size:9.5px;color:var(--mu);margin-bottom:18px}
+.bc span{color:var(--F);font-weight:700}
+.l-num{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--mu);margin-bottom:6px}
+.l-title{font-family:'Playfair Display',serif;font-size:clamp(20px,2.5vw,28px);font-weight:800;color:var(--F);line-height:1.2;margin-bottom:12px}
+.l-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:26px}
+.mb{padding:4px 10px;border-radius:20px;font-size:10.5px;font-family:'Space Mono',monospace}
+.mb-f{background:rgba(16,44,38,0.08);color:var(--F);border:1px solid rgba(16,44,38,0.14)}
+.mb-t{background:var(--C2);color:var(--mu)}
+.mb-l{background:var(--F);color:var(--C)}
+.l-body{font-size:15px;line-height:1.8;color:rgba(16,44,38,0.78);margin-bottom:26px}
+.l-body h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--F);margin:24px 0 9px}
+.l-body p{margin-bottom:11px}
+.l-body strong{color:var(--F)}
+.l-body em{color:var(--F2);font-style:normal;font-weight:600}
+.l-body code{font-family:'Space Mono',monospace;font-size:12px;background:var(--C2);border:1px solid var(--C);padding:2px 6px;border-radius:4px;color:var(--F)}
+.cb{background:var(--F3);border-radius:12px;overflow:hidden;margin:16px 0}
+.cbh{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--F2);border-bottom:1px solid rgba(247,231,206,0.08)}
+.cbl{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--C);letter-spacing:1px;opacity:.75}
+.cbd{display:flex;gap:5px}
+.cdd{width:10px;height:10px;border-radius:50%}
+.cbp{padding:16px 18px;overflow-x:auto;font-family:'Space Mono',monospace;font-size:12px;line-height:1.8;color:var(--C3)}
+.kw{color:#82cfb0}.fn{color:#a8d5c2}.st{color:#e0c9a0}.nm{color:#f4b27a}
+.cm{color:rgba(247,231,206,0.28);font-style:italic}.tg{color:#c8e6c0}.at{color:#ffe0a0}.vr{color:var(--C)}
+.ib{display:flex;gap:11px;padding:13px 15px;border-radius:9px;margin:14px 0;font-size:13.5px;line-height:1.65}
+.ib.info{background:rgba(16,44,38,0.05);border:1px solid rgba(16,44,38,0.11)}
+.ib.warn{background:rgba(180,100,0,0.05);border:1px solid rgba(180,100,0,0.18)}
+.ib.ok{background:rgba(16,44,38,0.05);border:1px solid rgba(16,44,38,0.14)}
+.ib-i{font-size:16px;flex-shrink:0;margin-top:2px}
+.l-nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;padding:18px 0;border-top:1.5px solid var(--C2)}
+.narr{display:flex;gap:7px}
+.nb{display:flex;align-items:center;gap:6px;padding:9px 15px;border-radius:9px;border:1.5px solid var(--C2);background:var(--W);color:var(--mu);font-size:13px;font-weight:500;cursor:pointer;transition:all .16s;font-family:'DM Sans',sans-serif}
+.nb:hover{border-color:var(--F);color:var(--F)}
+.nb:disabled{opacity:.3;cursor:not-allowed}
+.nb.nx{background:var(--F);color:var(--C);border-color:var(--F);font-weight:600}
+.nb.nx:hover{background:var(--F2);box-shadow:0 5px 18px rgba(16,44,38,0.2)}
+.ab-wrap{display:flex;gap:7px}
+.ab{display:flex;align-items:center;gap:6px;padding:9px 13px;border-radius:9px;border:1.5px solid var(--C2);background:var(--W);color:var(--mu);font-size:12.5px;font-weight:500;cursor:pointer;transition:all .16s;font-family:'DM Sans',sans-serif}
+.ab:hover{border-color:var(--F);color:var(--F);background:var(--C3)}
+
+/* TERMINAL */
+.tw{
+  position:fixed;width:520px;max-width:calc(100vw - 28px);
+  background:var(--F3);border:1.5px solid rgba(247,231,206,0.1);
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 24px 64px rgba(0,0,0,0.38);
+  z-index:800;display:none;flex-direction:column;
+  bottom:66px;right:18px;resize:both;
+  min-width:290px;min-height:250px;
+  max-height:calc(100vh - var(--hh) - 90px);
+}
+.tw.show{display:flex}
+.th{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--F2);border-bottom:1px solid rgba(247,231,206,0.07);cursor:grab;user-select:none;flex-shrink:0}
+.th:active{cursor:grabbing}
+.tdots{display:flex;gap:5px}
+.tdot{width:11px;height:11px;border-radius:50%;cursor:pointer}
+.tdr{background:#ff5f57}.tdy{background:#febc2e}.tdg{background:#28c840}
+.tt{flex:1;text-align:center;font-family:'Space Mono',monospace;font-size:10px;color:rgba(247,231,206,0.35)}
+.tex{width:21px;height:21px;border-radius:5px;border:1px solid rgba(247,231,206,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(247,231,206,0.35);cursor:pointer;transition:all .14s}
+.tex:hover{color:var(--C);border-color:rgba(247,231,206,0.28)}
+.tlangs{display:flex;flex-wrap:wrap;gap:3px;padding:6px 12px;background:var(--F2);border-bottom:1px solid rgba(247,231,206,0.07);flex-shrink:0}
+.tl{padding:4px 8px;border-radius:5px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(247,231,206,0.38);cursor:pointer;transition:all .12s}
+.tl.act{background:rgba(247,231,206,0.11);color:var(--C)}
+.tl:hover:not(.act){color:rgba(247,231,206,0.65)}
+.ted{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.ew{display:flex;flex:1;overflow:auto;font-family:'Space Mono',monospace;font-size:12.5px;line-height:1.7}
+.lns{padding:9px 7px;color:rgba(247,231,206,0.18);font-size:10px;border-right:1px solid rgba(247,231,206,0.07);user-select:none;min-width:32px;text-align:right;background:rgba(0,0,0,0.14);flex-shrink:0}
+.te{flex:1;padding:9px 12px;background:transparent;border:none;outline:none;color:var(--C);font-family:'Space Mono',monospace;font-size:12.5px;line-height:1.7;resize:none;caret-color:var(--C);white-space:pre;overflow-wrap:normal}
+.tout{border-top:1px solid rgba(247,231,206,0.07);background:rgba(0,0,0,0.22);max-height:150px;overflow-y:auto;padding:9px 12px;font-family:'Space Mono',monospace;font-size:11px;line-height:1.6;flex-shrink:0}
+.to{color:rgba(247,231,206,0.32);margin-bottom:1px}
+.tok{color:#82cfb0}.terr{color:#f48a8a}.tres{color:var(--C)}.tpr{color:rgba(247,231,206,0.45)}
+.tfoot{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--F2);border-top:1px solid rgba(247,231,206,0.07);flex-shrink:0}
+.rbtn{padding:5px 12px;background:var(--C);border:none;border-radius:6px;font-family:'Space Mono',monospace;font-size:10.5px;font-weight:700;color:var(--F);cursor:pointer;transition:all .13s}
+.rbtn:hover{background:var(--C2);box-shadow:0 3px 10px rgba(247,231,206,0.18)}
+.thi{font-family:'Space Mono',monospace;font-size:9px;color:rgba(247,231,206,0.22)}
+.tst{margin-left:auto;font-family:'Space Mono',monospace;font-size:9px;color:rgba(247,231,206,0.3)}
+.actip{position:absolute;bottom:100%;left:0;right:0;background:var(--F2);border:1px solid rgba(247,231,206,0.14);border-radius:7px;padding:6px 11px;font-family:'Space Mono',monospace;font-size:11px;color:var(--C);display:none;margin-bottom:3px;pointer-events:none}
+.actip.show{display:block}
+
+/* VIDEO MODAL */
+.vmb{position:fixed;inset:0;background:rgba(16,44,38,0.72);backdrop-filter:blur(10px);z-index:900;display:none;align-items:center;justify-content:center}
+.vmb.open{display:flex}
+.vm{background:var(--C3);border-radius:20px;padding:34px;width:410px;max-width:92vw;position:relative;animation:fu .28s ease both}
+.vmc{position:absolute;top:13px;right:13px;width:29px;height:29px;background:var(--C2);border:none;border-radius:7px;cursor:pointer;font-size:14px;color:var(--mu);display:flex;align-items:center;justify-content:center;transition:all .14s}
+.vmc:hover{background:var(--F);color:var(--C)}
+.vmt{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--F);margin-bottom:4px}
+.vms{font-size:13px;color:var(--mu);margin-bottom:20px}
+.vp{background:var(--W);border:1.5px solid var(--C2);border-radius:11px;padding:17px;margin-bottom:9px;cursor:pointer;transition:all .18s;position:relative}
+.vp:hover{border-color:var(--F)}
+.vp.pro{border-color:var(--F)}
+.vpb{display:inline-block;margin-bottom:5px;padding:2px 8px;background:var(--F);color:var(--C);font-size:9px;font-weight:700;border-radius:20px;font-family:'Space Mono',monospace}
+.vpn{font-weight:700;font-size:13px;color:var(--F);margin-bottom:3px}
+.vpp{font-family:'Space Mono',monospace;font-size:18px;color:var(--F);margin-bottom:6px}
+.vpf{font-size:12px;line-height:1.75;color:var(--mu)}
+.vpf .y{color:var(--F);font-weight:600}
+
+/* FOOTER */
+footer{background:var(--F);position:relative;z-index:1;padding:50px 40px 30px}
+.fi{max-width:1060px;margin:0 auto}
+.fg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-bottom:38px}
+.fct{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(247,231,206,0.38);margin-bottom:14px}
+.fl{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(247,231,206,0.07);cursor:pointer;font-size:13px;color:rgba(247,231,206,0.5);transition:color .12s;text-decoration:none}
+.fl:hover{color:var(--C)}
+.fl:last-child{border-bottom:none}
+.fa{margin-left:auto;opacity:0;transition:opacity .12s;font-size:11px}
+.fl:hover .fa{opacity:1}
+.ft{font-size:13px;line-height:1.75;color:rgba(247,231,206,0.5)}
+.ft strong{color:var(--C)}
+.sl{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(247,231,206,0.07);text-decoration:none;color:rgba(247,231,206,0.5);font-size:13px;transition:color .12s}
+.sl:hover{color:var(--C)}
+.sl:last-child{border-bottom:none}
+.si2{width:28px;height:28px;background:rgba(247,231,206,0.07);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px}
+.sh{font-family:'Space Mono',monospace;font-size:10px;margin-left:auto;opacity:.45}
+.fb{padding-top:22px;border-top:1px solid rgba(247,231,206,0.08);display:flex;align-items:center;justify-content:space-between;font-family:'Space Mono',monospace;font-size:9px;color:rgba(247,231,206,0.28)}
+
+@keyframes fu{from{opacity:0;transform:translateY(13px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){.main{padding:22px 15px 90px}footer{padding:44px 18px 28px}.fg{grid-template-columns:1fr;gap:22px}.fb{flex-direction:column;gap:5px}.l-nav{flex-direction:column;align-items:stretch}.ab-wrap{justify-content:stretch}.ab{flex:1;justify-content:center}.narr{justify-content:space-between}.w-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="sb-toggle" id="sbt" onclick="tsb()">
+    <div class="bars"><div class="bar b1"></div><div class="bar b2"></div><div class="bar b3"></div></div>
+  </div>
+  <a href="index.html" class="h-logo">
+    <div class="h-mark">OO</div>
+    <div class="h-name">OnOlam</div>
+  </a>
+  <div class="h-search">
+    <span class="h-si">⌕</span>
+    <input type="text" id="si" placeholder="Qidirish... html, python..."
+      autocomplete="off"
+      oninput="ds(this.value)"
+      onfocus="if(this.value)sdd()"
+      onblur="setTimeout(hdd,170)">
+    <div class="sdrop" id="sd"></div>
+  </div>
+  <div class="h-user">
+    <div class="h-av" id="hav">U</div>
+    <span class="h-uname" id="hun">Foydalanuvchi</span>
+  </div>
+</header>
+
+<nav class="sidebar" id="sb">
+  <div id="sbm">
+    <div class="sb-sec">
+      <div class="sb-lbl">Frontend</div>
+      <div class="sb-item" onclick="oc('html')"><div class="sb-ico">🌐</div>HTML<span class="sb-cnt">12</span><span class="sb-arr">›</span></div>
+      <div class="sb-item" onclick="oc('css')"><div class="sb-ico">🎨</div>CSS<span class="sb-cnt">10</span><span class="sb-arr">›</span></div>
+      <div class="sb-item" onclick="oc('js')"><div class="sb-ico">⚡</div>JavaScript<span class="sb-cnt">15</span><span class="sb-arr">›</span></div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Backend</div>
+      <div class="sb-item" onclick="oc('python')"><div class="sb-ico">🐍</div>Python<span class="sb-cnt">14</span><span class="sb-arr">›</span></div>
+      <div class="sb-item" onclick="oc('php')"><div class="sb-ico">🐘</div>PHP<span class="sb-cnt">10</span><span class="sb-arr">›</span></div>
+      <div class="sb-item" onclick="oc('sql')"><div class="sb-ico">🗄️</div>SQL<span class="sb-cnt">8</span><span class="sb-arr">›</span></div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Tizimlar</div>
+      <div class="sb-item" onclick="oc('windows')"><div class="sb-ico">🪟</div>Windows<span class="sb-cnt">6</span><span class="sb-arr">›</span></div>
+      <div class="sb-item" onclick="oc('linux')"><div class="sb-ico">🐧</div>Linux<span class="sb-cnt">9</span><span class="sb-arr">›</span></div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-lbl">Mobil</div>
+      <div class="sb-item" onclick="oc('mobile')"><div class="sb-ico">📱</div>Termux<span class="sb-cnt">7</span><span class="sb-arr">›</span></div>
+    </div>
+  </div>
+  <div id="sbs" style="display:none">
+    <div class="sb-sec">
+      <div class="sb-back" onclick="css2()">← Orqaga</div>
+      <div class="sb-lbl" id="sbl">HTML</div>
+      <div id="sbl2"></div>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <main class="main" id="mc">
+    <div class="welcome" id="ws">
+      <div class="w-ey">// OnOlam Platform</div>
+      <h1 class="w-title">Qaysi kursni boshlaysiz?</h1>
+      <p class="w-sub">Kurs tanlang — matnli darslar <strong style="color:var(--F)">bepul</strong>, video darslar 💎 pullik.</p>
+      <div class="w-grid">
+        <div class="wc" onclick="oc('html');ll('html',0)"><div class="wc-i">🌐</div><div class="wc-n">HTML</div><div class="wc-c">12 dars</div></div>
+        <div class="wc" onclick="oc('css');ll('css',0)"><div class="wc-i">🎨</div><div class="wc-n">CSS</div><div class="wc-c">10 dars</div></div>
+        <div class="wc" onclick="oc('js');ll('js',0)"><div class="wc-i">⚡</div><div class="wc-n">JavaScript</div><div class="wc-c">15 dars</div></div>
+        <div class="wc" onclick="oc('python');ll('python',0)"><div class="wc-i">🐍</div><div class="wc-n">Python</div><div class="wc-c">14 dars</div></div>
+        <div class="wc" onclick="oc('php');ll('php',0)"><div class="wc-i">🐘</div><div class="wc-n">PHP</div><div class="wc-c">10 dars</div></div>
+        <div class="wc" onclick="oc('sql');ll('sql',0)"><div class="wc-i">🗄️</div><div class="wc-n">SQL</div><div class="wc-c">8 dars</div></div>
+        <div class="wc" onclick="oc('windows');ll('windows',0)"><div class="wc-i">🪟</div><div class="wc-n">Windows</div><div class="wc-c">6 dars</div></div>
+        <div class="wc" onclick="oc('linux');ll('linux',0)"><div class="wc-i">🐧</div><div class="wc-n">Linux</div><div class="wc-c">9 dars</div></div>
+        <div class="wc" onclick="oc('mobile');ll('mobile',0)"><div class="wc-i">📱</div><div class="wc-n">Termux</div><div class="wc-c">7 dars</div></div>
+      </div>
+    </div>
+    <div class="lv" id="lv">
+      <div class="pbar"><div class="pfill" id="pf"></div></div>
+      <div class="bc" id="bc">OnOlam › <span>HTML</span> › 1-dars</div>
+      <div class="l-num" id="ln">01 / 12</div>
+      <h2 class="l-title" id="lt">Dars</h2>
+      <div class="l-meta">
+        <span class="mb mb-f">✓ Bepul</span>
+        <span class="mb mb-t" id="lti">⏱ 8 daqiqa</span>
+        <span class="mb mb-l" id="llv">🟢 Boshlang'ich</span>
+      </div>
+      <div class="l-body" id="lb"></div>
+      <div class="l-nav">
+        <div class="narr">
+          <button class="nb" id="pb" onclick="nav(-1)">← Oldingi</button>
+          <button class="nb nx" id="nb2" onclick="nav(1)">Keyingi →</button>
+        </div>
+        <div class="ab-wrap">
+          <button class="ab" onclick="oterm()">⌨️ Terminal</button>
+          <button class="ab" onclick="ovm()">▶️ Video</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <div class="fi">
+    <div class="fg">
+      <div>
+        <div class="fct">Tezkor Yo'riqnoma</div>
+        <a class="fl" onclick="oc('html');ll('html',0)"><span>🌐</span>HTML kursini boshlash<span class="fa">→</span></a>
+        <a class="fl" onclick="oc('python');ll('python',0)"><span>🐍</span>Python kursini boshlash<span class="fa">→</span></a>
+        <a class="fl" onclick="ovm()"><span>💎</span>Video darslar haqida<span class="fa">→</span></a>
+        <a class="fl" onclick="oterm()"><span>⌨️</span>Terminalni ochish<span class="fa">→</span></a>
+        <a class="fl" onclick="oc('mobile');ll('mobile',0)"><span>📱</span>Termux darslari<span class="fa">→</span></a>
+      </div>
+      <div>
+        <div class="fct">Loyiha Haqida</div>
+        <p class="ft"><strong>OnOlam</strong> — o'zbek tilida sifatli texnologiya ta'limi.</p>
+        <p class="ft" style="margin-top:9px">Hamkorlik: <strong>@onolam</strong></p>
+      </div>
+      <div>
+        <div class="fct">Ijtimoiy Tarmoqlar</div>
+        <a href="#" class="sl"><div class="si2">📸</div>Instagram<span class="sh">@onolam</span></a>
+        <a href="#" class="sl"><div class="si2">✈️</div>Telegram<span class="sh">@onolam_uz</span></a>
+        <a href="#" class="sl"><div class="si2">▶️</div>YouTube<span class="sh">OnOlam</span></a>
+      </div>
+    </div>
+    <div class="fb"><span>© 2025 OnOlam</span><span>Texnologiyalar Bilimlar Asri Dunyosi</span></div>
+  </div>
+</footer>
+
+<!-- TERMINAL -->
+<div class="tw" id="tw">
+  <div class="th" id="th">
+    <div class="tdots"><div class="tdot tdr" onclick="cterm()"></div><div class="tdot tdy"></div><div class="tdot tdg" onclick="mterm()"></div></div>
+    <div class="tt" id="ttl">terminal — html</div>
+    <div class="tex" onclick="mterm()">⤢</div>
+  </div>
+  <div class="tlangs">
+    <div class="tl act" onclick="sl2(this,'html')">HTML</div>
+    <div class="tl" onclick="sl2(this,'css')">CSS</div>
+    <div class="tl" onclick="sl2(this,'js')">JS</div>
+    <div class="tl" onclick="sl2(this,'python')">Python</div>
+    <div class="tl" onclick="sl2(this,'sql')">SQL</div>
+    <div class="tl" onclick="sl2(this,'php')">PHP</div>
+    <div class="tl" onclick="sl2(this,'bash')">Bash</div>
+  </div>
+  <div class="ted">
+    <div class="actip" id="ac"></div>
+    <div class="ew">
+      <div class="lns" id="lns">1</div>
+      <textarea class="te" id="te" spellcheck="false"
+        oninput="ul();ca(this.value)"
+        onkeydown="tk(event)"
+        placeholder="Kod yozing..."></textarea>
+    </div>
+  </div>
+  <div class="tout" id="to">
+    <div class="tpr">onolam@terminal:~$ </div>
+    <div class="to" id="tw2"></div>
+  </div>
+  <div class="tfoot">
+    <button class="rbtn" onclick="rc()">▶ Run</button>
+    <span class="thi">Ctrl+Enter — run · Ctrl+S — saqlash</span>
+    <span class="tst" id="ts">● tayyor</span>
+  </div>
+</div>
+
+<!-- VIDEO MODAL -->
+<div class="vmb" id="vmb" onclick="cvb(event)">
+  <div class="vm">
+    <button class="vmc" onclick="cvm()">✕</button>
+    <div class="vmt">Video Darslar</div>
+    <div class="vms">Rejimingizni tanlang</div>
+    <div class="vp">
+      <div class="vpn">🆓 Bepul</div><div class="vpp">0 so'm</div>
+      <div class="vpf"><span class="y">✓</span> Matnli darslar · <span class="y">✓</span> Terminal (60%)<br>✗ Video · ✗ Loyihalar</div>
+    </div>
+    <div class="vp pro">
+      <div class="vpb">TAVSIYA</div>
+      <div class="vpn">💎 Pro Rejim</div><div class="vpp">XX,XXX so'm/oy</div>
+      <div class="vpf"><span class="y">✓</span> Video + skrinshotlar<br><span class="y">✓</span> Terminal 100% + saqlash<br><span class="y">✓</span> Real loyihalar + Git · Linux + Kiberxavfsizlik</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* user */
+(()=>{const u=sessionStorage.getItem('oo_user')||'Foydalanuvchi';document.getElementById('hun').textContent=u.split('@')[0];document.getElementById('hav').textContent=(u[0]||'U').toUpperCase()})();
+
+/* sidebar */
+let sbo=false;
+function tsb(){sbo=!sbo;document.getElementById('sb').classList.toggle('open',sbo);document.getElementById('sbt').classList.toggle('open',sbo)}
+
+/* courses */
+const D={
+  html:{l:'HTML',i:'🌐',s:'<!DOCTYPE html>\n<html>\n  <head>\n    <title>Mening sahifam</title>\n  </head>\n  <body>\n    <h1>Salom Dunyo!</h1>\n    <p>Bu mening birinchi sahifam.</p>\n  </body>\n</html>',
+  ls:[
+    {t:'HTML nima?',ti:'8 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>HTML — HyperText Markup Language</h3><p>HTML — veb-sahifalarning <strong>skeleti</strong> va tuzilmasini yaratish tili. Brauzer HTML faylni o'qib, foydalanuvchiga ko'rinadigan sahifaga aylantiradi.</p><div class="ib info"><span class="ib-i">💡</span><div>HTML dasturlash tili emas — bu <strong>belgilash tili</strong>. U ma'lumotlarni tuzilmali shaklda tartibga soladi.</div></div><h3>HTML fayl tuzilmasi</h3><div class="cb"><div class="cbh"><span class="cbl">HTML</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="tg">&lt;!</span><span class="kw">DOCTYPE</span> <span class="at">html</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">html</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;</span><span class="fn">head</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;</span><span class="fn">title</span><span class="tg">&gt;</span>Mening sahifam<span class="tg">&lt;/</span><span class="fn">title</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;/</span><span class="fn">head</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;</span><span class="fn">body</span><span class="tg">&gt;</span>
+    <span class="tg">&lt;</span><span class="fn">h1</span><span class="tg">&gt;</span>Salom, Dunyo!<span class="tg">&lt;/</span><span class="fn">h1</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;/</span><span class="fn">body</span><span class="tg">&gt;</span>
+<span class="tg">&lt;/</span><span class="fn">html</span><span class="tg">&gt;</span></pre></div><p><code>&lt;!DOCTYPE html&gt;</code> — HTML5 versiyasini bildiradi.</p><p><code>&lt;head&gt;</code> — meta ma'lumotlar, sarlavha, CSS bog'lanishi.</p><p><code>&lt;body&gt;</code> — foydalanuvchi ko'radigan barcha kontent.</p><div class="ib ok"><span class="ib-i">✅</span><div>Yuqoridagi kodni terminaldagi HTML muhitiga yozing va <strong>Run</strong> bosing!</div></div>`},
+    {t:'HTML Teglar',ti:'10 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>Teglar — HTML ning asosi</h3><p>HTML teglar <code>&lt;ochiladi&gt;</code> va <code>&lt;/yopiladi&gt;</code> shaklida yoziladi.</p><div class="cb"><div class="cbh"><span class="cbl">HTML</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="cm">&lt;!-- Sarlavhalar --&gt;</span>
+<span class="tg">&lt;</span><span class="fn">h1</span><span class="tg">&gt;</span>Katta sarlavha<span class="tg">&lt;/</span><span class="fn">h1</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">h2</span><span class="tg">&gt;</span>Ikkinchi daraja<span class="tg">&lt;/</span><span class="fn">h2</span><span class="tg">&gt;</span>
+
+<span class="cm">&lt;!-- Matn --&gt;</span>
+<span class="tg">&lt;</span><span class="fn">p</span><span class="tg">&gt;</span>Paragraf<span class="tg">&lt;/</span><span class="fn">p</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">strong</span><span class="tg">&gt;</span>Qalin<span class="tg">&lt;/</span><span class="fn">strong</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">em</span><span class="tg">&gt;</span>Qiya<span class="tg">&lt;/</span><span class="fn">em</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">br</span><span class="tg">&gt;</span>  <span class="cm">&lt;!-- yangi qator --&gt;</span>
+
+<span class="cm">&lt;!-- Havola va rasm --&gt;</span>
+<span class="tg">&lt;</span><span class="fn">a</span> <span class="at">href</span>=<span class="st">"https://google.com"</span><span class="tg">&gt;</span>Google<span class="tg">&lt;/</span><span class="fn">a</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">img</span> <span class="at">src</span>=<span class="st">"rasm.jpg"</span> <span class="at">alt</span>=<span class="st">"Tavsif"</span><span class="tg">&gt;</span></pre></div><div class="ib warn"><span class="ib-i">⚠️</span><div><code>&lt;br&gt;</code>, <code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code> — bu teglar yopilmaydi (bo'sh elementlar).</div></div>`},
+    {t:"HTML Ro'yxatlar",ti:'7 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>ul va ol</h3><p>Tartibsiz ro'yxat <code>ul</code>, tartibli ro'yxat <code>ol</code> bilan yaratiladi.</p><div class="cb"><div class="cbh"><span class="cbl">HTML</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="tg">&lt;</span><span class="fn">ul</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;</span><span class="fn">li</span><span class="tg">&gt;</span>HTML<span class="tg">&lt;/</span><span class="fn">li</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;</span><span class="fn">li</span><span class="tg">&gt;</span>CSS<span class="tg">&lt;/</span><span class="fn">li</span><span class="tg">&gt;</span>
+<span class="tg">&lt;/</span><span class="fn">ul</span><span class="tg">&gt;</span>
+<span class="tg">&lt;</span><span class="fn">ol</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;</span><span class="fn">li</span><span class="tg">&gt;</span>Birinchi<span class="tg">&lt;/</span><span class="fn">li</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;</span><span class="fn">li</span><span class="tg">&gt;</span>Ikkinchi<span class="tg">&lt;/</span><span class="fn">li</span><span class="tg">&gt;</span>
+<span class="tg">&lt;/</span><span class="fn">ol</span><span class="tg">&gt;</span></pre></div>`},
+  ]},
+  css:{l:'CSS',i:'🎨',s:'body {\n  background: #F7E7CE;\n  color: #102C26;\n  font-family: sans-serif;\n  padding: 20px;\n}\nh1 { color: #102C26; font-size: 32px; }',
+  ls:[
+    {t:'CSS nima?',ti:'8 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>CSS — Cascading Style Sheets</h3><p>CSS HTML elementlarning <strong>ko'rinishini</strong> boshqaradi.</p><div class="cb"><div class="cbh"><span class="cbl">CSS</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="fn">h1</span> {
+  <span class="at">color</span>: <span class="st">#102C26</span>;
+  <span class="at">font-size</span>: <span class="nm">36px</span>;
+}
+<span class="fn">body</span> {
+  <span class="at">background</span>: <span class="st">#F7E7CE</span>;
+  <span class="at">margin</span>: <span class="nm">0</span>;
+}</pre></div><div class="ib info"><span class="ib-i">💡</span><div>CSS 3 usulda qo'shiladi: <strong>inline</strong>, <strong>internal</strong> va <strong>external</strong>.</div></div>`},
+    {t:'Selektorlar',ti:'12 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>CSS Selektorlar</h3><div class="cb"><div class="cbh"><span class="cbl">CSS</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="cm">/* Element */</span>
+<span class="fn">p</span> { <span class="at">color</span>: <span class="st">#102C26</span>; }
+<span class="cm">/* Class */</span>
+<span class="fn">.tugma</span> { <span class="at">background</span>: <span class="st">#102C26</span>; <span class="at">color</span>: <span class="st">#F7E7CE</span>; }
+<span class="cm">/* ID */</span>
+<span class="fn">#header</span> { <span class="at">height</span>: <span class="nm">60px</span>; }
+<span class="cm">/* Hover */</span>
+<span class="fn">button:hover</span> { <span class="at">opacity</span>: <span class="nm">0.8</span>; }</pre></div>`},
+  ]},
+  js:{l:'JavaScript',i:'⚡',s:"// JavaScript\nconsole.log('Salom Dunyo!');\nlet ism = 'Ali';\nconsole.log(`Ismim: ${ism}`);",
+  ls:[
+    {t:'JavaScript nima?',ti:'10 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>JavaScript — interaktivlik tili</h3><p>JS sahifalarni <strong>interaktiv</strong> qiladi — tugmalar, animatsiyalar, server bilan aloqa.</p><div class="cb"><div class="cbh"><span class="cbl">JavaScript</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="kw">let</span> <span class="vr">ism</span> = <span class="st">"Ali"</span>;
+<span class="kw">const</span> <span class="vr">yil</span> = <span class="nm">2025</span>;
+<span class="kw">function</span> <span class="fn">salom</span>(<span class="vr">nom</span>) {
+  <span class="kw">return</span> <span class="st">\`Salom, \${nom}!\`</span>;
+}
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">salom</span>(<span class="vr">ism</span>));</pre></div>`},
+    {t:"O'zgaruvchilar",ti:'12 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>let, const, var</h3><div class="cb"><div class="cbh"><span class="cbl">JavaScript</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="kw">let</span> <span class="vr">son</span> = <span class="nm">10</span>;    <span class="cm">// o'zgaruvchan</span>
+<span class="kw">const</span> <span class="vr">PI</span> = <span class="nm">3.14</span>; <span class="cm">// o'zgarmas</span>
+<span class="vr">son</span> = <span class="nm">20</span>;       <span class="cm">// ishlaydi</span>
+<span class="cm">// PI = 5;     XATO!</span></pre></div><div class="ib warn"><span class="ib-i">⚠️</span><div><code>var</code> ishlatmang — faqat <code>let</code> va <code>const</code>.</div></div>`},
+  ]},
+  python:{l:'Python',i:'🐍',s:"# Python\nprint('Salom Dunyo!')\nism = 'Ali'\nyosh = 20\nprint(f'Ismim: {ism}, yoshim: {yosh}')",
+  ls:[
+    {t:'Python nima?',ti:'10 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>Python — eng ommabop til</h3><p>O'rganish oson, kuchli va universsal. AI, veb, avtomatizatsiya — hammasi Python bilan.</p><div class="cb"><div class="cbh"><span class="cbl">Python</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="cm"># Birinchi Python dastur</span>
+<span class="fn">print</span>(<span class="st">"Salom Dunyo!"</span>)
+<span class="vr">ism</span> = <span class="st">"Ali"</span>
+<span class="vr">yosh</span> = <span class="nm">20</span>
+<span class="fn">print</span>(<span class="st">f"Ismim: {ism}, yoshim: {yosh}"</span>)</pre></div><div class="ib info"><span class="ib-i">💡</span><div>Python da <em>indent</em> (4 bo'sh joy) — kod bloklarini ajratish uchun majburiy.</div></div>`},
+    {t:"O'zgaruvchilar",ti:'12 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>Python turlari</h3><div class="cb"><div class="cbh"><span class="cbl">Python</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="vr">ism</span>    = <span class="st">"Ali"</span>   <span class="cm"># str</span>
+<span class="vr">yosh</span>   = <span class="nm">25</span>     <span class="cm"># int</span>
+<span class="vr">baland</span> = <span class="nm">1.75</span>  <span class="cm"># float</span>
+<span class="vr">talaba</span> = <span class="kw">True</span>  <span class="cm"># bool</span>
+<span class="fn">print</span>(<span class="fn">type</span>(<span class="vr">ism</span>)) <span class="cm"># &lt;class 'str'&gt;</span></pre></div>`},
+  ]},
+  php:{l:'PHP',i:'🐘',s:"<?php\necho 'Salom Dunyo!';\n$ism = 'Ali';\necho \"\\nIsmim: \" . $ism;\n?>",ls:[{t:'PHP nima?',ti:'9 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>PHP — server tili</h3><p>Server tomonda ishlaydi, dinamik HTML yaratadi. WordPress, Laravel PHP da.</p><div class="cb"><div class="cbh"><span class="cbl">PHP</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="tg">&lt;?php</span>
+<span class="fn">echo</span> <span class="st">"Salom!"</span>;
+<span class="vr">$ism</span> = <span class="st">"Ali"</span>;
+<span class="fn">echo</span> <span class="st">"Ismim: "</span> . <span class="vr">$ism</span>;
+<span class="tg">?&gt;</span></pre></div>`}]},
+  sql:{l:'SQL',i:'🗄️',s:"-- SQL\nSELECT * FROM users;\nSELECT ism, yosh FROM users\nWHERE yosh > 18\nORDER BY ism;",ls:[{t:'SQL nima?',ti:'8 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>SQL — ma'lumotlar bazasi tili</h3><div class="cb"><div class="cbh"><span class="cbl">SQL</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">users</span>;
+<span class="kw">SELECT</span> <span class="vr">ism</span>, <span class="vr">yosh</span> <span class="kw">FROM</span> <span class="fn">users</span>
+<span class="kw">WHERE</span> <span class="vr">yosh</span> > <span class="nm">18</span>;
+<span class="kw">INSERT INTO</span> <span class="fn">users</span> (<span class="vr">ism</span>) <span class="kw">VALUES</span> (<span class="st">'Ali'</span>);</pre></div>`}]},
+  windows:{l:'Windows',i:'🪟',s:':: Windows CMD\necho Salom!\ndir C:\\\nmkdir OnOlam',ls:[{t:'Windows asoslari',ti:'10 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>Windows — keng tarqalgan OT</h3><div class="ib info"><span class="ib-i">💡</span><div>Windows 10/11 da <strong>WSL</strong> (Windows Subsystem for Linux) o'rnatib, Linux terminalidan foydalanish mumkin!</div></div><div class="cb"><div class="cbh"><span class="cbl">CMD</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="fn">dir</span>           <span class="cm">:: papka tarkibi</span>
+<span class="fn">cd</span> Desktop    <span class="cm">:: papkaga kirish</span>
+<span class="fn">mkdir</span> test    <span class="cm">:: papka yaratish</span>
+<span class="fn">del</span> fayl.txt  <span class="cm">:: o'chirish</span></pre></div>`}]},
+  linux:{l:'Linux',i:'🐧',s:'#!/bin/bash\necho "Salom Dunyo!"\nls -la\npwd',ls:[{t:'Linux nima?',ti:'10 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>Linux — dasturchilar OS si</h3><p>Bepul, ochiq kodli. Barcha serverlarning 96% Linux da ishlaydi.</p><div class="cb"><div class="cbh"><span class="cbl">Bash</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="fn">ls</span>                <span class="cm"># fayl ro'yxati</span>
+<span class="fn">pwd</span>               <span class="cm"># joriy yo'l</span>
+<span class="fn">cd</span> /home          <span class="cm"># o'tish</span>
+<span class="fn">mkdir</span> onolam      <span class="cm"># yaratish</span>
+<span class="fn">sudo apt install</span> python3</pre></div>`}]},
+  mobile:{l:'Termux',i:'📱',s:'# Termux\npkg update\npkg install python\npython --version',ls:[{t:'Termux nima?',ti:'12 daqiqa',lv:"🟢 Boshlang'ich",c:`<h3>Termux — telefoningizda Linux</h3><p>Android da to'liq Linux muhiti. Kompyutersiz dasturlash!</p><div class="ib ok"><span class="ib-i">📱</span><div><strong>F-Droid</strong> dan yuklab oling — Google Play versiyasi eskirgan.</div></div><div class="cb"><div class="cbh"><span class="cbl">Termux</span><div class="cbd"><div class="cdd" style="background:#ff5f57"></div><div class="cdd" style="background:#febc2e"></div><div class="cdd" style="background:#28c840"></div></div></div><pre class="cbp"><span class="fn">pkg</span> update && <span class="fn">pkg</span> upgrade
+<span class="fn">pkg</span> install python
+<span class="fn">pkg</span> install nodejs
+<span class="fn">pkg</span> install git</pre></div>`}]},
+};
+
+const SD=[
+  {t:'HTML nima?',s:'HTML · 1-dars',g:'dars',i:'🌐',a:()=>{oc('html');ll('html',0)}},
+  {t:'CSS Selektorlar',s:'CSS · 2-dars',g:'dars',i:'🎨',a:()=>{oc('css');ll('css',1)}},
+  {t:'JavaScript nima?',s:'JS · 1-dars',g:'dars',i:'⚡',a:()=>{oc('js');ll('js',0)}},
+  {t:'Python nima?',s:'Python · 1-dars',g:'dars',i:'🐍',a:()=>{oc('python');ll('python',0)}},
+  {t:'SQL nima?',s:'SQL · 1-dars',g:'dars',i:'🗄️',a:()=>{oc('sql');ll('sql',0)}},
+  {t:'Termux o\'rnatish',s:'Telefon · 1-dars',g:'dars',i:'📱',a:()=>{oc('mobile');ll('mobile',0)}},
+  {t:'Linux buyruqlari',s:'Linux · 1-dars',g:'dars',i:'🐧',a:()=>{oc('linux');ll('linux',0)}},
+  {t:'Video darslar',s:'Pullik rejim',g:'pro',i:'▶️',a:()=>ovm()},
+  {t:'Terminal',s:'Kod yozish',g:'vosita',i:'⌨️',a:()=>oterm()},
+  {t:'Frontend nima?',s:'Bosh sahifa',g:'info',i:'🌐',a:()=>window.location='index.html#courses'},
+];
+function ds(q){
+  const dd=document.getElementById('sd');
+  if(!q.trim()){dd.innerHTML='';dd.classList.remove('show');return}
+  const r=SD.filter(x=>x.t.toLowerCase().includes(q.toLowerCase())||x.s.toLowerCase().includes(q.toLowerCase()));
+  if(!r.length){dd.innerHTML='<div class="sdi" style="color:var(--mu)">Natija topilmadi</div>';dd.classList.add('show');return}
+  dd.innerHTML=r.map(x=>`<div class="sdi" onclick="(${x.a.toString()})();hdd()"><div class="sdi-ico">${x.i}</div><div class="sdi-inf"><div class="sdi-t">${x.t}</div><div class="sdi-s">${x.s}</div></div><span class="sdi-tag">${x.g}</span></div>`).join('');
+  dd.classList.add('show');
+}
+function sdd(){document.getElementById('sd').classList.add('show')}
+function hdd(){document.getElementById('sd').classList.remove('show')}
+
+let cc=null,ci=0;
+function oc(id){
+  cc=id;const c=D[id];
+  document.getElementById('sbm').style.display='none';
+  document.getElementById('sbs').style.display='block';
+  document.getElementById('sbl').textContent=c.l+' Darslari';
+  document.getElementById('sbl2').innerHTML=c.ls.map((l,i)=>`<div class="si ${i===0?'act':''}" id="si${i}" onclick="ll('${id}',${i})"><span class="si-n">${String(i+1).padStart(2,'0')}</span><span class="si-dot"></span><span>${l.t}</span></div>`).join('');
+  if(!sbo)tsb();
+}
+function css2(){document.getElementById('sbm').style.display='block';document.getElementById('sbs').style.display='none'}
+function ll(id,idx){
+  cc=id;ci=idx;const c=D[id];const l=c.ls[idx];
+  document.getElementById('ws').style.display='none';
+  document.getElementById('lv').classList.add('show');
+  document.getElementById('ln').textContent=`${String(idx+1).padStart(2,'0')} / ${String(c.ls.length).padStart(2,'0')}`;
+  document.getElementById('lt').textContent=l.t;
+  document.getElementById('lti').textContent=`⏱ ${l.ti}`;
+  document.getElementById('llv').textContent=l.lv;
+  document.getElementById('bc').innerHTML=`OnOlam › <span>${c.l}</span> › ${l.t}`;
+  document.getElementById('lb').innerHTML=l.c;
+  document.getElementById('pf').style.width=((idx+1)/c.ls.length*100)+'%';
+  document.querySelectorAll('.si').forEach((el,i)=>el.classList.toggle('act',i===idx));
+  document.getElementById('pb').disabled=idx===0;
+  document.getElementById('nb2').textContent=idx===c.ls.length-1?'Kurs tugadi ✓':'Keyingi →';
+  const lm={js:'js',python:'python',css:'css',sql:'sql',php:'php',linux:'bash',windows:'bash',mobile:'bash'};
+  cl=lm[id]||'html';
+  document.querySelectorAll('.tl').forEach(el=>el.classList.toggle('act',el.textContent.toLowerCase()===cl||(cl==='html'&&el.textContent==='HTML')||(cl==='js'&&el.textContent==='JS')));
+  document.getElementById('ttl').textContent=`terminal — ${id}`;
+  document.getElementById('te').value=c.s||'';
+  document.getElementById('tw2').textContent=`[${c.i} ${c.l} terminali]`;
+  ul();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nav(d){if(!cc)return;const n=ci+d;if(n>=0&&n<D[cc].ls.length)ll(cc,n)}
+
+/* terminal */
+let tm=false,cl='html';
+function oterm(){document.getElementById('tw').classList.add('show')}
+function cterm(){document.getElementById('tw').classList.remove('show');if(tm)rt()}
+function mterm(){
+  const w=document.getElementById('tw');
+  if(!tm){w._s={b:w.style.bottom,r:w.style.right,wd:w.style.width};w.style.cssText+=';top:calc(var(--hh)+5px);left:5px;right:5px;bottom:5px;width:auto;height:auto';tm=true}
+  else rt();
+}
+function rt(){const w=document.getElementById('tw');const s=w._s||{};w.style.top='';w.style.left='';w.style.bottom=s.b||'66px';w.style.right=s.r||'18px';w.style.width=s.wd||'520px';w.style.height='';tm=false}
+function sl2(el,l){document.querySelectorAll('.tl').forEach(e=>e.classList.remove('act'));el.classList.add('act');cl=l;document.getElementById('ttl').textContent=`terminal — ${l}`;const m={html:'html',css:'css',js:'js',python:'python',sql:'sql',php:'php',bash:'linux'};document.getElementById('te').value=D[m[l]]?.s||'// Kod yozing...';ul();document.getElementById('to').innerHTML='<div class="tpr">onolam@terminal:~$ </div><div class="to">['+l.toUpperCase()+' muhiti]</div>'}
+function ul(){const v=document.getElementById('te').value;const n=v.split('\n').length;document.getElementById('lns').innerHTML=Array.from({length:n},(_,i)=>i+1).join('<br>')}
+function tk(e){
+  if(e.ctrlKey&&e.key==='Enter'){e.preventDefault();rc()}
+  if(e.ctrlKey&&e.key==='s'){e.preventDefault();document.getElementById('ts').textContent='● saqlandi ✓';setTimeout(()=>document.getElementById('ts').textContent='● tayyor',2000)}
+  if(e.key==='Tab'){e.preventDefault();const t=e.target,s=t.selectionStart;t.value=t.value.slice(0,s)+'  '+t.value.slice(t.selectionEnd);t.selectionStart=t.selectionEnd=s+2;ul()}
+}
+const hints={html:['<!DOCTYPE html>','<html>','<head>','<body>','<div>','<p>','<h1>','<span>','<a href="">','<img src="">'],python:['print()','def ','if ','for i in range()','while ','class ','import ','return '],js:['console.log()','function ','const ','let ','document.getElementById()'],css:['background:','color:','display:flex','margin:','padding:','border:'],sql:['SELECT * FROM ','WHERE ','ORDER BY ','INSERT INTO '],php:['echo ','$_POST','function ','<?php'],bash:['ls -la','cd ','mkdir ','echo ','sudo apt install']};
+function ca(v){const tip=document.getElementById('ac');const cur=v.split('\n').pop().trim();if(cur.length<2){tip.classList.remove('show');return}const m=(hints[cl]||[]).find(h=>h.startsWith(cur)&&h!==cur);m?(tip.textContent=`Tab → ${m}`,tip.classList.add('show')):tip.classList.remove('show')}
+function rc(){
+  const code=document.getElementById('te').value;
+  const out=document.getElementById('to');
+  document.getElementById('ts').textContent='● ishlamoqda...';
+  out.innerHTML='<div class="tpr">onolam@terminal:~$ run '+cl+'</div>';
+  setTimeout(()=>{
+    document.getElementById('ts').textContent='● bajarildi ✓';
+    if(cl==='html'){out.innerHTML+='<div class="tok">✓ Brauzerda ko\'rsatildi</div>';const b=new Blob([code],{type:'text/html'});const u=URL.createObjectURL(b);const d=document.createElement('div');d.style.cssText='margin-top:7px;background:#fff;border-radius:6px;overflow:hidden;height:100px';d.innerHTML=`<iframe src="${u}" style="width:100%;height:100%;border:none"></iframe>`;out.appendChild(d)}
+    else if(cl==='python'){const ps=code.match(/print\([^)]+\)/g)||[];ps.length?ps.forEach(p=>{const v=p.slice(6,-1).replace(/['"f]/g,'');out.innerHTML+=`<div class="tres">${v}</div>`}):out.innerHTML+='<div class="to">print() ishlating</div>'}
+    else if(cl==='js'){const ls=code.match(/console\.log\([^)]+\)/g)||[];ls.length?ls.forEach(l=>{const v=l.slice(12,-1).replace(/['"]/g,'');out.innerHTML+=`<div class="tres">${v}</div>`}):out.innerHTML+='<div class="to">console.log() ishlating</div>'}
+    else{out.innerHTML+=`<div class="tok">✓ Bajarildi</div><div class="to">${cl.toUpperCase()} muhitida ishlatildi</div>`}
+  },480);
+}
+(()=>{const w=document.getElementById('tw'),h=document.getElementById('th');let dr=false,ox=0,oy=0;h.addEventListener('mousedown',e=>{if(tm)return;dr=true;ox=e.clientX-w.offsetLeft;oy=e.clientY-w.offsetTop;w.style.right='auto';w.style.bottom='auto'});document.addEventListener('mousemove',e=>{if(!dr)return;let nx=e.clientX-ox,ny=e.clientY-oy;nx=Math.max(0,Math.min(nx,window.innerWidth-w.offsetWidth));ny=Math.max(62,Math.min(ny,window.innerHeight-200));w.style.left=nx+'px';w.style.top=ny+'px'});document.addEventListener('mouseup',()=>dr=false)})();
+
+function ovm(){document.getElementById('vmb').classList.add('open')}
+function cvm(){document.getElementById('vmb').classList.remove('open')}
+function cvb(e){if(e.target===document.getElementById('vmb'))cvm()}
+</script>
+</body>
+</html>

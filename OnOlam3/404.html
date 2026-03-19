@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — 404</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+.not-found{min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;overflow:hidden;}
+.nf-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.35;}
+.nf-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(0,255,65,.04) 0%,transparent 70%);pointer-events:none;}
+.nf-content{position:relative;z-index:1;max-width:500px;}
+.nf-terminal{background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-xl);padding:0;overflow:hidden;margin:0 auto 40px;width:100%;max-width:440px;box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 40px rgba(0,255,65,.04);text-align:left;}
+.nf-term-header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--void-3);border-bottom:1px solid var(--border);}
+.nf-term-dots{display:flex;gap:5px;}
+.nf-term-dots span{width:10px;height:10px;border-radius:50%;}
+.nf-term-dots span:nth-child(1){background:#ff5f57;}
+.nf-term-dots span:nth-child(2){background:#ffbd2e;}
+.nf-term-dots span:nth-child(3){background:#28c840;}
+.nf-term-title{font-size:11px;color:var(--text-3);margin-left:4px;}
+.nf-term-body{padding:20px;font-size:13px;line-height:2;}
+.nf-line{display:block;}
+.nl-prompt{color:var(--neon);margin-right:8px;}
+.nl-cmd{color:var(--text-1);}
+.nl-out{color:var(--text-2);padding-left:16px;}
+.nl-err{color:var(--red);padding-left:16px;}
+.nl-warn{color:var(--yellow);padding-left:16px;}
+.nl-blank{display:block;height:8px;}
+.nf-404{font-size:clamp(80px,15vw,140px);font-weight:800;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:2px var(--neon);text-shadow:0 0 60px rgba(0,255,65,.15);margin-bottom:16px;font-family:var(--font);}
+.nf-title{font-size:clamp(18px,3vw,26px);font-weight:800;margin-bottom:12px;}
+.nf-desc{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:32px;}
+.nf-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.nf-links{margin-top:32px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap;}
+.nf-links a{font-size:13px;color:var(--text-3);transition:var(--t);}
+.nf-links a:hover{color:var(--neon);}
+/* Glitch */
+@keyframes glitch{
+  0%,90%,100%{transform:translate(0);}
+  92%{transform:translate(-3px,1px);}
+  94%{transform:translate(3px,-1px);color:var(--red);}
+  96%{transform:translate(-2px,2px);}
+  98%{transform:translate(2px,-2px);color:var(--blue);}
+}
+.glitch{animation:glitch 4s ease-in-out infinite;}
+/* Typing */
+@keyframes typing{from{width:0}to{width:100%}}
+.type-line{overflow:hidden;white-space:nowrap;animation:typing 1.5s steps(30) forwards;}
+.type-line.d1{animation-delay:.2s;width:0;}
+.type-line.d2{animation-delay:1s;width:0;}
+.type-line.d3{animation-delay:1.8s;width:0;}
+.type-line.d4{animation-delay:2.6s;width:0;}
+.type-line.d5{animation-delay:3.4s;width:0;}
+@media(max-width:480px){.nf-actions{flex-direction:column;align-items:center;}.nf-actions .btn{width:100%;max-width:280px;}}
+  </style>
+</head>
+<body>
+<div class="not-found">
+  <div class="nf-grid"></div>
+  <div class="nf-orb"></div>
+  <div class="nf-content">
+
+    <!-- Terminal error -->
+    <div class="nf-terminal anim-up">
+      <div class="nf-term-header">
+        <div class="nf-term-dots"><span></span><span></span><span></span></div>
+        <span class="nf-term-title">onolam@terminal ~ bash</span>
+      </div>
+      <div class="nf-term-body">
+        <span class="nf-line type-line d1"><span class="nl-prompt">$</span><span class="nl-cmd">cd /sahifa/notopildi</span></span>
+        <span class="nf-line type-line d2 nl-err">bash: cd: /sahifa/notopildi: No such file or directory</span>
+        <span class="nl-blank"></span>
+        <span class="nf-line type-line d3"><span class="nl-prompt">$</span><span class="nl-cmd">find / -name "sahifa" 2>/dev/null</span></span>
+        <span class="nf-line type-line d4 nl-warn">⚠ Sahifa topilmadi. HTTP 404.</span>
+        <span class="nl-blank"></span>
+        <span class="nf-line type-line d5"><span class="nl-prompt">$</span><span class="nl-cmd">echo "Bosh sahifaga qaytish..."<span class="cursor"></span></span></span>
+      </div>
+    </div>
+
+    <div class="nf-404 glitch anim-up anim-d3">404</div>
+    <h1 class="nf-title anim-up anim-d4">Sahifa topilmadi</h1>
+    <p class="nf-desc anim-up anim-d5">
+      Siz qidirgan sahifa mavjud emas, o'chirilgan yoki manzil noto'g'ri kiritilgan.<br>
+      Xato bo'lsa, biz sizga yordam beramiz.
+    </p>
+
+    <div class="nf-actions anim-up anim-d5">
+      <a href="index.html"><button class="btn btn-neon btn-lg">⚡ Bosh sahifa →</button></a>
+      <a href="dashboard.html"><button class="btn btn-outline btn-lg">Dashboard</button></a>
+    </div>
+
+    <div class="nf-links anim-up">
+      <a href="courses.html">📚 Kurslar</a>
+      <a href="pricing.html">💳 Tariflar</a>
+      <a href="login.html">🔑 Kirish</a>
+      <a href="#">❓ Yordam</a>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

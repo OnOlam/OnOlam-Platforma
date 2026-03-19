@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOlam — Texnologiyalar Bilimlar Asri Dunyosi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:  #102C26;
+  --forest2: #1a3d35;
+  --forest3: #0b201b;
+  --champ:   #F7E7CE;
+  --champ2:  #ede0cc;
+  --champ3:  #f9f0e2;
+  --white:   #ffffff;
+  --text-on-forest: #F7E7CE;
+  --text-on-champ:  #102C26;
+  --muted-on-forest: rgba(247,231,206,0.55);
+  --muted-on-champ:  rgba(16,44,38,0.5);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--champ3);
+  color: var(--text-on-champ);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* subtle texture overlay */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23102C26' fill-opacity='0.03'%3E%3Cpath d='M0 0h40v1H0zM0 20h40v1H0z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── HERO SECTION ── */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  display: flex;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* decorative arc */
+.hero::after {
+  content:'';
+  position:absolute;
+  bottom:-2px; left:0; right:0;
+  height: 80px;
+  background: var(--champ3);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* diagonal accent */
+.hero-deco {
+  position:absolute;
+  top:0; right:0;
+  width:38%;
+  height:100%;
+  background: var(--forest2);
+  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
+  opacity:0.5;
+}
+
+.hero-inner {
+  display:flex;
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 40px;
+  position:relative;
+  z-index:2;
+}
+
+/* left: main content */
+.hero-left {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:80px 0 120px;
+}
+
+/* LOGO */
+.logo-area {
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:52px;
+  animation: fadeUp .7s ease both;
+}
+.logo-box {
+  width:68px; height:68px;
+  background: var(--champ);
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Mono',monospace;
+  font-weight:700; font-size:18px;
+  color: var(--forest);
+  flex-shrink:0;
+  box-shadow: 0 8px 32px rgba(247,231,206,0.15);
+}
+.logo-text-block h1 {
+  font-family:'Playfair Display', serif;
+  font-size:48px; font-weight:800;
+  color: var(--champ);
+  line-height:1;
+  letter-spacing:-1px;
+}
+.logo-text-block .logo-sub {
+  font-family:'Space Mono',monospace;
+  font-size:9px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color: var(--muted-on-forest);
+  margin-top:5px;
+}
+
+.logo-meaning {
+  display:inline-flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:16px 20px;
+  border:1px solid rgba(247,231,206,0.15);
+  border-radius:12px;
+  background:rgba(247,231,206,0.06);
+  max-width:480px;
+  margin-bottom:40px;
+  animation: fadeUp .7s .1s ease both;
+}
+.logo-meaning-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+.logo-meaning-text {
+  font-size:13px;
+  line-height:1.7;
+  color: var(--muted-on-forest);
+}
+.logo-meaning-text strong { color:var(--champ); }
+
+.hero-headline {
+  font-family:'Playfair Display',serif;
+  font-size: clamp(28px,4vw,52px);
+  font-weight:800;
+  color: var(--champ);
+  line-height:1.15;
+  margin-bottom:16px;
+  animation: fadeUp .7s .15s ease both;
+}
+.hero-desc {
+  font-size:16px;
+  color:var(--muted-on-forest);
+  line-height:1.75;
+  max-width:440px;
+  animation: fadeUp .7s .2s ease both;
+}
+
+/* right: auth panel */
+.hero-right {
+  width:320px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding: 80px 0 120px;
+  flex-shrink:0;
+}
+
+.auth-card {
+  background:var(--champ);
+  border-radius:20px;
+  padding:32px 28px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+  animation: fadeUp .7s .25s ease both;
+}
+.auth-card-title {
+  font-family:'Playfair Display',serif;
+  font-size:22px; font-weight:700;
+  color:var(--forest);
+  margin-bottom:6px;
+}
+.auth-card-sub {
+  font-size:13px;
+  color:var(--muted-on-champ);
+  margin-bottom:24px;
+}
+
+/* tabs */
+.auth-tabs {
+  display:flex;
+  background:var(--champ2);
+  border-radius:10px;
+  padding:3px;
+  margin-bottom:22px;
+}
+.auth-tab {
+  flex:1; padding:8px;
+  text-align:center;
+  font-size:13px; font-weight:600;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .2s;
+  color:var(--muted-on-champ);
+  user-select:none;
+}
+.auth-tab.active {
+  background:var(--forest);
+  color:var(--champ);
+}
+
+.auth-form { display:flex; flex-direction:column; gap:12px; }
+.auth-form.hidden { display:none; }
+
+.field-label {
+  font-size:11px; font-weight:600;
+  letter-spacing:1px; text-transform:uppercase;
+  color:var(--muted-on-champ);
+  margin-bottom:5px;
+}
+.field-input {
+  width:100%;
+  padding:11px 14px;
+  background:var(--white);
+  border:1.5px solid var(--champ2);
+  border-radius:10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  color:var(--forest);
+  outline:none;
+  transition:border-color .2s;
+}
+.field-input:focus { border-color:var(--forest); }
+.field-input::placeholder { color:var(--muted-on-champ); }
+
+.btn-main {
+  width:100%;
+  padding:13px;
+  background:var(--forest);
+  border:none;
+  border-radius:10px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:600; font-size:14px;
+  color:var(--champ);
+  cursor:pointer;
+  transition:all .2s;
+  margin-top:4px;
+  letter-spacing:.3px;
+}
+.btn-main:hover {
+  background:var(--forest2);
+  transform:translateY(-1px);
+  box-shadow:0 8px 24px rgba(16,44,38,0.3);
+}
+
+/* quick stats */
+.stats-row {
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+  animation: fadeUp .7s .3s ease both;
+}
+.stat-pill {
+  flex:1;
+  background:rgba(247,231,206,0.08);
+  border:1px solid rgba(247,231,206,0.12);
+  border-radius:10px;
+  padding:12px;
+  text-align:center;
+}
+.stat-pill-val {
+  font-family:'Space Mono',monospace;
+  font-size:17px; font-weight:700;
+  color:var(--champ);
+}
+.stat-pill-lbl {
+  font-size:10px;
+  color:var(--muted-on-forest);
+  margin-top:2px;
+}
+
+/* ── COURSES SECTION ── */
+.section-courses {
+  position:relative; z-index:1;
+  padding:80px 40px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.sec-eyebrow {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted-on-champ);
+  margin-bottom:12px;
+}
+.sec-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,3vw,38px);
+  font-weight:800;
+  color:var(--forest);
+  margin-bottom:48px;
+}
+
+.cards-wrap {
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
+  gap:20px;
+}
+
+.course-card {
+  background:var(--white);
+  border:1.5px solid var(--champ2);
+  border-radius:20px;
+  padding:32px;
+  cursor:pointer;
+  transition:all .25s;
+  position:relative;
+  overflow:hidden;
+}
+.course-card::before {
+  content:'';
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:4px;
+  background:var(--forest);
+  border-radius:20px 0 0 20px;
+  transform:scaleY(0);
+  transform-origin:bottom;
+  transition:transform .3s ease;
+}
+.course-card:hover {
+  border-color:var(--forest);
+  transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(16,44,38,0.12);
+}
+.course-card:hover::before { transform:scaleY(1); }
+
+.card-ico {
+  width:48px; height:48px;
+  background:var(--champ3);
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+  margin-bottom:18px;
+  border:1.5px solid var(--champ2);
+}
+.card-title {
+  font-family:'Playfair Display',serif;
+  font-size:19px; font-weight:700;
+  color:var(--forest);
+  margin-bottom:10px;
+}
+.card-desc {
+  font-size:13.5px;
+  line-height:1.7;
+  color:var(--muted-on-champ);
+  margin-bottom:20px;
+}
+.card-tags { display:flex; flex-wrap:wrap; gap:6px; }
+.tag {
+  padding:4px 11px;
+  background:var(--champ3);
+  border:1px solid var(--champ2);
+  border-radius:20px;
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--forest);
+}
+.card-go {
+  position:absolute;
+  bottom:24px; right:24px;
+  width:36px; height:36px;
+  background:var(--champ3);
+  border:1.5px solid var(--champ2);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px;
+  color:var(--muted-on-champ);
+  transition:all .2s;
+}
+.course-card:hover .card-go {
+  background:var(--forest);
+  border-color:var(--forest);
+  color:var(--champ);
+}
+
+/* ── FOOTER ── */
+footer {
+  background:var(--forest);
+  position:relative; z-index:1;
+  padding:64px 40px 36px;
+}
+footer::before {
+  content:'';
+  position:absolute;
+  top:-2px; left:0; right:0;
+  height:50px;
+  background:var(--champ3);
+  clip-path: ellipse(55% 100% at 50% 0%);
+}
+
+.footer-inner {
+  max-width:1200px;
+  margin:0 auto;
+}
+.footer-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:48px;
+  margin-bottom:48px;
+}
+.footer-col-title {
+  font-family:'Space Mono',monospace;
+  font-size:9px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted-on-forest);
+  margin-bottom:18px;
+}
+.qs-link {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:9px 0;
+  border-bottom:1px solid rgba(247,231,206,0.08);
+  cursor:pointer;
+  font-size:13px;
+  color:var(--muted-on-forest);
+  transition:color .15s;
+  text-decoration:none;
+}
+.qs-link:hover { color:var(--champ); }
+.qs-link:last-child { border-bottom:none; }
+.qs-arrow { margin-left:auto; font-size:12px; opacity:0; transition:opacity .15s; }
+.qs-link:hover .qs-arrow { opacity:1; }
+
+.footer-about {
+  font-size:13px;
+  line-height:1.75;
+  color:var(--muted-on-forest);
+}
+.footer-about strong { color:var(--champ); }
+
+.social-item {
+  display:flex; align-items:center; gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid rgba(247,231,206,0.08);
+  text-decoration:none;
+  color:var(--muted-on-forest);
+  font-size:13px;
+  transition:color .15s;
+}
+.social-item:hover { color:var(--champ); }
+.social-item:last-child { border-bottom:none; }
+.social-ico {
+  width:32px; height:32px;
+  background:rgba(247,231,206,0.08);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px;
+  flex-shrink:0;
+}
+.social-handle {
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--muted-on-forest);
+  margin-left:auto;
+}
+
+.footer-bottom {
+  padding-top:28px;
+  border-top:1px solid rgba(247,231,206,0.1);
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:'Space Mono',monospace;
+  font-size:10px;
+  color:var(--muted-on-forest);
+}
+
+/* ── MODAL ── */
+.modal-bg {
+  position:fixed; inset:0;
+  background:rgba(16,44,38,0.7);
+  backdrop-filter:blur(8px);
+  z-index:200;
+  display:none;
+  align-items:center; justify-content:center;
+}
+.modal-bg.open { display:flex; }
+.modal-box {
+  background:var(--champ3);
+  border-radius:24px;
+  padding:40px;
+  width:420px; max-width:92vw;
+  animation:popIn .3s cubic-bezier(.34,1.56,.64,1) both;
+  position:relative;
+}
+.modal-close {
+  position:absolute; top:16px; right:16px;
+  width:32px; height:32px;
+  background:var(--champ2);
+  border:none; border-radius:8px;
+  cursor:pointer; font-size:16px;
+  color:var(--muted-on-champ);
+  display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
+}
+.modal-close:hover { background:var(--forest); color:var(--champ); }
+.modal-title {
+  font-family:'Playfair Display',serif;
+  font-size:24px; font-weight:700;
+  color:var(--forest); margin-bottom:6px;
+}
+.modal-sub { font-size:13px; color:var(--muted-on-champ); margin-bottom:28px; }
+.plan-opt {
+  background:var(--white);
+  border:1.5px solid var(--champ2);
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:12px;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.plan-opt:hover { border-color:var(--forest); }
+.plan-opt.pro { border-color:var(--forest); }
+.plan-badge {
+  position:absolute; top:-10px; right:14px;
+  padding:3px 10px;
+  background:var(--forest);
+  color:var(--champ);
+  font-size:9px; font-weight:700;
+  border-radius:20px; font-family:'Space Mono',monospace;
+}
+.plan-name { font-weight:700; font-size:14px; color:var(--forest); margin-bottom:4px; }
+.plan-price {
+  font-family:'Space Mono',monospace;
+  font-size:20px; color:var(--forest);
+  margin-bottom:8px;
+}
+.plan-feat { font-size:12px; line-height:1.75; color:var(--muted-on-champ); }
+.plan-feat .y { color:var(--forest); font-weight:600; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes popIn  { from{opacity:0;transform:scale(.88)} to{opacity:1;transform:scale(1)} }
+
+@media(max-width:900px){
+  .hero-inner{flex-direction:column}
+  .hero-left{padding:60px 0 40px}
+  .hero-right{width:100%;padding:0 0 80px}
+  .cards-wrap{grid-template-columns:1fr}
+  .section-courses{padding:60px 24px}
+  footer{padding:64px 24px 36px}
+  .footer-grid{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HERO ─────────────────────── -->
+<section class="hero">
+  <div class="hero-deco"></div>
+
+  <div class="hero-inner">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="logo-area">
+        <div class="logo-box">OO</div>
+        <div class="logo-text-block">
+          <h1>OnOlam</h1>
+          <div class="logo-sub">On · Olam Platform</div>
+        </div>
+      </div>
+
+      <div class="logo-meaning">
+        <span class="logo-meaning-icon">🔤</span>
+        <div class="logo-meaning-text">
+          <strong>On</strong> = Online + Knowledge &nbsp;·&nbsp;
+          <strong>Olam</strong> = Dunyo (World)<br>
+          To'liq ma'nosi: <em>"Texnologiyalar, Bilimlar Asri Dunyosi"</em>
+        </div>
+      </div>
+
+      <h2 class="hero-headline">
+        Dasturlashni<br>
+        noldan o'rgan.
+      </h2>
+      <p class="hero-desc">
+        Frontend, Backend, OS va Telefon darslari — barchasi bir joyda.
+        Matnli darslar bepul, video darslar pullik rejimda.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-pill">
+          <div class="stat-pill-val">120+</div>
+          <div class="stat-pill-lbl">Darslar</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-val">60+</div>
+          <div class="stat-pill-lbl">Video</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-val">1.2k</div>
+          <div class="stat-pill-lbl">O'quvchi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: AUTH -->
+    <div class="hero-right">
+      <div class="auth-card">
+        <div class="auth-card-title">Xush kelibsiz</div>
+        <div class="auth-card-sub">Kurslarni boshlash uchun kiring</div>
+
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Kirish</div>
+          <div class="auth-tab" id="tab-reg" onclick="switchTab('reg')">Ro'yxat</div>
+        </div>
+
+        <!-- Login form -->
+        <div class="auth-form" id="form-login">
+          <div>
+            <div class="field-label">Gmail</div>
+            <input class="field-input" type="email" id="login-email" placeholder="sizning@gmail.com">
+          </div>
+          <div>
+            <div class="field-label">Parol</div>
+            <input class="field-input" type="password" id="login-pass" placeholder="••••••••">
+          </div>
+          <button class="btn-main" onclick="doLogin()">Kirish →</button>
+        </div>
+
+        <!-- Register form -->
+        <div class="auth-form hidden" id="form-reg">
+          <div>
+            <div class="field-label">Gmail</div>
+            <input class="field-input" type="email" id="reg-email" placeholder="sizning@gmail.com">
+          </div>
+          <div>
+            <div class="field-label">Parol</div>
+            <input class="field-input" type="password" id="reg-pass" placeholder="••••••••">
+          </div>
+          <button class="btn-main" onclick="doRegister()">Ro'yxatdan o'tish →</button>
+        </div>
+      </div>
+
+      <!-- pricing link -->
+      <div style="text-align:center;margin-top:16px;">
+        <span onclick="openModal()" style="font-size:13px;color:var(--muted-on-forest);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
+          💎 Pullik rejim haqida
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── COURSES ─────────────────── -->
+<section>
+  <div class="section-courses">
+    <div class="sec-eyebrow">// Kurslar</div>
+    <h2 class="sec-title">Nima o'rganasiz?</h2>
+
+    <div class="cards-wrap">
+
+      <div class="course-card" onclick="window.location='dashboard.html'">
+        <div class="card-ico">🌐</div>
+        <div class="card-title">Frontend Darslar</div>
+        <p class="card-desc">
+          Veb-sahifalarning ko'rinadigan qismini yaratish.
+          <strong>HTML</strong> — tuzilma va skelet.
+          <strong>CSS</strong> — uslub, animatsiya, rang.
+          <strong>JavaScript</strong> — interaktivlik va mantiq.
+        </p>
+        <div class="card-tags">
+          <span class="tag">HTML5</span>
+          <span class="tag">CSS3</span>
+          <span class="tag">JavaScript</span>
+        </div>
+        <div class="card-go">→</div>
+      </div>
+
+      <div class="course-card" onclick="window.location='dashboard.html'">
+        <div class="card-ico">⚙️</div>
+        <div class="card-title">Backend Darslar</div>
+        <p class="card-desc">
+          Server tomoni dasturlash.
+          <strong>Python</strong> — kuchli va oson.
+          <strong>PHP</strong> — veb serverlar uchun.
+          <strong>SQL</strong> — ma'lumotlar bazasi.
+        </p>
+        <div class="card-tags">
+          <span class="tag">Python</span>
+          <span class="tag">PHP</span>
+          <span class="tag">SQL</span>
+        </div>
+        <div class="card-go">→</div>
+      </div>
+
+      <div class="course-card" onclick="window.location='dashboard.html'">
+        <div class="card-ico">💻</div>
+        <div class="card-title">Operatsion Tizimlar</div>
+        <p class="card-desc">
+          <strong>Windows</strong> — sozlash va muhit.
+          <strong>Linux</strong> — terminal, o'rnatish, server muhiti.
+          Noutbuk va kompyuterlarga o'rnatish bo'yicha to'liq qo'llanmalar.
+        </p>
+        <div class="card-tags">
+          <span class="tag">Windows</span>
+          <span class="tag">Linux</span>
+        </div>
+        <div class="card-go">→</div>
+      </div>
+
+      <div class="course-card" onclick="window.location='dashboard.html'">
+        <div class="card-ico">📱</div>
+        <div class="card-title">Telefon Darslari</div>
+        <p class="card-desc">
+          Android telefon va <strong>Termux</strong> ilovasi orqali dasturlash.
+          Frontend va Backend darslarini telefoningizda bajaring — kompyuter shart emas!
+        </p>
+        <div class="card-tags">
+          <span class="tag">Termux</span>
+          <span class="tag">Android</span>
+        </div>
+        <div class="card-go">→</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+
+      <div>
+        <div class="footer-col-title">Tezkor Yo'riqnoma</div>
+        <a class="qs-link" onclick="goRegister()">
+          <span>📖</span> Onlayn kursda o'qimoqchiman
+          <span class="qs-arrow">→</span>
+        </a>
+        <a class="qs-link" href="#courses">
+          <span>💡</span> Frontend nima?
+          <span class="qs-arrow">→</span>
+        </a>
+        <a class="qs-link" href="#courses">
+          <span>⚙️</span> Backend nima?
+          <span class="qs-arrow">→</span>
+        </a>
+        <a class="qs-link" onclick="openModal()">
+          <span>💎</span> Bepul va pullik farqi
+          <span class="qs-arrow">→</span>
+        </a>
+        <a class="qs-link" href="#courses">
+          <span>📱</span> Telefondan o'rganish mumkinmi?
+          <span class="qs-arrow">→</span>
+        </a>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Loyiha Haqida</div>
+        <p class="footer-about">
+          <strong>OnOlam</strong> — o'zbek tilida sifatli texnologiya ta'limi platformasi. Maqsad: har kim, hatto telefoni bilan ham dasturlashni o'rgansin.
+        </p>
+        <p class="footer-about" style="margin-top:12px">
+          Hamkorlik uchun murojaat: <strong>@onolam</strong>
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Ijtimoiy Tarmoqlar</div>
+        <a href="#" class="social-item">
+          <div class="social-ico">📸</div>
+          Instagram
+          <span class="social-handle">@onolam</span>
+        </a>
+        <a href="#" class="social-item">
+          <div class="social-ico">✈️</div>
+          Telegram
+          <span class="social-handle">@onolam_uz</span>
+        </a>
+        <a href="#" class="social-item">
+          <div class="social-ico">▶️</div>
+          YouTube
+          <span class="social-handle">OnOlam</span>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 OnOlam</span>
+      <span>Texnologiyalar Bilimlar Asri Dunyosi</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── MODAL ─────────────────── -->
+<div class="modal-bg" id="modalBg" onclick="closeBg(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Rejimni tanlang</div>
+    <div class="modal-sub">O'z ehtiyojingizga mos rejimni tanlang</div>
+
+    <div class="plan-opt">
+      <div class="plan-name">🆓 Bepul Rejim</div>
+      <div class="plan-price">0 so'm</div>
+      <div class="plan-feat">
+        <span class="y">✓</span> Barcha matnli darslar<br>
+        <span class="y">✓</span> Terminal (60% imkoniyat)<br>
+        <span class="y">✓</span> Sayt bo'ylab qidiruv<br>
+        ✗ Video uroklar &nbsp;·&nbsp; ✗ Real loyihalar
+      </div>
+    </div>
+
+    <div class="plan-opt pro">
+      <div class="plan-badge">TAVSIYA</div>
+      <div class="plan-name">💎 Pro Rejim</div>
+      <div class="plan-price">XX,XXX so'm/oy</div>
+      <div class="plan-feat">
+        <span class="y">✓</span> Video uroklar + skrinshotlar<br>
+        <span class="y">✓</span> Terminal 100% + kodni saqlash<br>
+        <span class="y">✓</span> Real loyihalar + Git<br>
+        <span class="y">✓</span> Linux to'liq + Kiberxavfsizlik
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(t){
+  document.querySelectorAll('.auth-tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(el=>el.classList.add('hidden'));
+  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('form-'+t).classList.remove('hidden');
+}
+function goRegister(){ switchTab('reg'); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function doLogin(){
+  const e=document.getElementById('login-email').value;
+  const p=document.getElementById('login-pass').value;
+  if(!e||!p){ alert('Gmail va parolni kiriting'); return; }
+  // save to sessionStorage and redirect
+  sessionStorage.setItem('oo_user', e);
+  window.location.href='dashboard.html';
+}
+function doRegister(){
+  const e=document.getElementById('reg-email').value;
+  const p=document.getElementById('reg-pass').value;
+  if(!e||!p){ alert('Gmail va parolni kiriting'); return; }
+  sessionStorage.setItem('oo_user', e);
+  window.location.href='dashboard.html';
+}
+
+function openModal(){ document.getElementById('modalBg').classList.add('open'); }
+function closeModal(){ document.getElementById('modalBg').classList.remove('open'); }
+function closeBg(e){ if(e.target===document.getElementById('modalBg'))closeModal(); }
+</script>
+</body>
+</html>

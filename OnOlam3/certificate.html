@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Sertifikatlar</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+/* ── CERTIFICATE PAGE ── */
+.cert-hero{background:var(--void-2);border-bottom:1px solid var(--border);padding:32px 0;}
+.cert-hero h1{font-size:clamp(22px,3vw,30px);font-weight:800;margin-bottom:6px;}
+.cert-hero h1 span{color:var(--neon);}
+.cert-hero p{font-size:13px;color:var(--text-3);}
+
+/* Stats */
+.cert-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;}
+.cstat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;text-align:center;transition:var(--t-md);}
+.cstat:hover{border-color:var(--border-2);transform:translateY(-2px);}
+.cstat .csn{font-size:28px;font-weight:800;color:var(--neon);margin-bottom:4px;}
+.cstat .csl{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;}
+
+/* Cert grid */
+.cert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:32px;}
+
+/* Cert card */
+.cert-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:var(--t-md);}
+.cert-card:hover{border-color:rgba(0,255,65,.25);box-shadow:0 16px 40px rgba(0,0,0,.5);}
+.cert-card.locked{opacity:.55;}
+.cert-card.locked:hover{border-color:var(--border);transform:none;box-shadow:none;}
+
+/* Cert visual — mini certificate */
+.cert-visual{padding:24px 20px;background:linear-gradient(145deg,#010801,#021502);border-bottom:1px solid var(--border);position:relative;overflow:hidden;min-height:160px;display:flex;align-items:center;justify-content:center;}
+.cert-visual::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,65,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,65,.04) 1px,transparent 1px);background-size:24px 24px;}
+.cert-visual::after{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:radial-gradient(circle,rgba(0,255,65,.08),transparent 70%);}
+.cert-inner{position:relative;z-index:1;border:1px solid rgba(0,255,65,.2);border-radius:var(--r-lg);padding:18px 20px;text-align:center;background:rgba(0,255,65,.02);width:100%;}
+.cert-inner .ci-logo{font-size:11px;font-weight:800;color:var(--neon);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.cert-inner .ci-title{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.cert-inner .ci-name{font-size:15px;font-weight:800;color:var(--text-1);margin-bottom:4px;}
+.cert-inner .ci-course{font-size:12px;color:var(--text-2);}
+.cert-inner .ci-seal{font-size:26px;margin-top:10px;display:block;}
+
+/* Lock overlay */
+.cert-lock{position:absolute;inset:0;background:rgba(2,12,2,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:2;}
+.cert-lock span{font-size:32px;}
+.cert-lock p{font-size:12px;color:var(--text-2);text-align:center;padding:0 16px;}
+
+/* Cert info */
+.cert-info{padding:16px 20px;}
+.cert-info h3{font-size:14px;font-weight:700;margin-bottom:4px;}
+.cert-meta{font-size:11px;color:var(--text-3);font-family:var(--font);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.cert-actions{display:flex;gap:8px;}
+.cert-actions button{flex:1;font-size:11px;padding:8px;}
+
+/* Progress needed */
+.cert-progress{margin-bottom:10px;}
+.cp-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:5px;}
+.cp-label span:last-child{color:var(--neon);}
+
+/* Cert detail modal */
+.cert-modal{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.cert-modal.open{opacity:1;pointer-events:all;}
+.cert-modal-bg{position:absolute;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);}
+.cert-modal-box{position:relative;z-index:1;background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-xl);width:100%;max-width:600px;overflow:hidden;transform:scale(.95);transition:transform .25s;}
+.cert-modal.open .cert-modal-box{transform:scale(1);}
+
+/* Full cert preview */
+.cert-preview{background:linear-gradient(145deg,#010c01,#011501);padding:48px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.cert-preview::before{content:'';position:absolute;inset:12px;border:1px solid rgba(0,255,65,.15);border-radius:var(--r-lg);pointer-events:none;}
+.cert-preview::after{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:400px;height:300px;background:radial-gradient(ellipse,rgba(0,255,65,.06),transparent 70%);}
+.cp-content{position:relative;z-index:1;}
+.cp-logo{font-size:13px;font-weight:800;color:var(--neon);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;}
+.cp-heading{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+.cp-recipient{font-size:28px;font-weight:800;color:var(--text-1);margin-bottom:8px;}
+.cp-completed{font-size:13px;color:var(--text-2);margin-bottom:4px;}
+.cp-course{font-size:20px;font-weight:700;color:var(--neon);margin-bottom:20px;}
+.cp-seal{font-size:48px;margin-bottom:16px;display:block;}
+.cp-date{font-size:11px;color:var(--text-3);}
+.cp-divider{width:80px;height:1px;background:rgba(0,255,65,.3);margin:16px auto;}
+.cp-verify{font-size:10px;color:var(--text-4);letter-spacing:.05em;}
+
+.cert-modal-footer{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.cert-modal-footer .left{font-size:13px;color:var(--text-2);}
+.cert-modal-footer .left span{color:var(--neon);font-weight:700;}
+.cert-modal-actions{display:flex;gap:8px;}
+
+@media(max-width:900px){.cert-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.cert-grid{grid-template-columns:1fr;}.cert-stats{grid-template-columns:repeat(3,1fr);gap:8px;}.cstat .csn{font-size:22px;}.cert-modal{padding:12px;}.cert-preview{padding:28px 20px;}.cp-recipient{font-size:22px;}.cp-course{font-size:16px;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">⚡</div>On<span>Olam</span></a>
+    <div class="navbar-center">
+      <a href="dashboard.html"     class="nav-link">Dashboard</a>
+      <a href="courses.html"       class="nav-link">Kurslar</a>
+      <a href="certificate.html"   class="nav-link active">Sertifikatlar</a>
+    </div>
+    <div class="navbar-right">
+      <a href="pricing.html"><button class="btn btn-neon btn-sm">⚡ Pro</button></a>
+      <div class="navbar-avatar" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      </div>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <div class="drawer-user">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      <div class="drawer-user-info"><h4>Halimjon</h4><span class="badge badge-free">Free</span></div>
+    </div>
+    <a href="dashboard.html"     class="drawer-link"><span class="di">🏠</span> Dashboard</a>
+    <a href="courses.html"       class="drawer-link"><span class="di">📚</span> Kurslar</a>
+    <a href="certificate.html"   class="drawer-link active"><span class="di">🏆</span> Sertifikatlar</a>
+    <a href="pro-community.html" class="drawer-link"><span class="di">👥</span> Hamjamiyat</a>
+    <a href="pricing.html"       class="drawer-link"><span class="di">⚡</span> Pro olish</a>
+    <div class="drawer-sep"></div>
+    <a href="profile.html" class="drawer-link"><span class="di">⚙️</span> Profil</a>
+    <a href="login.html"   class="drawer-link exit"><span class="di">↩</span> Chiqish</a>
+  </div>
+</div>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Asosiy</div>
+      <a href="dashboard.html"   class="sidebar-link"><span class="si">🏠</span> Dashboard</a>
+      <a href="courses.html"     class="sidebar-link"><span class="si">📚</span> Kurslar</a>
+      <a href="certificate.html" class="sidebar-link active"><span class="si">🏆</span> Sertifikatlar</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Pro</div>
+      <a href="pro-community.html" class="sidebar-link"><span class="si">👥</span> Hamjamiyat</a>
+      <a href="pricing.html"       class="sidebar-link"><span class="si">⚡</span> Pro olish</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Hisob</div>
+      <a href="profile.html" class="sidebar-link"><span class="si">⚙️</span> Sozlamalar</a>
+      <a href="login.html"   class="sidebar-link exit"><span class="si">↩</span> Chiqish</a>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-inner" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+        <div class="sidebar-user-info"><h5>Halimjon H.</h5><p>Free foydalanuvchi</p></div>
+        <span style="color:var(--text-4);font-size:12px;">⚙</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="page-content">
+
+    <!-- Header -->
+    <div class="page-header anim-up">
+      <div class="eyebrow">Sertifikatlar</div>
+      <h1>Mening <span style="color:var(--neon)">sertifikatlarim</span> 🏆</h1>
+      <p>Tugatgan kurslaringiz uchun rasmiy sertifikat oling. LinkedIn va CV ga qo'shing.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="cert-stats anim-up anim-d1">
+      <div class="cstat">
+        <div class="csn">1</div>
+        <div class="csl">Olingan</div>
+      </div>
+      <div class="cstat">
+        <div class="csn" style="color:var(--yellow)">2</div>
+        <div class="csl">Jarayonda</div>
+      </div>
+      <div class="cstat">
+        <div class="csn" style="color:var(--text-2)">5</div>
+        <div class="csl">Jami mumkin</div>
+      </div>
+    </div>
+
+    <!-- Pro banner -->
+    <div style="background:linear-gradient(135deg,var(--surface),rgba(0,255,65,.03));border:1px solid rgba(0,255,65,.2);border-radius:var(--r-xl);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px;" class="anim-up anim-d2">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span style="font-size:28px;">🔒</span>
+        <div>
+          <div style="font-size:14px;font-weight:700;">Sertifikatlar — Pro tarifda</div>
+          <div style="font-size:12px;color:var(--text-3);">Kursni tugatgandan keyin rasmiy sertifikat olish uchun Pro kerak.</div>
+        </div>
+      </div>
+      <a href="pricing.html"><button class="btn btn-neon btn-sm">Pro boshlash →</button></a>
+    </div>
+
+    <!-- Cert grid -->
+    <div class="cert-grid anim-up anim-d3">
+
+      <!-- EARNED cert -->
+      <div class="cert-card" onclick="openCert('HTML Asoslari','Halimjon Hasanov','10-mart 2026','ONOLAM-HTML-2026-001')">
+        <div class="cert-visual">
+          <div class="cert-inner">
+            <div class="ci-logo">⚡ OnOlam</div>
+            <div class="ci-title">Sertifikat taqdim etadi</div>
+            <div class="ci-name">Halimjon Hasanov</div>
+            <div class="ci-course">HTML Asoslari</div>
+            <span class="ci-seal">🎖️</span>
+          </div>
+        </div>
+        <div class="cert-info">
+          <h3>HTML Asoslari</h3>
+          <div class="cert-meta">
+            <span class="chip chip-green">✓ Olingan</span>
+            <span>10-mart 2026</span>
+          </div>
+          <div class="cert-actions">
+            <button class="btn btn-neon btn-sm" onclick="event.stopPropagation();downloadCert('HTML')">⬇ Yuklab olish</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();shareCert()">↗ Ulashish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- IN PROGRESS cert -->
+      <div class="cert-card">
+        <div class="cert-visual" style="position:relative;">
+          <div class="cert-inner" style="opacity:.4;">
+            <div class="ci-logo">⚡ OnOlam</div>
+            <div class="ci-title">Sertifikat taqdim etadi</div>
+            <div class="ci-name">— — —</div>
+            <div class="ci-course">CSS Asoslari</div>
+            <span class="ci-seal" style="filter:grayscale(1)">🔒</span>
+          </div>
+          <div class="cert-lock">
+            <span>⏳</span>
+            <p>40% tugatildi. Kursni oxiriga yetkazing.</p>
+          </div>
+        </div>
+        <div class="cert-info">
+          <h3>CSS Asoslari</h3>
+          <div class="cert-progress">
+            <div class="cp-label"><span>Progress</span><span>40%</span></div>
+            <div class="progress"><div class="progress-fill" style="width:40%"></div></div>
+          </div>
+          <div class="cert-actions">
+            <a href="course-detail.html" style="flex:1;"><button class="btn btn-outline btn-sm w-full">Davom ettirish →</button></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCKED cert (need pro) -->
+      <div class="cert-card locked">
+        <div class="cert-visual" style="position:relative;">
+          <div class="cert-inner" style="opacity:.3;">
+            <div class="ci-logo">⚡ OnOlam</div>
+            <div class="ci-title">Sertifikat taqdim etadi</div>
+            <div class="ci-name">— — —</div>
+            <div class="ci-course">Python Asoslari</div>
+            <span class="ci-seal" style="filter:grayscale(1)">🔒</span>
+          </div>
+          <div class="cert-lock">
+            <span>⚡</span>
+            <p>Pro tarifga o'ting va kursni tugallang.</p>
+          </div>
+        </div>
+        <div class="cert-info">
+          <h3>Python Asoslari</h3>
+          <div class="cert-meta"><span class="badge badge-pro">Pro kerak</span><span>20% — jarayonda</span></div>
+          <div class="cert-actions">
+            <a href="pricing.html" style="flex:1;"><button class="btn btn-neon btn-sm w-full">Pro olish →</button></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- More locked -->
+      <div class="cert-card locked">
+        <div class="cert-visual" style="position:relative;">
+          <div class="cert-inner" style="opacity:.3;">
+            <div class="ci-logo">⚡ OnOlam</div>
+            <div class="ci-course">JavaScript</div>
+            <span class="ci-seal" style="filter:grayscale(1)">🔒</span>
+          </div>
+          <div class="cert-lock"><span>📚</span><p>Kursni boshlang.</p></div>
+        </div>
+        <div class="cert-info">
+          <h3>JavaScript</h3>
+          <div class="cert-meta"><span class="badge badge-free">Bepul kurs</span></div>
+          <div class="cert-actions">
+            <a href="course-detail.html" style="flex:1;"><button class="btn btn-ghost btn-sm w-full">Boshlash →</button></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cert-card locked">
+        <div class="cert-visual" style="position:relative;">
+          <div class="cert-inner" style="opacity:.3;">
+            <div class="ci-logo">⚡ OnOlam</div>
+            <div class="ci-course">SQL</div>
+            <span class="ci-seal" style="filter:grayscale(1)">🔒</span>
+          </div>
+          <div class="cert-lock"><span>📚</span><p>Kursni boshlang.</p></div>
+        </div>
+        <div class="cert-info">
+          <h3>SQL Asoslari</h3>
+          <div class="cert-meta"><span class="badge badge-free">Bepul kurs</span></div>
+          <div class="cert-actions">
+            <a href="course-detail.html" style="flex:1;"><button class="btn btn-ghost btn-sm w-full">Boshlash →</button></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- CERT MODAL -->
+<div class="cert-modal" id="certModal" onclick="if(event.target===this||event.target.classList.contains('cert-modal-bg'))closeCert()">
+  <div class="cert-modal-bg"></div>
+  <div class="cert-modal-box anim-up">
+    <div class="cert-preview">
+      <div class="cp-content">
+        <div class="cp-logo">⚡ ONOLAM</div>
+        <div class="cp-heading">Ushbu sertifikat taqdim etiladi</div>
+        <div class="cp-recipient" id="modalName">Halimjon Hasanov</div>
+        <div class="cp-completed">muvaffaqiyatli tugatgani uchun</div>
+        <div class="cp-course" id="modalCourse">HTML Asoslari</div>
+        <span class="cp-seal">🎖️</span>
+        <div class="cp-divider"></div>
+        <div class="cp-date" id="modalDate">10-mart 2026</div>
+        <div style="margin-top:8px;" id="modalId" class="cp-verify">ID: ONOLAM-HTML-2026-001</div>
+      </div>
+    </div>
+    <div class="cert-modal-footer">
+      <div class="left">Sertifikat ID: <span id="modalIdFooter">ONOLAM-HTML-2026-001</span></div>
+      <div class="cert-modal-actions">
+        <button class="btn btn-ghost btn-sm" onclick="closeCert()">Yopish</button>
+        <button class="btn btn-ghost btn-sm" onclick="shareCert()">↗ Ulashish</button>
+        <button class="btn btn-neon btn-sm" onclick="downloadCert('HTML')">⬇ Yuklab olish</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="border-top:1px solid var(--border);padding:20px 0;">
+  <div class="container"><div class="footer-inner" style="padding:0;"><div class="footer-copy">© 2026 <span>OnOlam</span>.</div><div class="footer-links"><a href="#">Yordam</a></div></div></div>
+</div>
+
+<script src="js/burger.js"></script>
+<script>
+function openCert(course, name, date, id){
+  document.getElementById('modalName').textContent   = name;
+  document.getElementById('modalCourse').textContent = course;
+  document.getElementById('modalDate').textContent   = date;
+  document.getElementById('modalId').textContent     = 'ID: ' + id;
+  document.getElementById('modalIdFooter').textContent = id;
+  document.getElementById('certModal').classList.add('open');
+  document.body.classList.add('no-scroll');
+}
+function closeCert(){
+  document.getElementById('certModal').classList.remove('open');
+  document.body.classList.remove('no-scroll');
+}
+function downloadCert(course){
+  const a = document.createElement('a');
+  a.href = '#'; a.download = 'OnOlam-' + course + '-sertifikat.pdf';
+  alert('Sertifikat yuklab olinmoqda...\n(Haqiqiy loyihada PDF generatsiya qilinadi)');
+}
+function shareCert(){
+  if(navigator.share){
+    navigator.share({ title:'OnOlam Sertifikat', text:"Men OnOlam'da HTML kursini tugatdim!", url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Havola nusxalandi!');
+  }
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeCert(); });
+</script>
+</body>
+</html>

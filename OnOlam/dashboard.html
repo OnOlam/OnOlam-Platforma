@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOlam — Dashboard</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.welcome-banner {
+  background:linear-gradient(135deg,rgba(26,86,255,0.12),rgba(124,58,237,0.08));
+  border:1px solid rgba(26,86,255,0.2); border-radius:18px;
+  padding:28px 32px; margin-bottom:24px;
+  display:flex; align-items:center; justify-content:space-between; gap:20px;
+  position:relative; overflow:hidden;
+}
+.welcome-banner::before {
+  content:''; position:absolute; right:-40px; top:-40px;
+  width:200px; height:200px; border-radius:50%;
+  background:radial-gradient(rgba(0,200,255,0.15),transparent);
+}
+.welcome-text h2 { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; margin-bottom:6px; }
+.welcome-text p { font-size:0.88rem; color:var(--dim); }
+.welcome-planet { font-size:4rem; opacity:0.8; }
+
+.progress-section { margin-bottom:24px; }
+.progress-section h3 { font-size:0.9rem; color:var(--dim); margin-bottom:10px; font-weight:500; }
+.progress-row { display:flex; align-items:center; gap:14px; }
+.progress-track { flex:1; height:8px; border-radius:99px; background:rgba(255,255,255,0.08); overflow:hidden; }
+.progress-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--blue),var(--cyan)); transition:width 1s ease; }
+.progress-pct { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; color:var(--white); min-width:44px; }
+
+.last-lesson-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; padding:20px 24px; margin-bottom:24px;
+}
+.llc-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.llc-header h3 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; }
+.lesson-preview {
+  background:rgba(255,255,255,0.03); border:1px solid var(--border2);
+  border-radius:12px; padding:16px;
+  display:flex; gap:20px; align-items:flex-start;
+}
+.lp-left { flex:1; }
+.lp-module { font-size:0.78rem; color:var(--dim); margin-bottom:8px; }
+.lp-title { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; margin-bottom:12px; }
+.lp-dots { display:flex; gap:5px; margin-bottom:10px; }
+.dot-indicator { width:10px;height:10px;border-radius:50%; }
+.dot-done { background:var(--blue); }
+.dot-current { background:var(--cyan); box-shadow:0 0 6px var(--cyan); }
+.dot-empty { background:rgba(255,255,255,0.15); border:1px solid var(--border); }
+.lp-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.lp-tag { padding:3px 10px; border-radius:6px; font-size:0.72rem; background:var(--faint); border:1px solid var(--border2); color:var(--dim); }
+.lp-right {
+  width:200px; flex-shrink:0;
+  background:rgba(8,12,31,0.8); border-radius:10px; padding:12px;
+  font-family:'JetBrains Mono',monospace; font-size:0.72rem;
+  color:rgba(168,216,255,0.7); border:1px solid var(--border2);
+}
+.lp-duration { font-size:0.75rem; color:var(--dim); text-align:right; margin-bottom:8px; }
+
+.courses-recommend { margin-bottom:24px; }
+.cr-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin-bottom:16px; }
+.cr-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.cr-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:18px; transition:all 0.3s;
+}
+.cr-card:hover { border-color:rgba(26,86,255,0.3); transform:translateY(-2px); }
+.cr-direction { font-size:0.72rem; color:var(--dim); margin-bottom:10px; font-weight:500; }
+.cr-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.cr-tech-name { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; display:flex; align-items:center; gap:8px; }
+.cr-logo { font-size:1.6rem; }
+</style>
+</head>
+<body>
+<div class="space-bg"><div class="stars"></div><div class="nebula nebula-1"></div><div class="nebula nebula-2" style="animation-delay:6s;"></div></div>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="header-logo">
+    <div class="logo-orb">OO</div>
+    On<span>Olam</span>
+  </a>
+  <div class="header-right">
+    <div class="search-box">🔍 Qidiruv...</div>
+    <div class="icon-btn">🔔</div>
+    <a href="profile.html" class="avatar-btn">S</a>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-user">
+    <div class="sidebar-avatar">S</div>
+    <div class="sidebar-name">Sardor Axmedov</div>
+    <div class="sidebar-plan">Free Foydalanuvchi</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="dashboard.html" class="nav-item active"><span class="nav-icon">📚</span> Kurslar</a>
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Darslar</a>
+    <a href="profile.html" class="nav-item"><span class="nav-icon">🏅</span> Sertifikatlar</a>
+    <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span> Profilni tahrirlash</a>
+    <div class="nav-divider"></div>
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">🔍</span> Qidiruv...</a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">⏻</span> Chiqish</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<div class="page-wrap with-sidebar">
+  <main class="main-content">
+
+    <!-- Welcome -->
+    <div class="welcome-banner fade-in">
+      <div class="welcome-text">
+        <h2>Salom, Sardor! 👋</h2>
+        <p>Progresingizni davom ettiring va yangi mavzularni o'rganishda davom eting.</p>
+      </div>
+      <div class="welcome-planet">🪐</div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section fade-in" style="animation-delay:0.1s">
+      <h3>Umumiy progress</h3>
+      <div class="progress-row">
+        <div class="progress-track">
+          <div class="progress-fill" style="width:40%;" id="mainProgress"></div>
+        </div>
+        <div class="progress-pct">40 %</div>
+      </div>
+    </div>
+
+    <!-- Last lesson -->
+    <div class="last-lesson-card fade-in" style="animation-delay:0.15s">
+      <div class="llc-header">
+        <h3>Oxirgi darsni davom ettirish</h3>
+        <a href="lesson.html" class="btn btn-primary btn-sm">Davom ettirish</a>
+      </div>
+      <div class="lesson-preview">
+        <div class="lp-left">
+          <div class="lp-module">Modul 1 — Frontend Asoslari</div>
+          <div class="lp-title">2. HTML taglari</div>
+          <div class="lp-dots">
+            <div class="dot-indicator dot-done"></div>
+            <div class="dot-indicator dot-current"></div>
+            <div class="dot-indicator dot-empty"></div>
+            <div class="dot-indicator dot-empty"></div>
+            <div class="dot-indicator dot-empty"></div>
+          </div>
+          <div class="lp-tags">
+            <span class="lp-tag">⊞ kompede</span>
+            <span class="lp-tag">3 ◇</span>
+            <span class="lp-tag">8</span>
+          </div>
+        </div>
+        <div class="lp-right">
+          <div class="lp-duration">15 m</div>
+          <div style="color:rgba(100,180,255,0.6)">&lt;div class='container'&gt;</div>
+          <div style="margin-top:4px;color:var(--dim);font-size:0.65rem;">// HTML teg atributlari...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tavsiya kurslar -->
+    <div class="courses-recommend fade-in" style="animation-delay:0.2s">
+      <div class="cr-title">Sizga tavsiya etilgan kurslar</div>
+      <div class="cr-grid">
+        <div class="cr-card">
+          <div class="cr-direction">Frontend</div>
+          <div class="cr-top">
+            <div class="cr-tech-name">
+              <div class="tech-logo tech-html" style="width:32px;height:32px;border-radius:8px;font-size:0.8rem;">5</div>
+              HTML
+            </div>
+            <div class="cr-logo">🟨</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <span class="badge badge-beginner">Beginner ✓</span>
+          </div>
+          <a href="course.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">Davom ettirish</a>
+        </div>
+        <div class="cr-card">
+          <div class="cr-direction">Backend</div>
+          <div class="cr-top">
+            <div class="cr-tech-name">
+              <div class="tech-logo tech-py" style="width:32px;height:32px;border-radius:8px;font-size:0.8rem;">🐍</div>
+              Python
+            </div>
+            <div class="cr-logo">🟣</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <span class="badge badge-intermediate">Intermediate ✓</span>
+          </div>
+          <a href="course.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">Davom ettirish</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yana kurslar -->
+    <div class="courses-recommend fade-in" style="animation-delay:0.25s">
+      <div class="cr-title">Yangi kurslar</div>
+      <div class="cr-grid">
+        <div class="cr-card">
+          <div class="cr-direction">Frontend</div>
+          <div class="cr-top">
+            <div class="cr-tech-name">
+              <div class="tech-logo tech-css" style="width:32px;height:32px;border-radius:8px;font-size:0.8rem;">3</div>
+              CSS
+            </div>
+            <div class="cr-logo">🔷</div>
+          </div>
+          <div style="margin-bottom:12px;"><span class="badge badge-beginner">Beginner</span></div>
+          <a href="course.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">Davom ettirish</a>
+        </div>
+        <div class="cr-card">
+          <div class="cr-direction">Backend</div>
+          <div class="cr-top">
+            <div class="cr-tech-name">
+              <div class="tech-logo tech-php" style="width:32px;height:32px;border-radius:8px;font-size:0.75rem;">php</div>
+              Php
+            </div>
+            <div class="cr-logo">🟣</div>
+          </div>
+          <div style="margin-bottom:12px;"><span class="badge badge-intermediate">Intermediate</span></div>
+          <a href="course.html" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">Davom ettirish</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <a href="index.html" class="footer-logo"><div class="logo-orb" style="width:26px;height:26px;font-size:0.55rem;">OO</div>On<span>Olam</span></a>
+    <div class="footer-links">
+      <a href="#">Biz haqimizda</a><a href="#">Kurslar</a><a href="#">Tariflar</a><a href="#">Blog</a><a href="#">Yunsul</a>
+    </div>
+    <div class="footer-social">
+      <a href="#" class="social-btn">📱 Telegram</a>
+      <a href="#" class="social-btn">✉️ Email</a>
+    </div>
+    <div class="footer-copy">© 2025 OnOlam. Barcha huquqlar himoyalangan.</div>
+  </footer>
+</div>
+</body>
+</html>

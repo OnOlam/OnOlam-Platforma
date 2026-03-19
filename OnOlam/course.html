@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOlam — Python Asoslari</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root { --modules-w:220px; }
+.course-layout { display:flex;height:calc(100vh - var(--header-h));overflow:hidden; }
+
+/* Modules sidebar */
+.modules-sidebar {
+  width:var(--modules-w);flex-shrink:0;
+  background:rgba(8,12,31,0.95); border-right:1px solid var(--border2);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.ms-user { padding:16px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:10px; }
+.ms-user-av { width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;border:1px solid rgba(26,86,255,0.4);flex-shrink:0; }
+.ms-user-info .name { font-size:0.82rem;font-weight:600; }
+.ms-user-info .plan { font-size:0.68rem;color:var(--dim); }
+.ms-nav { padding:10px 8px;border-bottom:1px solid var(--border2); }
+.ms-lessons { flex:1;overflow-y:auto;padding:8px; }
+.ms-lessons::-webkit-scrollbar { width:3px; }
+.ms-lessons::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.08);border-radius:2px; }
+.ms-search { margin:10px;padding:7px 12px 7px 32px;background:var(--faint);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:0.78rem;font-family:'DM Sans',sans-serif;outline:none;width:calc(100% - 20px);position:relative; }
+.ms-search-wrap { position:relative;margin:8px; }
+.ms-search-wrap::before { content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.7rem;pointer-events:none; }
+.module-label { font-size:0.65rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim2);padding:10px 8px 4px;display:flex;align-items:center;justify-content:space-between; }
+.lesson-link {
+  display:flex;align-items:center;gap:8px;
+  padding:8px;border-radius:8px;cursor:pointer;
+  text-decoration:none;color:var(--dim);
+  font-size:0.8rem;margin-bottom:2px;transition:all 0.2s;
+}
+.lesson-link:hover { background:var(--faint);color:var(--white); }
+.lesson-link.active { background:rgba(26,86,255,0.12);color:var(--white);border-left:2px solid var(--blue); }
+.lesson-link.done { color:var(--green); }
+.ll-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
+.ll-dot.done-dot { background:var(--green); }
+.ll-dot.active-dot { background:var(--blue);box-shadow:0 0 6px var(--blue); }
+.ll-dot.empty-dot { background:rgba(255,255,255,0.15);border:1px solid var(--border); }
+.cert-link { display:flex;align-items:center;gap:8px;padding:10px 8px;font-size:0.8rem;color:var(--dim);cursor:pointer;border-top:1px solid var(--border2);margin-top:8px;border-radius:8px;transition:all 0.2s;text-decoration:none; }
+.cert-link:hover { background:var(--faint);color:var(--white); }
+
+/* Main content */
+.course-main { flex:1;overflow-y:auto;padding:28px; }
+.course-main::-webkit-scrollbar { width:4px; }
+.course-main::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1);border-radius:2px; }
+
+.course-hero { display:flex;gap:20px;margin-bottom:24px;align-items:flex-start; }
+.ch-left { flex:1; }
+.ch-title { font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:12px; }
+.ch-desc { font-size:0.9rem;color:var(--dim);line-height:1.7;margin-bottom:18px;max-width:500px; }
+.ch-progress { background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:16px; }
+.ch-pct { font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:8px; }
+.ch-stats { display:flex;gap:20px;flex-wrap:wrap;margin-top:14px; }
+.ch-stat { display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--dim); }
+.ch-stat strong { color:var(--white);font-size:0.85rem; }
+
+/* Right panel */
+.course-right { width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:14px; }
+.instructor-card { background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px; }
+.instr-top { display:flex;gap:10px;align-items:center;margin-bottom:12px; }
+.instr-av { width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700; }
+.instr-name { font-size:0.85rem;font-weight:600; }
+.instr-role { font-size:0.72rem;color:var(--dim); }
+.cert-side-card { background:linear-gradient(135deg,rgba(26,86,255,0.1),rgba(124,58,237,0.07));border:1px solid rgba(26,86,255,0.2);border-radius:14px;padding:16px; }
+.cert-side-title { font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:8px; }
+.cert-thumb { width:100%;height:60px;background:linear-gradient(135deg,#0d1b4b,#1a1040);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:0.65rem;font-weight:800;color:var(--cyan);letter-spacing:1px;margin-bottom:8px;border:1px solid rgba(26,86,255,0.2); }
+.rec-card { background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px; }
+.rec-title { font-size:0.85rem;font-weight:600;margin-bottom:10px;font-family:'Syne',sans-serif; }
+.rec-item { display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border2);font-size:0.8rem;color:var(--dim);cursor:pointer;transition:color 0.2s;text-decoration:none; }
+.rec-item:hover { color:var(--white); }
+.rec-item:last-child { border-bottom:none; }
+.rec-dot { width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0; }
+
+/* Lessons list */
+.lessons-section { margin-top:24px; }
+.ls-title { font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px; }
+.ls-title .ls-module { font-size:0.88rem;color:var(--dim);font-weight:500; }
+.lesson-row {
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:14px 18px;margin-bottom:8px;cursor:pointer;
+  display:flex;align-items:center;gap:14px;transition:all 0.2s;
+  text-decoration:none;color:var(--white);
+}
+.lesson-row:hover { border-color:rgba(26,86,255,0.3);background:rgba(26,86,255,0.05); }
+.lesson-row.active { border-color:rgba(26,86,255,0.4);background:rgba(26,86,255,0.08); }
+.lr-num { font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--blue3);font-weight:600;min-width:28px; }
+.lr-info { flex:1; }
+.lr-title { font-size:0.88rem;font-weight:600;margin-bottom:6px; }
+.lr-meta { display:flex;gap:10px;align-items:center; }
+.lr-dots { display:flex;gap:3px; }
+.lr-dot { width:8px;height:8px;border-radius:50%; }
+.lr-dot.f { background:var(--blue); }
+.lr-dot.e { background:rgba(255,255,255,0.15); }
+.lr-tag { width:20px;height:20px;border-radius:5px;background:var(--faint);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--dim); }
+.lr-dur { font-size:0.78rem;color:var(--dim);margin-left:auto;white-space:nowrap; }
+</style>
+</head>
+<body>
+<div class="space-bg"><div class="stars"></div><div class="nebula nebula-1"></div><div class="nebula nebula-2"></div></div>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="index.html" class="header-logo"><div class="logo-orb">OO</div>On<span>Olam</span></a>
+  <div class="header-right">
+    <div class="search-box">🔍 Qidiruv...</div>
+    <a href="profile.html" class="avatar-btn">S</a>
+  </div>
+</header>
+
+<div class="page-wrap" style="padding-top:var(--header-h);">
+  <div class="course-layout">
+
+    <!-- MODULES SIDEBAR -->
+    <div class="modules-sidebar">
+      <div class="ms-user">
+        <div class="ms-user-av">S</div>
+        <div class="ms-user-info">
+          <div class="name">OnOlam</div>
+          <div class="plan">🐍 Python asoslari</div>
+        </div>
+      </div>
+      <nav class="ms-nav">
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📚</span> Kurslar</a>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">⊞</span> Darslar</a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">🏅</span> Sertifikatlar</a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span> Profilni tahrirlash</a>
+      </nav>
+      <div class="ms-search-wrap">
+        <input class="ms-search" placeholder="Qidiruv...">
+      </div>
+      <div class="ms-lessons">
+        <div class="module-label">Python asoslari <span>⚙</span></div>
+        <a href="lesson.html" class="lesson-link active"><div class="ll-dot active-dot"></div> Python bilan tanishuv</a>
+        <a href="lesson.html" class="lesson-link"><div class="ll-dot empty-dot"></div> O'zgaruvchilar va turlar</a>
+        <a href="lesson.html" class="lesson-link"><div class="ll-dot empty-dot"></div> Shart operatorlari</a>
+        <a href="lesson.html" class="lesson-link"><div class="ll-dot empty-dot"></div> Sikllar</a>
+        <a href="lesson.html" class="lesson-link"><div class="ll-dot empty-dot"></div> List va Tuplelar</a>
+        <a href="profile.html" class="cert-link">🏅 Sertifikat</a>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="course-main">
+      <div style="display:flex;gap:24px;">
+        <!-- LEFT -->
+        <div style="flex:1;">
+          <div class="course-hero">
+            <div class="ch-left">
+              <div class="ch-title">
+                <div class="tech-logo tech-py" style="width:44px;height:44px;border-radius:12px;font-size:1.1rem;">🐍</div>
+                Python asoslari
+              </div>
+              <div class="ch-desc">Python dasturlash asoslarini mukammal o'rganing. Backend va ma'lumotlar bilan ishlash uchun asosiy bilimlarni oling.</div>
+              <div class="ch-progress">
+                <div class="ch-pct">75% <span style="font-size:0.8rem;color:var(--dim);font-weight:400;">Darslar tugallangan</span></div>
+                <div class="progress-track"><div class="progress-fill" style="width:75%;"></div></div>
+                <div class="ch-stats">
+                  <div class="ch-stat">⊞ Darslar <strong>B 2 20</strong></div>
+                  <div class="ch-stat">⬡ Topsinglar <strong>O 7 12</strong></div>
+                  <div class="ch-stat">🎮 O'yinlar <strong>2 75</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lessons list -->
+          <div class="lessons-section">
+            <div class="ls-title">Darsliklar: <span class="ls-module">Modul 1 — Python asoslari</span></div>
+
+            <a href="lesson.html" class="lesson-row active">
+              <div class="lr-num">1.</div>
+              <div class="lr-info">
+                <div class="lr-title">Python bilan tanishuv</div>
+                <div class="lr-meta">
+                  <div class="lr-dots"><div class="lr-dot f"></div><div class="lr-dot f"></div><div class="lr-dot f"></div><div class="lr-dot e"></div><div class="lr-dot e"></div></div>
+                  <div class="lr-tag">⊞ 5</div>
+                  <div class="lr-tag">◇ 6</div>
+                  <div class="lr-dur">5 m 35 s</div>
+                </div>
+              </div>
+            </a>
+
+            <a href="lesson.html" class="lesson-row">
+              <div class="lr-num">2.</div>
+              <div class="lr-info">
+                <div class="lr-title">O'zgaruvchilar va turlar</div>
+                <div class="lr-meta">
+                  <div class="lr-dots"><div class="lr-dot f"></div><div class="lr-dot f"></div><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div></div>
+                  <div class="lr-tag">⊞ 5</div>
+                  <div class="lr-tag">◇ 6</div>
+                  <div class="lr-dur">→ 10 m 41 s</div>
+                </div>
+              </div>
+            </a>
+
+            <a href="lesson.html" class="lesson-row">
+              <div class="lr-num">3.</div>
+              <div class="lr-info">
+                <div class="lr-title">Shart operatorlari</div>
+                <div class="lr-meta">
+                  <div class="lr-dots"><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div></div>
+                  <div class="lr-tag">⊞ 5</div>
+                  <div class="lr-tag">◇ 5</div>
+                  <div class="lr-dur">8 m 12 s</div>
+                </div>
+              </div>
+            </a>
+
+            <a href="lesson.html" class="lesson-row">
+              <div class="lr-num">4.</div>
+              <div class="lr-info">
+                <div class="lr-title">Sikllar</div>
+                <div class="lr-meta">
+                  <div class="lr-dots"><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div><div class="lr-dot e"></div></div>
+                  <div class="lr-tag">⊞ 5</div>
+                  <div class="lr-tag">◇ 5</div>
+                  <div class="lr-dur">12 m 05 s</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="course-right">
+          <div class="instructor-card">
+            <div class="instr-top">
+              <div class="instr-av">S</div>
+              <div>
+                <div class="instr-name">Instruktor</div>
+                <div class="instr-role">Sardo Axanriahov</div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">Yordam so'rash 2</button>
+          </div>
+
+          <div class="cert-side-card">
+            <div class="cert-side-title">Kurs sertifikati</div>
+            <div class="cert-thumb">ONOLAM CERT</div>
+            <p style="font-size:0.75rem;color:var(--dim);line-height:1.6;">Ko'e angettilaa va heredza tiur va bilan porpariata certifikari bonotat.</p>
+          </div>
+
+          <div class="rec-card">
+            <div class="rec-title">Tavsiya kurslar</div>
+            <a href="course.html" class="rec-item"><div class="rec-dot" style="background:linear-gradient(135deg,#ff6b35,#ee4b2b);">🌐</div> Django Asoslari</a>
+            <a href="course.html" class="rec-item"><div class="rec-dot" style="background:linear-gradient(135deg,#777bb3,#4f5b93);">php</div> PHP Dasturlash</a>
+            <a href="course.html" class="rec-item"><div class="rec-dot" style="background:linear-gradient(135deg,#e48e00,#cc7a00);">🗄</div> SQL Dasturlash</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <a href="index.html" class="footer-logo"><div class="logo-orb" style="width:26px;height:26px;font-size:0.55rem;">OO</div>On<span>Olam</span></a>
+    <div class="footer-links"><a href="#">Biz haqimizda</a><a href="#">Kurslar</a><a href="#">Tariflar</a><a href="#">Blog</a><a href="#">Yunsul</a></div>
+    <div class="footer-social"><a href="#" class="social-btn">📱 Telegram</a><a href="#" class="social-btn">✉️ Email</a></div>
+    <div class="footer-copy">© 2025 OnOlam. Barcha huquqlar himoyalangan.</div>
+  </footer>
+</div>
+</body>
+</html>

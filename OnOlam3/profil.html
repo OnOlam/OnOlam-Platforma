@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Profil</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+/* ── PROFILE PAGE ── */
+.profile-hero{background:var(--void-2);border-bottom:1px solid var(--border);padding:32px 0;}
+.profile-top{display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+.profile-avatar-wrap{position:relative;flex-shrink:0;}
+.profile-avatar{width:88px;height:88px;border-radius:var(--r-xl);border:2px solid var(--border-2);overflow:hidden;}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.avatar-edit{position:absolute;bottom:-6px;right:-6px;width:26px;height:26px;background:var(--neon);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;border:2px solid var(--void-2);}
+.profile-meta{flex:1;}
+.profile-meta h1{font-size:clamp(20px,3vw,26px);font-weight:800;margin-bottom:4px;}
+.profile-meta .handle{font-size:13px;color:var(--text-3);margin-bottom:10px;}
+.profile-meta .handle span{color:var(--neon);}
+.profile-badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.profile-meta p{font-size:13px;color:var(--text-2);max-width:500px;}
+.profile-actions{margin-left:auto;display:flex;gap:8px;align-items:flex-start;flex-shrink:0;}
+
+/* Profile stats */
+.profile-stats{display:flex;gap:28px;margin-top:24px;padding-top:24px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.ps-item{text-align:center;}
+.ps-num{font-size:20px;font-weight:800;color:var(--neon);}
+.ps-lbl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;}
+
+/* Tabs */
+.profile-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:28px;overflow-x:auto;}
+.ptab{font-size:13px;font-weight:600;color:var(--text-3);padding:10px 16px;border:none;background:transparent;cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;transition:var(--t);margin-bottom:-1px;white-space:nowrap;}
+.ptab:hover{color:var(--text-1);}
+.ptab.active{color:var(--neon);border-bottom-color:var(--neon);}
+
+/* Settings form */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.settings-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;margin-bottom:20px;}
+.settings-section h3{font-size:14px;font-weight:700;margin-bottom:4px;}
+.settings-section .sh-desc{font-size:12px;color:var(--text-3);margin-bottom:20px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-sep{height:1px;background:var(--border);margin:20px 0;}
+.avatar-section{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.avatar-section img{width:64px;height:64px;border-radius:var(--r-lg);border:1px solid var(--border-2);}
+.avatar-section-info h4{font-size:13px;font-weight:700;margin-bottom:4px;}
+.avatar-section-info p{font-size:12px;color:var(--text-3);}
+.avatar-btns{display:flex;gap:8px;margin-top:8px;}
+
+/* Danger zone */
+.danger-section{background:rgba(255,71,87,.04);border:1px solid rgba(255,71,87,.2);border-radius:var(--r-xl);padding:24px;margin-bottom:20px;}
+.danger-section h3{font-size:14px;font-weight:700;color:var(--red);margin-bottom:4px;}
+.danger-section p{font-size:12px;color:var(--text-3);margin-bottom:16px;}
+.danger-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+
+/* Toggle switch */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.toggle-info p{font-size:11px;color:var(--text-3);}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--surface-3);border-radius:11px;cursor:pointer;transition:.3s;border:1px solid var(--border);}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:2px;bottom:2px;background:var(--text-3);border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:rgba(0,255,65,.2);border-color:rgba(0,255,65,.4);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px);background:var(--neon);box-shadow:0 0 6px var(--neon);}
+
+/* Activity tab */
+.activity-list{display:flex;flex-direction:column;gap:12px;}
+.act-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;display:flex;align-items:center;gap:14px;}
+.act-card .ac-icon{width:36px;height:36px;border-radius:var(--r-md);background:var(--neon-faint);border:1px solid rgba(0,255,65,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.act-card .ac-info{flex:1;}
+.act-card .ac-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.act-card .ac-info p{font-size:11px;color:var(--text-3);}
+.act-card .ac-time{font-size:11px;color:var(--text-4);flex-shrink:0;}
+
+/* Security */
+.sec-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap;}
+.sec-item:last-child{border-bottom:none;}
+.sec-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.sec-item-info p{font-size:11px;color:var(--text-3);}
+.sec-status{display:flex;align-items:center;gap:8px;}
+
+@media(max-width:768px){.settings-grid{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}.profile-actions{margin-left:0;width:100%;}.profile-top{gap:16px;}}
+@media(max-width:480px){.profile-stats{gap:16px;}.ps-num{font-size:16px;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">⚡</div>On<span>Olam</span></a>
+    <div class="navbar-center">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="courses.html"   class="nav-link">Kurslar</a>
+    </div>
+    <div class="navbar-right">
+      <a href="pricing.html"><button class="btn btn-neon btn-sm">⚡ Pro</button></a>
+      <div class="navbar-avatar" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      </div>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <div class="drawer-user">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      <div class="drawer-user-info"><h4>Halimjon</h4><span class="badge badge-free">Free</span></div>
+    </div>
+    <a href="dashboard.html"   class="drawer-link"><span class="di">🏠</span> Dashboard</a>
+    <a href="courses.html"     class="drawer-link"><span class="di">📚</span> Kurslar</a>
+    <a href="certificate.html" class="drawer-link"><span class="di">🏆</span> Sertifikatlar</a>
+    <a href="pricing.html"     class="drawer-link"><span class="di">⚡</span> Pro olish</a>
+    <div class="drawer-sep"></div>
+    <a href="profile.html" class="drawer-link active"><span class="di">⚙️</span> Profil</a>
+    <a href="login.html"   class="drawer-link exit"><span class="di">↩</span> Chiqish</a>
+  </div>
+</div>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Asosiy</div>
+      <a href="dashboard.html"   class="sidebar-link"><span class="si">🏠</span> Dashboard</a>
+      <a href="courses.html"     class="sidebar-link"><span class="si">📚</span> Kurslar</a>
+      <a href="certificate.html" class="sidebar-link"><span class="si">🏆</span> Sertifikatlar</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Pro</div>
+      <a href="pro-community.html" class="sidebar-link"><span class="si">👥</span> Hamjamiyat</a>
+      <a href="pricing.html"       class="sidebar-link"><span class="si">⚡</span> Pro olish</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Hisob</div>
+      <a href="profile.html" class="sidebar-link active"><span class="si">⚙️</span> Sozlamalar</a>
+      <a href="login.html"   class="sidebar-link exit"><span class="si">↩</span> Chiqish</a>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-inner" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+        <div class="sidebar-user-info"><h5>Halimjon H.</h5><p>Free foydalanuvchi</p></div>
+        <span style="color:var(--neon);font-size:12px;">●</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="page-content">
+
+    <!-- Profile Hero -->
+    <div class="profile-hero" style="background:transparent;border:none;padding:0 0 28px;">
+      <div class="profile-top anim-up">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="avatar">
+          </div>
+          <div class="avatar-edit" onclick="alert('Rasm yuklash...')">✏️</div>
+        </div>
+        <div class="profile-meta">
+          <h1>Halimjon Hasanov</h1>
+          <div class="handle">@<span>halimjon_dev</span> · OnOlam member</div>
+          <div class="profile-badges">
+            <span class="badge badge-free">Free</span>
+            <span class="chip chip-green">🔥 7 kun streak</span>
+            <span class="chip chip-blue">📚 3 faol kurs</span>
+          </div>
+          <p>Frontend developer bo'lish yo'lida. HTML, CSS va JS o'rganmoqdaman. OnOlam bilan har kuni kod yozaman.</p>
+        </div>
+        <div class="profile-actions">
+          <button class="btn btn-ghost btn-sm" onclick="copyLink()">🔗 Profil havola</button>
+          <a href="pricing.html"><button class="btn btn-neon btn-sm">⚡ Pro olish</button></a>
+        </div>
+      </div>
+      <div class="profile-stats anim-up anim-d1">
+        <div class="ps-item"><div class="ps-num">12</div><div class="ps-lbl">Darslar</div></div>
+        <div class="ps-item"><div class="ps-num">3</div><div class="ps-lbl">Kurslar</div></div>
+        <div class="ps-item"><div class="ps-num">1</div><div class="ps-lbl">Sertifikat</div></div>
+        <div class="ps-item"><div class="ps-num">7</div><div class="ps-lbl">Streak</div></div>
+        <div class="ps-item"><div class="ps-num">4.2h</div><div class="ps-lbl">Bu hafta</div></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="profile-tabs anim-up anim-d2">
+      <button class="ptab active" onclick="showPTab('settings',this)">⚙️ Sozlamalar</button>
+      <button class="ptab" onclick="showPTab('activity',this)">📊 Faollik</button>
+      <button class="ptab" onclick="showPTab('security',this)">🔒 Xavfsizlik</button>
+      <button class="ptab" onclick="showPTab('notif',this)">🔔 Bildirishnomalar</button>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="ptab-settings">
+
+      <!-- Avatar -->
+      <div class="settings-section">
+        <h3>Profil rasmi</h3>
+        <p class="sh-desc">PNG, JPG, GIF — max 2MB</p>
+        <div class="avatar-section">
+          <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+          <div class="avatar-section-info">
+            <h4>Joriy rasm</h4>
+            <p>Pixel art uslubi (avtomatik generatsiya)</p>
+            <div class="avatar-btns">
+              <button class="btn btn-ghost btn-sm" onclick="alert('Rasm yuklash...')">📁 Yuklash</button>
+              <button class="btn btn-danger btn-sm" onclick="alert('O\'chirildi')">🗑 O\'chirish</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal info -->
+      <div class="settings-section">
+        <h3>Shaxsiy ma'lumot</h3>
+        <p class="sh-desc">Ismingiz va kontakt ma'lumotlaringiz</p>
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">Ism</label>
+            <input class="input" type="text" value="Halimjon">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Familiya</label>
+            <input class="input" type="text" value="Hasanov">
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Username</label>
+          <input class="input" type="text" value="halimjon_dev">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input class="input" type="email" value="halimjon@gmail.com">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Telefon</label>
+          <input class="input" type="tel" placeholder="+998 90 000 00 00">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Bio</label>
+          <textarea class="input" style="min-height:80px;">Frontend developer bo'lish yo'lida. HTML, CSS va JS o'rganmoqdaman.</textarea>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">Joylashuv</label>
+            <input class="input" type="text" placeholder="Toshkent, O'zbekiston">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Vebsayt</label>
+            <input class="input" type="url" placeholder="https://...">
+          </div>
+        </div>
+        <button class="btn btn-neon" onclick="saveSettings(this)">Saqlash</button>
+      </div>
+
+      <!-- Danger zone -->
+      <div class="danger-section">
+        <h3>Xavfli zona</h3>
+        <p>Bu amалlar qaytarib bo'lmaydi. Ehtiyot bo'ling.</p>
+        <div class="danger-row">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--text-1);">Hisobni o'chirish</div>
+            <div style="font-size:12px;color:var(--text-3);">Barcha ma'lumotlar, progresslar va sertifikatlar o'chiriladi.</div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete()">🗑 Hisobni o'chirish</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY TAB -->
+    <div id="ptab-activity" style="display:none;">
+      <div class="activity-list">
+        <div class="act-card"><div class="ac-icon">✅</div><div class="ac-info"><h4>HTML dars 3 tugatildi</h4><p>Formalar va inputlar · HTML kursi</p></div><div class="ac-time">Bugun, 14:32</div></div>
+        <div class="act-card"><div class="ac-icon">▶</div><div class="ac-info"><h4>CSS dars 3 boshlandi</h4><p>Flexbox · CSS kursi</p></div><div class="ac-time">Bugun, 11:15</div></div>
+        <div class="act-card"><div class="ac-icon">🏆</div><div class="ac-info"><h4>HTML sertifikati olindi</h4><p>Tabriklaymiz! ID: ONOLAM-HTML-2026</p></div><div class="ac-time">10-mart, 18:00</div></div>
+        <div class="act-card"><div class="ac-icon">📚</div><div class="ac-info"><h4>Python kursiga yozilindi</h4><p>Python Asoslari · 5 dars</p></div><div class="ac-time">Kecha, 20:04</div></div>
+        <div class="act-card"><div class="ac-icon">🔥</div><div class="ac-info"><h4>7 kunlik streak erishildi!</h4><p>Har kuni o'rganishni davom ettiring</p></div><div class="ac-time">Bugun</div></div>
+        <div class="act-card"><div class="ac-icon">✅</div><div class="ac-info"><h4>HTML dars 2 tugatildi</h4><p>Teglar va atributlar · HTML kursi</p></div><div class="ac-time">2 kun oldin</div></div>
+      </div>
+    </div>
+
+    <!-- SECURITY TAB -->
+    <div id="ptab-security" style="display:none;">
+      <div class="settings-section">
+        <h3>Parolni o'zgartirish</h3>
+        <p class="sh-desc">Xavfsizlik uchun vaqti-vaqti bilan parolingizni yangilang</p>
+        <div class="input-group">
+          <label class="input-label">Joriy parol</label>
+          <input class="input" type="password" placeholder="••••••••">
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">Yangi parol</label>
+            <input class="input" type="password" placeholder="••••••••" oninput="checkStrength(this.value)">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Tasdiqlang</label>
+            <input class="input" type="password" placeholder="••••••••">
+          </div>
+        </div>
+        <button class="btn btn-neon btn-sm" onclick="saveSettings(this)">Parolni yangilash</button>
+      </div>
+      <div class="settings-section">
+        <h3>Xavfsizlik ma'lumoti</h3>
+        <p class="sh-desc">Hisobingiz holati</p>
+        <div class="sec-item">
+          <div class="sec-item-info"><h4>Email tasdiqlangan</h4><p>halimjon@gmail.com</p></div>
+          <div class="sec-status"><span class="chip chip-green">✓ Tasdiqlangan</span></div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-item-info"><h4>Ikki bosqichli autentifikatsiya</h4><p>SMS yoki authenticator app orqali</p></div>
+          <div class="sec-status">
+            <span class="chip chip-red">✗ O'chirilgan</span>
+            <button class="btn btn-ghost btn-sm" onclick="alert('2FA sozlamalar...')">Yoqish</button>
+          </div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-item-info"><h4>Oxirgi kirish</h4><p>Bugun, 14:20 · Chrome · Toshkent</p></div>
+          <div class="sec-status"><span class="chip chip-green">Joriy session</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS TAB -->
+    <div id="ptab-notif" style="display:none;">
+      <div class="settings-section">
+        <h3>Bildirishnoma sozlamalari</h3>
+        <p class="sh-desc">Qaysi bildirishnomalarni olishni tanlang</p>
+        <div class="toggle-row">
+          <div class="toggle-info"><h4>Yangi dars bildirishnomasi</h4><p>Yangi dars qo'shilganda xabar oling</p></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><h4>Streak eslatmasi</h4><p>Kunlik mashg'ulotni eslatib turadi</p></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><h4>Platforma yangiliklari</h4><p>Yangi kurslar va imkoniyatlar haqida</p></div>
+          <label class="toggle"><input type="checkbox"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-info"><h4>Email xabarnoma</h4><p>Muhim ma'lumotlar emailga yuboriladi</p></div>
+          <label class="toggle"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div style="margin-top:20px;">
+          <button class="btn btn-neon" onclick="saveSettings(this)">Sozlamalarni saqlash</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div style="border-top:1px solid var(--border);padding:20px 0;">
+  <div class="container"><div class="footer-inner" style="padding:0;"><div class="footer-copy">© 2026 <span>OnOlam</span>.</div></div></div>
+</div>
+
+<script src="js/burger.js"></script>
+<script>
+function showPTab(name, el){
+  document.querySelectorAll('[id^="ptab-"]').forEach(t => t.style.display='none');
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ptab-'+name).style.display='block';
+  el.classList.add('active');
+}
+function saveSettings(btn){
+  const orig = btn.textContent;
+  btn.textContent = '✔ Saqlandi!';
+  btn.classList.add('btn-ghost');
+  btn.classList.remove('btn-neon');
+  setTimeout(()=>{ btn.textContent=orig; btn.classList.remove('btn-ghost'); btn.classList.add('btn-neon'); }, 2000);
+}
+function copyLink(){
+  navigator.clipboard.writeText(window.location.origin+'/profile/halimjon_dev')
+    .then(()=>alert('Profil havola nusxalandi!'));
+}
+function confirmDelete(){
+  if(confirm('Hisobni o\'chirishni xohlaysizmi?\nBu amalni qaytarib bo\'lmaydi!')){
+    alert('Demo rejim: hisob o\'chirilmadi.');
+  }
+}
+function checkStrength(v){
+  const score = [v.length>=8, /[A-Z]/.test(v), /[0-9]/.test(v), /[^A-Za-z0-9]/.test(v)].filter(Boolean).length;
+  console.log('Parol kuchi:', ['','Zaif','O\'rtacha','Yaxshi','Kuchli'][score]);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOlam — Kirish</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+body { display:flex; align-items:center; justify-content:center; min-height:100vh; overflow:hidden; }
+.auth-wrap {
+  position:relative; z-index:1;
+  display:flex; width:860px; max-width:98vw;
+  border-radius:24px; overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+  animation:popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+/* Left branding */
+.auth-left {
+  width:42%; background:linear-gradient(160deg,#0d1b4b,#0a0f2e);
+  padding:44px 36px; display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden; flex-shrink:0;
+}
+.auth-left::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 20% 20%,rgba(26,86,255,0.25) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 80%,rgba(124,58,237,0.15) 0%,transparent 50%);
+}
+.auth-left::after {
+  content:''; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(26,86,255,0.07) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(26,86,255,0.07) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+.al-brand { position:relative; z-index:1; }
+.al-logo { display:flex; align-items:center; gap:10px; font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; margin-bottom:36px; text-decoration:none; color:var(--white); }
+.al-logo span { color:var(--cyan); }
+.al-title { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; line-height:1.15; letter-spacing:-0.5px; margin-bottom:14px; }
+.al-title .acc { background:linear-gradient(90deg,var(--blue3),var(--cyan)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.al-sub { font-size:0.85rem; color:var(--dim); line-height:1.7; font-weight:300; }
+.al-feats { position:relative; z-index:1; display:flex; flex-direction:column; gap:10px; }
+.al-feat { display:flex; align-items:center; gap:10px; font-size:0.82rem; color:var(--dim); }
+.al-feat-icon { width:28px;height:28px;border-radius:8px;background:rgba(26,86,255,0.15);border:1px solid rgba(26,86,255,0.25);display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0; }
+
+/* Right form */
+.auth-right {
+  flex:1; background:rgba(8,12,31,0.95); backdrop-filter:blur(24px);
+  padding:44px 40px; display:flex; flex-direction:column; justify-content:center;
+  position:relative;
+}
+.auth-toggle {
+  display:flex; background:var(--faint); border:1px solid var(--border);
+  border-radius:12px; padding:4px; margin-bottom:32px; width:fit-content;
+}
+.toggle-btn {
+  padding:8px 28px; border-radius:9px; border:none;
+  font-size:0.85rem; font-weight:500; cursor:pointer;
+  background:transparent; color:var(--dim);
+  font-family:'DM Sans',sans-serif; transition:all 0.25s;
+}
+.toggle-btn.active {
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:var(--white); box-shadow:0 4px 14px rgba(26,86,255,0.4);
+}
+.form-title { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; letter-spacing:-0.4px; margin-bottom:5px; }
+.form-sub { font-size:0.85rem; color:var(--dim); margin-bottom:26px; font-weight:300; }
+.form { display:flex; flex-direction:column; gap:14px; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field label { font-size:0.77rem; font-weight:500; color:rgba(255,255,255,0.65); letter-spacing:0.3px; }
+.input-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--dim); font-size:0.9rem; pointer-events:none; transition:color 0.2s; }
+.field .input-wrap:focus-within .input-icon { color:var(--blue3); }
+.eye-btn { position:absolute; right:12px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--dim); cursor:pointer; font-size:0.9rem; transition:color 0.2s; }
+.eye-btn:hover { color:var(--white); }
+.forgot { text-align:right; }
+.forgot a { font-size:0.77rem; color:var(--blue3); text-decoration:none; }
+.forgot a:hover { color:var(--cyan); }
+.err-msg {
+  font-size:0.75rem; color:var(--red); display:none; align-items:center; gap:5px;
+  padding:8px 12px; border-radius:8px;
+  background:rgba(255,77,106,0.07); border:1px solid rgba(255,77,106,0.2);
+}
+.or-div { display:flex; align-items:center; gap:10px; font-size:0.74rem; color:var(--dim2); }
+.or-div::before,.or-div::after { content:''; flex:1; height:1px; background:var(--border); }
+.social-row { display:flex; gap:10px; }
+.social-auth-btn {
+  flex:1; padding:9px; border-radius:10px; border:1px solid var(--border);
+  background:var(--faint); color:var(--dim); font-size:0.8rem; font-weight:500;
+  cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.social-auth-btn:hover { border-color:rgba(255,255,255,0.25); color:var(--white); }
+.spinner { display:none; width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto; }
+.success-overlay {
+  display:none; position:absolute; inset:0;
+  background:rgba(8,12,31,0.98); backdrop-filter:blur(16px);
+  align-items:center; justify-content:center;
+  flex-direction:column; gap:14px; border-radius:0 24px 24px 0;
+  z-index:10; animation:fadeIn 0.4s ease;
+}
+.success-circle {
+  width:68px;height:68px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),#00b87a);
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+  box-shadow:0 0 36px rgba(0,229,160,0.4);
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.success-title { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; }
+.success-sub { font-size:0.84rem; color:var(--dim); }
+@media(max-width:680px){
+  .auth-wrap{ flex-direction:column; border-radius:16px; }
+  .auth-left{ width:100%; padding:28px 24px; }
+  .al-feats{ display:none; }
+  .auth-right{ padding:28px 24px; }
+}
+</style>
+</head>
+<body>
+<div class="space-bg"><div class="stars"></div><div class="nebula nebula-1"></div><div class="nebula nebula-2"></div></div>
+
+<div class="auth-wrap">
+  <!-- LEFT -->
+  <div class="auth-left">
+    <div class="al-brand">
+      <a href="index.html" class="al-logo">
+        <div class="logo-orb" style="width:32px;height:32px;font-size:0.65rem;">OO</div>
+        On<span>Olam</span>
+      </a>
+      <div class="al-title">Dasturchi bo'lishning <span class="acc">eng qisqa yo'li</span></div>
+      <div class="al-sub">Frontend va Backend — ikkalasini o'rganing. Bepul boshlang, premium bilan professional bo'ling.</div>
+    </div>
+    <div class="al-feats">
+      <div class="al-feat"><div class="al-feat-icon">🌐</div> HTML, CSS, JavaScript</div>
+      <div class="al-feat"><div class="al-feat-icon">🐍</div> Python, PHP, SQL</div>
+      <div class="al-feat"><div class="al-feat-icon">🤖</div> AI Yordamchi (Premium)</div>
+      <div class="al-feat"><div class="al-feat-icon">💻</div> Brauzerda kod muharriri</div>
+      <div class="al-feat"><div class="al-feat-icon">🎬</div> Video darsliklar (Premium)</div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="auth-right">
+    <div class="auth-toggle">
+      <button class="toggle-btn active" id="loginBtn" onclick="showLogin()">Kirish</button>
+      <button class="toggle-btn" id="regBtn" onclick="showReg()">Ro'yxatdan o'tish</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginView">
+      <div class="form-title">Xush kelibsiz 👋</div>
+      <div class="form-sub">Akkauntingizga kiring va o'qishni davom eting.</div>
+      <div class="form">
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input class="input-field" id="lEmail" type="text" placeholder="email@example.com" oninput="clearErr('lErr')">
+          </div>
+        </div>
+        <div class="field">
+          <label>Parol</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input class="input-field" id="lPass" type="password" placeholder="••••••••" oninput="clearErr('lErr')">
+            <button class="eye-btn" onclick="togglePwd('lPass',this)">👁</button>
+          </div>
+        </div>
+        <div class="forgot"><a href="#">Parolni unutdingizmi?</a></div>
+        <div class="err-msg" id="lErr">⚠️ Email yoki parol noto'g'ri</div>
+        <button class="btn btn-primary" id="lBtn" onclick="doLogin()" style="width:100%;justify-content:center;padding:13px;">
+          <span id="lBtnTxt">Kirish →</span>
+          <div class="spinner" id="lSpin"></div>
+        </button>
+        <div class="or-div">yoki</div>
+        <div class="social-row">
+          <button class="social-auth-btn">🌐 Google</button>
+          <button class="social-auth-btn">📱 Telegram</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTER (hidden) -->
+    <div id="regView" style="display:none;">
+      <div class="form-title">Hisob yarating ✨</div>
+      <div class="form-sub">Bepul ro'yxatdan o'ting va o'qishni boshlang.</div>
+      <div class="form">
+        <div style="display:flex;gap:12px;">
+          <div class="field" style="flex:1;">
+            <label>Ism</label>
+            <div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" id="rName" type="text" placeholder="Ismingiz"></div>
+          </div>
+          <div class="field" style="flex:1;">
+            <label>Familiya</label>
+            <div class="input-wrap"><span class="input-icon">👤</span><input class="input-field" id="rSurname" type="text" placeholder="Familiyangiz"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <div class="input-wrap"><span class="input-icon">✉️</span><input class="input-field" id="rEmail" type="email" placeholder="email@example.com"></div>
+        </div>
+        <div class="field">
+          <label>Parol</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input class="input-field" id="rPass" type="password" placeholder="Kamida 8 belgi" oninput="checkStrength()">
+            <button class="eye-btn" onclick="togglePwd('rPass',this)">👁</button>
+          </div>
+          <div style="display:flex;gap:4px;margin-top:5px;">
+            <div style="flex:1;height:3px;border-radius:99px;background:var(--faint);overflow:hidden;"><div id="s1" style="height:100%;border-radius:99px;transition:background 0.3s;"></div></div>
+            <div style="flex:1;height:3px;border-radius:99px;background:var(--faint);overflow:hidden;"><div id="s2" style="height:100%;border-radius:99px;transition:background 0.3s;"></div></div>
+            <div style="flex:1;height:3px;border-radius:99px;background:var(--faint);overflow:hidden;"><div id="s3" style="height:100%;border-radius:99px;transition:background 0.3s;"></div></div>
+          </div>
+          <div id="sLbl" style="font-size:0.7rem;color:var(--dim);margin-top:2px;"></div>
+        </div>
+        <div class="field">
+          <label>Parolni tasdiqlang</label>
+          <div class="input-wrap"><span class="input-icon">🔒</span><input class="input-field" id="rPass2" type="password" placeholder="Parolni takrorlang"><button class="eye-btn" onclick="togglePwd('rPass2',this)">👁</button></div>
+        </div>
+        <div class="err-msg" id="rErr">⚠️ Parollar mos kelmadi</div>
+        <button class="btn btn-primary" id="rBtn" onclick="doRegister()" style="width:100%;justify-content:center;padding:13px;">
+          <span id="rBtnTxt">Ro'yxatdan o'tish →</span>
+          <div class="spinner" id="rSpin"></div>
+        </button>
+        <div class="or-div">yoki</div>
+        <div class="social-row">
+          <button class="social-auth-btn">🌐 Google</button>
+          <button class="social-auth-btn">📱 Telegram</button>
+        </div>
+        <p style="font-size:0.72rem;color:var(--dim2);text-align:center;line-height:1.6;">Ro'yxatdan o'tish orqali <a href="#" style="color:var(--blue3);text-decoration:none;">Foydalanish shartlari</a>ga rozilik bildirasiz.</p>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-overlay" id="successOvr">
+      <div class="success-circle">✓</div>
+      <div class="success-title" id="sucTitle">Muvaffaqiyatli!</div>
+      <div class="success-sub" id="sucSub">Yo'naltirilmoqdasiz...</div>
+      <a href="dashboard.html" class="btn btn-primary" style="margin-top:8px;">Davom etish →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function showLogin(){
+  document.getElementById('loginBtn').classList.add('active');
+  document.getElementById('regBtn').classList.remove('active');
+  document.getElementById('loginView').style.display='block';
+  document.getElementById('regView').style.display='none';
+}
+function showReg(){
+  document.getElementById('regBtn').classList.add('active');
+  document.getElementById('loginBtn').classList.remove('active');
+  document.getElementById('regView').style.display='block';
+  document.getElementById('loginView').style.display='none';
+}
+function togglePwd(id,btn){
+  const i=document.getElementById(id);
+  i.type=i.type==='password'?'text':'password';
+  btn.textContent=i.type==='password'?'👁':'🙈';
+}
+function clearErr(id){ document.getElementById(id).style.display='none'; }
+function checkStrength(){
+  const v=document.getElementById('rPass').value;
+  let s=0;
+  if(v.length>=8)s++;
+  if(/[A-Z0-9]/.test(v))s++;
+  if(/[^A-Za-z0-9]/.test(v))s++;
+  const cols=['','#ff4d6a','#ffc107','#00e5a0'];
+  const lbls=['','Zaif',"O'rtacha",'Kuchli'];
+  for(let i=1;i<=3;i++) document.getElementById('s'+i).style.background=i<=s?cols[s]:'transparent';
+  document.getElementById('sLbl').textContent=v.length>0?lbls[s]:'';
+  document.getElementById('sLbl').style.color=cols[s]||'var(--dim)';
+}
+function setLoad(type,on){
+  const btn=document.getElementById(type+'Btn');
+  const txt=document.getElementById(type+'BtnTxt');
+  const sp=document.getElementById(type+'Spin');
+  if(btn){btn.disabled=on;}
+  if(txt)txt.style.display=on?'none':'block';
+  if(sp)sp.style.display=on?'block':'none';
+}
+function showSuccess(title,sub){
+  document.getElementById('sucTitle').textContent=title;
+  document.getElementById('sucSub').textContent=sub;
+  document.getElementById('successOvr').style.display='flex';
+}
+function doLogin(){
+  const e=document.getElementById('lEmail').value.trim();
+  const p=document.getElementById('lPass').value;
+  const err=document.getElementById('lErr');
+  if(!e||!p){err.style.display='flex';err.textContent="⚠️ Barcha maydonlarni to'ldiring";return;}
+  setLoad('l',true);
+  setTimeout(()=>{
+    setLoad('l',false);
+    showSuccess('Kirish muvaffaqiyatli! 🎉',"Dashboard sahifasiga yo'naltirilmoqdasiz...");
+  },1400);
+}
+function doRegister(){
+  const n=document.getElementById('rName').value.trim();
+  const e=document.getElementById('rEmail').value.trim();
+  const p=document.getElementById('rPass').value;
+  const p2=document.getElementById('rPass2').value;
+  const err=document.getElementById('rErr');
+  if(!n||!e||!p||!p2){err.style.display='flex';err.textContent="⚠️ Barcha maydonlarni to'ldiring";return;}
+  if(p!==p2){err.style.display='flex';err.textContent="⚠️ Parollar mos kelmadi";return;}
+  if(p.length<8){err.style.display='flex';err.textContent="⚠️ Parol kamida 8 belgi bo'lishi kerak";return;}
+  err.style.display='none';
+  setLoad('r',true);
+  setTimeout(()=>{
+    setLoad('r',false);
+    showSuccess('Hisob yaratildi! 🎉','Xush kelibsiz, '+n+'!');
+  },1500);
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'){ if(document.getElementById('loginView').style.display!=='none')doLogin(); else doRegister(); }});
+</script>
+</body>
+</html>

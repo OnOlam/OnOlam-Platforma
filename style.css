@@ -1,0 +1,1197 @@
+/* ============================================================
+   OnOlam — To'liq CSS Stili
+   Rasmga aynan mos: kosmik fon, to'lqin, gradient kartalar
+   ============================================================ */
+
+/* ── GOOGLE FONTS ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ══════════════════════════════════════════════════
+   1. CSS O'ZGARUVCHILAR — BARCHA RANGLAR
+══════════════════════════════════════════════════ */
+:root {
+  /* Asosiy fon ranglari */
+  --bg-dark:        #060818;   /* Eng qora fon */
+  --bg-navy:        #080c24;   /* Qoraga yaqin ko'k */
+  --bg-deep:        #0a0e2a;   /* Asosiy fon rangi */
+  --bg-card:        #0d1235;   /* Karta fonlari */
+  --bg-card-light:  #111840;   /* Ochroq karta */
+  --bg-card-hover:  #151e4f;   /* Hover holati */
+
+  /* Asosiy rang - Ko'k */
+  --blue-bright:    #2979ff;   /* Tugma ko'ki (Bepul boshlash) */
+  --blue-light:     #40a9ff;   /* Yorqin ko'k accent */
+  --blue-glow:      #1565c0;   /* Ko'k glow uchun */
+  --blue-soft:      #1a237e;   /* To'q ko'k */
+
+  /* To'lqin / Accent - Binafsha */
+  --purple-wave:    #7b2fff;   /* To'lqinli chiziq - asosiy binafsha */
+  --purple-mid:     #9c27b0;   /* O'rta binafsha */
+  --purple-soft:    #6a0dad;   /* To'q binafsha */
+  --purple-glow:    rgba(123, 47, 255, 0.4); /* Binafsha glow */
+
+  /* Premium rang - Moviy-binafsha */
+  --premium-blue:   #1e40af;   /* Premium karta fonining to'q ko'ki */
+  --premium-bright: #3b82f6;   /* Premium karta yorqin ko'k */
+  --premium-border: #2563eb;   /* Premium karta chegarasi */
+
+  /* Yulduz rangi */
+  --star-gold:      #fbbf24;   /* Yulduzcha rangi */
+  --star-orange:    #f59e0b;
+
+  /* Matn ranglari */
+  --text-white:     #ffffff;
+  --text-light:     #e2e8f0;
+  --text-muted:     #94a3b8;
+  --text-dim:       #64748b;
+  --text-blue:      #60a5fa;
+
+  /* Progress bar ranglari */
+  --progress-green:  #10b981;
+  --progress-yellow: #f59e0b;
+  --progress-blue:   #3b82f6;
+
+  /* Border / Ajratgich */
+  --border-dim:     rgba(255,255,255,0.06);
+  --border-blue:    rgba(41,121,255,0.3);
+  --border-card:    rgba(255,255,255,0.08);
+
+  /* Glow / Shadow */
+  --shadow-blue:    0 0 40px rgba(41,121,255,0.2);
+  --shadow-card:    0 8px 32px rgba(0,0,0,0.4);
+  --shadow-btn:     0 4px 20px rgba(41,121,255,0.4);
+
+  /* Transition */
+  --tr: all 0.3s ease;
+}
+
+/* ══════════════════════════════════════════════════
+   2. RESET VA BASE
+══════════════════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--tr);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════
+   3. KOSMIK FON — ASOSIY
+   (Rasmda: qora + ko'k gradient + yulduzlar)
+══════════════════════════════════════════════════ */
+body {
+  background:
+    /* Yulduzsimon nuqtalar */
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    /* Ko'k-binafsha gradient chap tomonda */
+    radial-gradient(ellipse 600px 500px at 0% 20%, rgba(13,25,100,0.8) 0%, transparent 70%),
+    /* Binafsha glow o'rta chap */
+    radial-gradient(ellipse 400px 300px at 15% 40%, rgba(75,0,130,0.25) 0%, transparent 60%),
+    /* Ko'k glow o'ng tomonda */
+    radial-gradient(ellipse 500px 400px at 100% 10%, rgba(25,50,150,0.4) 0%, transparent 60%),
+    /* Asosiy fon */
+    linear-gradient(180deg, #060818 0%, #080c24 40%, #060818 100%);
+  background-attachment: fixed;
+}
+
+/* ══════════════════════════════════════════════════
+   4. CONTAINER
+══════════════════════════════════════════════════ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ══════════════════════════════════════════════════
+   5. NAVBAR
+   (Rasmda: shaffof, logo chapda, havolalar o'ngda)
+══════════════════════════════════════════════════ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 16px 0;
+  background: rgba(6, 8, 24, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+.navbar-logo .logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2979ff, #7b2fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* Nav havolalar */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar-nav a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: var(--tr);
+}
+
+.navbar-nav a:hover {
+  color: var(--text-white);
+}
+
+/* Navbar tugmalari */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ══════════════════════════════════════════════════
+   6. TUGMALAR
+   (Rasmda: ko'k solid + outline)
+══════════════════════════════════════════════════ */
+
+/* Asosiy tugma — Ko'k */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #2979ff 0%, #1565c0 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 50px;       /* To'liq yumaloq */
+  border: none;
+  cursor: pointer;
+  transition: var(--tr);
+  box-shadow: var(--shadow-btn);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(41,121,255,0.55);
+  background: linear-gradient(135deg, #448aff 0%, #2979ff 100%);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Outline tugma — "Tariflar >" */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: transparent;
+  color: var(--text-white);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 50px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: var(--tr);
+  white-space: nowrap;
+}
+
+.btn-outline:hover {
+  border-color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.06);
+}
+
+/* Kichik tugma — karta ichida */
+.btn-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 22px;
+  background: linear-gradient(135deg, #2979ff, #1e40af);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: var(--tr);
+  box-shadow: 0 2px 12px rgba(41,121,255,0.35);
+}
+
+.btn-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(41,121,255,0.5);
+}
+
+/* Premium tugma */
+.btn-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #2979ff 0%, #7b2fff 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: var(--tr);
+  box-shadow: 0 4px 20px rgba(123,47,255,0.4);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(123,47,255,0.5);
+}
+
+/* ══════════════════════════════════════════════════
+   7. HERO SECTION
+   (Rasmda: chap-matn, o'ng-dashboard karta)
+══════════════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  padding: 120px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Kosmik sharlar — orqa fonda ko'ringan doiralar */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(41,121,255,0.15) 0%, rgba(123,47,255,0.08) 50%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: 12%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,47,255,0.5) 0%, rgba(41,121,255,0.2) 60%, transparent 80%);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Hero chap qism */
+.hero-content h1 {
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--text-white);
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.hero-content p {
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 400px;
+}
+
+.hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Hero o'ng — Dashboard karta */
+.hero-dashboard {
+  position: relative;
+}
+
+/* ══════════════════════════════════════════════════
+   8. DASHBOARD KARTA (Hero o'ng taraf)
+   (Rasmda: oq-shaffof karta, statslar, progress)
+══════════════════════════════════════════════════ */
+.dashboard-card {
+  background: rgba(13, 18, 53, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(41,121,255,0.5), transparent);
+}
+
+/* Foydalanuvchilar soni */
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--text-white);
+  line-height: 1;
+}
+
+.stat-number span {
+  color: var(--blue-light);
+}
+
+.stat-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* Progress bar */
+.progress-item {
+  margin: 12px 0;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s ease;
+}
+
+.progress-fill.green  { background: linear-gradient(90deg, #10b981, #34d399); }
+.progress-fill.yellow { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.progress-fill.blue   { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+
+/* Dars elementlari */
+.lesson-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  border: 1px solid var(--border-dim);
+  margin: 8px 0;
+  transition: var(--tr);
+}
+
+.lesson-item:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: var(--border-blue);
+}
+
+.lesson-num {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.lesson-title {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  flex: 1;
+  padding: 0 12px;
+}
+
+/* ══════════════════════════════════════════════════
+   9. TO'LQINLI AJRATGICH CHIZIQ
+   (Rasmda: binafsha egri chiziq section orasida)
+══════════════════════════════════════════════════ */
+
+/* Usul 1: SVG to'lqin — eng aniq */
+.wave-divider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  margin: 0;
+}
+
+.wave-divider svg {
+  display: block;
+  width: 100%;
+}
+
+/* Usul 2: CSS faqat — background-image SVG */
+.wave-line {
+  width: 100%;
+  height: 60px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60'%3E%3Cpath d='M0 30 C200 5 400 55 600 30 C800 5 1000 55 1200 30 C1300 18 1380 10 1440 15' stroke='%237b2fff' stroke-width='2' fill='none' opacity='0.7'/%3E%3Cpath d='M0 35 C180 15 360 50 540 35 C720 20 900 50 1080 35 C1200 25 1350 18 1440 22' stroke='%232979ff' stroke-width='1.5' fill='none' opacity='0.4'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  margin: 20px 0;
+}
+
+/* Binafsha to'lqin — RASMGA AYNAN MOS */
+.wave-purple {
+  width: 100%;
+  height: 80px;
+  position: relative;
+  overflow: hidden;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cdefs%3E%3ClinearGradient id='wg' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%232979ff' stop-opacity='0.3'/%3E%3Cstop offset='40%25' stop-color='%237b2fff' stop-opacity='0.8'/%3E%3Cstop offset='100%25' stop-color='%232979ff' stop-opacity='0.1'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M0 40 C150 10 300 70 500 40 C700 10 900 70 1100 40 C1250 20 1360 15 1440 20' stroke='url(%23wg)' stroke-width='3' fill='none'/%3E%3Cpath d='M0 50 C200 25 400 65 600 45 C800 25 1000 60 1200 45 C1320 35 1400 30 1440 35' stroke='%237b2fff' stroke-width='1.5' fill='none' opacity='0.3'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ══════════════════════════════════════════════════
+   10. XUSUSIYATLAR SECTION (Features)
+   (Rasmda: 3 ta karta — Real loyihalar, AI, Amaliy)
+══════════════════════════════════════════════════ */
+.features-section {
+  padding: 60px 0 40px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(13, 18, 53, 0.6);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  transition: var(--tr);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(41,121,255,0.04), transparent);
+  opacity: 0;
+  transition: var(--tr);
+}
+
+.feature-card:hover {
+  border-color: rgba(41,121,255,0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(41,121,255,0.1);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
+}
+
+/* Feature icon — katta ikonka */
+.feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.4rem;
+}
+
+.feature-icon.blue {
+  background: linear-gradient(135deg, rgba(41,121,255,0.2), rgba(41,121,255,0.05));
+  border: 1px solid rgba(41,121,255,0.2);
+  color: var(--blue-light);
+}
+
+.feature-icon.purple {
+  background: linear-gradient(135deg, rgba(123,47,255,0.2), rgba(123,47,255,0.05));
+  border: 1px solid rgba(123,47,255,0.2);
+  color: #a78bfa;
+}
+
+.feature-icon.cyan {
+  background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(6,182,212,0.05));
+  border: 1px solid rgba(6,182,212,0.2);
+  color: #22d3ee;
+}
+
+.feature-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 6px;
+}
+
+.feature-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════════════════
+   11. KURSLAR SECTION
+   (Rasmda: Frontend/Backend bo'limlari + kurs kartalar)
+══════════════════════════════════════════════════ */
+.courses-section {
+  padding: 70px 0;
+  position: relative;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 40px;
+  letter-spacing: -0.3px;
+}
+
+.courses-category-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+/* Kurs kartalar grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.courses-grid.backend-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Kurs karta */
+.course-card {
+  background: linear-gradient(145deg, #0d1235 0%, #111840 100%);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: var(--tr);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.course-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(41,121,255,0.4), transparent);
+  transition: var(--tr);
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(41,121,255,0.3);
+  box-shadow:
+    0 16px 40px rgba(0,0,0,0.4),
+    0 0 30px rgba(41,121,255,0.08);
+  background: linear-gradient(145deg, #111840 0%, #151e50 100%);
+}
+
+.course-card:hover::before {
+  background: linear-gradient(90deg, transparent, rgba(41,121,255,0.7), transparent);
+}
+
+/* Kurs nomi */
+.course-name {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 16px;
+  letter-spacing: -0.2px;
+}
+
+/* Kurs logo rasm */
+.course-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  transition: var(--tr);
+}
+
+.course-card:hover .course-logo {
+  transform: scale(1.05) translateY(-2px);
+  filter: drop-shadow(0 8px 20px rgba(41,121,255,0.3));
+}
+
+/* Boshlash tugmasi karta ichida */
+.course-card .btn-sm {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════════════
+   12. NARX / TARIFLAR SECTION
+   (Rasmda: Free + Premium 2 karta)
+══════════════════════════════════════════════════ */
+.pricing-section {
+  padding: 70px 0;
+}
+
+.pricing-section .section-title {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Umumiy narx karta stili */
+.pricing-card {
+  border-radius: 20px;
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: var(--tr);
+}
+
+/* FREE karta */
+.pricing-card.free {
+  background: linear-gradient(145deg, #0d1235, #111840);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.pricing-card.free:hover {
+  border-color: rgba(41,121,255,0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+
+/* PREMIUM karta — ko'k gradient */
+.pricing-card.premium {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 40%, #1d4ed8 100%);
+  border: 1px solid rgba(59,130,246,0.4);
+  box-shadow:
+    0 0 40px rgba(29,78,216,0.2),
+    0 8px 32px rgba(0,0,0,0.3);
+}
+
+.pricing-card.premium:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 60px rgba(29,78,216,0.3),
+    0 16px 50px rgba(0,0,0,0.4);
+}
+
+/* Premium karta glow effekti */
+.pricing-card.premium::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #2979ff, #7b2fff, #2979ff);
+}
+
+.pricing-card.premium::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent 60%);
+  pointer-events: none;
+}
+
+/* Narx karta header */
+.pricing-header {
+  margin-bottom: 24px;
+}
+
+.pricing-plan-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: 8px;
+}
+
+/* Yulduzlar */
+.stars {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 20px;
+}
+
+.star {
+  color: var(--star-gold);
+  font-size: 1rem;
+}
+
+/* Narx */
+.pricing-price {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--text-white);
+  line-height: 1;
+}
+
+.pricing-price .currency {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.pricing-price .period {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 4px;
+}
+
+/* Xususiyatlar ro'yxati */
+.pricing-features {
+  margin: 24px 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pricing-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+.pricing-feature-item::before {
+  content: '•';
+  color: var(--blue-light);
+  font-size: 1.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pricing-card.premium .pricing-feature-item::before {
+  color: #93c5fd;
+}
+
+/* ══════════════════════════════════════════════════
+   13. FOOTER
+   (Rasmda: qora, logo, havolalar, ijtimoiy)
+══════════════════════════════════════════════════ */
+.footer {
+  padding: 50px 0 30px;
+  border-top: 1px solid var(--border-dim);
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 200px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(41,121,255,0.4), transparent);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 40px;
+  align-items: start;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+/* Footer havolalar */
+.footer-nav {
+  display: flex;
+  gap: 32px;
+}
+
+.footer-nav a {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  transition: var(--tr);
+}
+
+.footer-nav a:hover {
+  color: var(--text-white);
+}
+
+/* Ijtimoiy tarmoqlar */
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  transition: var(--tr);
+}
+
+.social-link:hover {
+  color: var(--blue-light);
+}
+
+.social-icon {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+/* Footer qidiruv / xabar qutisi */
+.footer-newsletter {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-input {
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  color: var(--text-white);
+  font-size: 0.85rem;
+  outline: none;
+  transition: var(--tr);
+  width: 180px;
+}
+
+.footer-input::placeholder {
+  color: var(--text-dim);
+}
+
+.footer-input:focus {
+  border-color: var(--border-blue);
+  background: rgba(41,121,255,0.05);
+}
+
+.footer-bottom {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-dim);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copyright {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* ══════════════════════════════════════════════════
+   14. SEKCIYA ORQA FON EFFEKTLARI
+   (Har bir sekciya uchun ambient glow)
+══════════════════════════════════════════════════ */
+
+/* Kurslar sekciyasi uchun ambient */
+.courses-section::before {
+  content: '';
+  position: absolute;
+  left: -200px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,47,255,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+/* Narx sekciyasi uchun ambient */
+.pricing-section {
+  position: relative;
+}
+
+.pricing-section::before {
+  content: '';
+  position: absolute;
+  right: -100px;
+  top: 20%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,78,216,0.08), transparent 70%);
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════
+   15. UMUMIY YORDAMCHI KLASSLAR
+══════════════════════════════════════════════════ */
+
+/* Matn ranglari */
+.text-blue   { color: var(--blue-light); }
+.text-purple { color: #a78bfa; }
+.text-muted  { color: var(--text-muted); }
+.text-white  { color: var(--text-white); }
+
+/* Font og'irliklari */
+.fw-400 { font-weight: 400; }
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fw-800 { font-weight: 800; }
+
+/* Flexbox */
+.flex        { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between{ display: flex; align-items: center; justify-content: space-between; }
+.items-center{ align-items: center; }
+.gap-8  { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-24 { gap: 24px; }
+
+/* Padding */
+.py-80 { padding: 80px 0; }
+.py-60 { padding: 60px 0; }
+.py-40 { padding: 40px 0; }
+.pt-80 { padding-top: 80px; }
+.pb-80 { padding-bottom: 80px; }
+.mb-40 { margin-bottom: 40px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-16 { margin-bottom: 16px; }
+
+/* ══════════════════════════════════════════════════
+   16. YULDUZLI FON — NUQTALAR
+   (body ga qo'shiladi yoki ::before/::after)
+══════════════════════════════════════════════════ */
+.stars-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.stars-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 5%   12%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15%  25%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25%  8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35%  40%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45%  18%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55%  55%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65%  30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75%  70%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85%  15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 95%  45%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 20% 65%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 60% 90%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 80% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 10% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 70% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 90% 85%, rgba(255,255,255,0.3) 0%, transparent 100%);
+}
+
+/* ══════════════════════════════════════════════════
+   17. ANIMATSIYALAR
+══════════════════════════════════════════════════ */
+
+/* Yuqoridan pastga tushish */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pastdan yuqoriga chiqish */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Chapdan o'ngga */
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* O'ngdan chapga */
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Suzib yurish */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* Pulsatsiya glow */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(41,121,255,0.2); }
+  50%       { box-shadow: 0 0 40px rgba(41,121,255,0.4), 0 0 60px rgba(41,121,255,0.15); }
+}
+
+/* Orqa fon yulduzlar yonib o'chishi */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 1; }
+}
+
+/* To'lqin harakati */
+@keyframes waveMove {
+  from { background-position-x: 0; }
+  to   { background-position-x: 100px; }
+}
+
+/* Animatsiya classlar */
+.animate-fadeInUp   { animation: fadeInUp   0.7s ease forwards; }
+.animate-fadeInDown { animation: fadeInDown 0.6s ease forwards; }
+.animate-fadeInLeft { animation: fadeInLeft 0.7s ease forwards; }
+.animate-float      { animation: float 4s ease-in-out infinite; }
+.animate-glow       { animation: glowPulse 3s ease-in-out infinite; }
+
+/* Kechikish */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* ══════════════════════════════════════════════════
+   18. RESPONSIVE — MOBIL
+══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-content p { margin: 0 auto 36px; }
+  .hero-buttons   { justify-content: center; }
+  .hero-dashboard { display: none; }
+
+  .features-grid  { grid-template-columns: repeat(2, 1fr); }
+  .courses-grid   { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .navbar-nav     { display: none; }
+  .features-grid  { grid-template-columns: 1fr; }
+  .pricing-grid   { grid-template-columns: 1fr; }
+  .footer-inner   { grid-template-columns: 1fr; gap: 24px; }
+  .footer-nav     { flex-wrap: wrap; gap: 16px; }
+
+  .hero-content h1 { font-size: 2rem; }
+  .section-title   { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .hero { padding: 100px 0 60px; }
+  .hero-buttons { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-outline { text-align: center; justify-content: center; }
+  .courses-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+}

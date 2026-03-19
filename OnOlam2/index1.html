@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOlam — 0 dan Junior darajagacha</title>
+<link rel="stylesheet" href="style.css">
+<!-- Yoki CSS ni shu yerda ham yozsa bo'ladi -->
+<style>
+/* ─── QO'SHIMCHA: Kurs logolar (rasmlar yo'q bo'lganda) ─── */
+.course-logo-placeholder {
+  width: 80px; height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; font-weight: 900;
+}
+.html-logo  { background: linear-gradient(135deg,#ff6b35,#e34f26); color:#fff; }
+.css-logo   { background: linear-gradient(135deg,#264de4,#2965f1); color:#fff; }
+.js-logo    { background: linear-gradient(135deg,#f7df1e,#e6c200); color:#000; }
+.py-logo    { background: linear-gradient(135deg,#3776ab,#ffd43b); color:#fff; }
+.php-logo   { background: linear-gradient(135deg,#777bb4,#4f5b93); color:#fff; }
+
+/* Kosmik shar (Hero o'ng tarafda) */
+.cosmic-ball {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(1px);
+  pointer-events: none;
+}
+.cosmic-ball-1 {
+  width: 100px; height: 100px;
+  top: 8%; right: 8%;
+  background: radial-gradient(circle at 35% 35%, rgba(123,47,255,0.9), rgba(41,121,255,0.4) 60%, transparent 80%);
+  animation: float 5s ease-in-out infinite;
+  box-shadow: 0 0 40px rgba(123,47,255,0.4);
+}
+.cosmic-ball-2 {
+  width: 60px; height: 60px;
+  top: 22%; right: 18%;
+  background: radial-gradient(circle at 40% 40%, rgba(41,121,255,0.8), rgba(123,47,255,0.3) 60%, transparent 80%);
+  animation: float 7s ease-in-out infinite reverse;
+  box-shadow: 0 0 25px rgba(41,121,255,0.3);
+}
+.cosmic-ball-3 {
+  width: 40px; height: 40px;
+  top: 35%; right: 6%;
+  background: radial-gradient(circle at 45% 45%, rgba(96,165,250,0.7), transparent 70%);
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Orqa fon effekti */
+.bg-glow-left {
+  position: fixed; top: 0; left: 0;
+  width: 600px; height: 700px;
+  background: radial-gradient(ellipse at 0% 30%, rgba(13,25,100,0.6) 0%, transparent 60%);
+  pointer-events: none; z-index: -1;
+}
+.bg-glow-right {
+  position: fixed; top: 0; right: 0;
+  width: 500px; height: 500px;
+  background: radial-gradient(ellipse at 100% 0%, rgba(25,50,180,0.3) 0%, transparent 60%);
+  pointer-events: none; z-index: -1;
+}
+.bg-glow-purple {
+  position: fixed; top: 20%; left: 10%;
+  width: 400px; height: 400px;
+  background: radial-gradient(ellipse, rgba(80,0,160,0.12) 0%, transparent 70%);
+  pointer-events: none; z-index: -1;
+}
+</style>
+</head>
+<body>
+
+<!-- Orqa fon glow effektlari -->
+<div class="bg-glow-left"></div>
+<div class="bg-glow-right"></div>
+<div class="bg-glow-purple"></div>
+<div class="stars-bg"></div>
+
+<!-- ════════════════════════════
+     NAVBAR
+════════════════════════════ -->
+<nav class="navbar">
+  <div class="container">
+    <a class="navbar-logo" href="#">
+      <div class="logo-icon">On</div>
+      OnOlam
+    </a>
+
+    <ul class="navbar-nav">
+      <li><a href="#">Kurslar</a></li>
+      <li><a href="#">Tariflar</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Biz haqimizda</a></li>
+    </ul>
+
+    <div class="navbar-actions">
+      <button class="btn-outline" style="padding:9px 20px; font-size:0.85rem;">Kirish</button>
+      <button class="btn-primary" style="padding:9px 20px; font-size:0.85rem;">Ro'yxatdan o'tish</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════
+     HERO
+════════════════════════════ -->
+<section class="hero">
+  <!-- Kosmik sharlar -->
+  <div class="cosmic-ball cosmic-ball-1"></div>
+  <div class="cosmic-ball cosmic-ball-2"></div>
+  <div class="cosmic-ball cosmic-ball-3"></div>
+
+  <div class="container">
+    <div class="hero-inner">
+
+      <!-- Chap: Matn -->
+      <div class="hero-content animate-fadeInLeft">
+        <h1>0 dan Junior<br>darajagacha<br>OnOlam bilan</h1>
+        <p>Frontend va Backend kurslarga qo'shiling, mutlaqo bepul boshlang.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary">Bepul boshlash</button>
+          <button class="btn-outline">Tariflar &nbsp;›</button>
+        </div>
+      </div>
+
+      <!-- O'ng: Dashboard karta -->
+      <div class="hero-dashboard animate-fadeInRight animate-float">
+        <div class="dashboard-card">
+
+          <!-- Yuqori stat -->
+          <div style="margin-bottom:20px;">
+            <div class="stat-number">30,000+ <span style="font-size:1rem;font-weight:500;color:var(--text-muted);">foydalanuvchilar</span></div>
+            <div class="stat-desc">Frontend va backend kurslarga qo'shiling,<br>menda bepul boshlang.</div>
+          </div>
+
+          <!-- Progress barlar -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+            <div>
+              <div class="progress-label"><span>Javascript</span><span style="color:#10b981;">71%</span></div>
+              <div class="progress-bar"><div class="progress-fill green" style="width:71%;"></div></div>
+            </div>
+            <div>
+              <div class="progress-label"><span>Sertifikat</span><span style="color:#f59e0b;">15%</span></div>
+              <div class="progress-bar"><div class="progress-fill yellow" style="width:15%;"></div></div>
+            </div>
+            <div>
+              <div class="progress-label"><span>15%</span><span style="color:#60a5fa;">2.0%</span></div>
+              <div class="progress-bar"><div class="progress-fill blue" style="width:20%;"></div></div>
+            </div>
+            <div>
+              <div class="progress-label"><span>Frontend</span><span style="color:#f59e0b;">46%</span></div>
+              <div class="progress-bar"><div class="progress-fill yellow" style="width:46%;"></div></div>
+            </div>
+          </div>
+
+          <!-- Darslar -->
+          <div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;display:flex;justify-content:space-between;">
+              <span>MA. Dasturlash</span>
+              <span>17% 3 darslar</span>
+            </div>
+            <div class="lesson-item">
+              <span class="lesson-num">1.</span>
+              <span class="lesson-title">HTML bilan tanishuv</span>
+              <button class="btn-sm" style="padding:5px 14px;font-size:0.72rem;flex-shrink:0;">Boshl nimdan</button>
+            </div>
+            <div class="lesson-item">
+              <span class="lesson-num">2.</span>
+              <span class="lesson-title">CSS asoslari</span>
+              <button class="btn-sm" style="padding:5px 14px;font-size:0.72rem;flex-shrink:0;">Boshl nimdan</button>
+            </div>
+          </div>
+
+          <!-- Davom ettirish tugmasi -->
+          <button class="btn-primary" style="width:100%;margin-top:16px;justify-content:center;">Davom ettirish</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════
+     TO'LQIN CHIZIQ (Section orasida)
+     Rasmda: binafsha egri chiziq
+════════════════════════════ -->
+<div class="wave-purple"></div>
+
+<!-- ════════════════════════════
+     XUSUSIYATLAR
+════════════════════════════ -->
+<section class="features-section">
+  <div class="container">
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon blue">🖥️</div>
+        <div>
+          <div class="feature-title">Real loyihalar</div>
+          <div class="feature-desc">Amaliy loyihalar orqali tajribo oling.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon purple">🤖</div>
+        <div>
+          <div class="feature-title">AI yordamchi</div>
+          <div class="feature-desc">Savollaringizga AI yordamchidan javob oling.</div>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon cyan">&lt;/&gt;</div>
+        <div>
+          <div class="feature-title">Amaliy mashqlar</div>
+          <div class="feature-desc">Kod yozish amaliyotus ilan bilmini mustakkamang.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════
+     KURSLAR
+════════════════════════════ -->
+<section class="courses-section">
+  <div class="container">
+    <h2 class="section-title">Kurs yo'nalishlari</h2>
+
+    <!-- Frontend -->
+    <div class="courses-category-title">Frontend</div>
+    <div class="courses-grid">
+      <div class="course-card">
+        <div class="course-name">HTML</div>
+        <div class="course-logo-placeholder html-logo">5</div>
+        <button class="btn-sm">Boshlash</button>
+      </div>
+      <div class="course-card">
+        <div class="course-name">CSS</div>
+        <div class="course-logo-placeholder css-logo">3</div>
+        <button class="btn-sm">Boshlash</button>
+      </div>
+      <div class="course-card">
+        <div class="course-name">Javascript</div>
+        <div class="course-logo-placeholder js-logo">JS</div>
+        <button class="btn-sm">Boshlash</button>
+      </div>
+    </div>
+
+    <!-- Backend -->
+    <div class="courses-category-title">Backend</div>
+    <div class="courses-grid backend-grid">
+      <div class="course-card">
+        <div class="course-name">Python</div>
+        <div class="course-logo-placeholder py-logo">🐍</div>
+        <button class="btn-sm">Boshlash</button>
+      </div>
+      <div class="course-card">
+        <div class="course-name">PHP</div>
+        <div class="course-logo-placeholder php-logo">php</div>
+        <button class="btn-sm">Boshlash</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════
+     NARXLAR
+════════════════════════════ -->
+<section class="pricing-section">
+  <div class="container">
+    <h2 class="section-title">Foydalanuvchilar fikri</h2>
+
+    <div class="pricing-grid">
+
+      <!-- FREE -->
+      <div class="pricing-card free">
+        <div class="pricing-header">
+          <div class="pricing-plan-name">Free</div>
+          <div class="stars">
+            <span class="star">★</span><span class="star">★</span>
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+        <div class="flex-between" style="align-items:flex-start;">
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">Text darslar</li>
+            <li class="pricing-feature-item">Ochiq kodlar</li>
+            <li class="pricing-feature-item">Oddiy testlar</li>
+          </ul>
+          <div style="text-align:right;">
+            <div class="pricing-price">0 <span class="currency">UZS</span> ›</div>
+          </div>
+        </div>
+        <button class="btn-primary" style="width:100%;margin-top:24px;justify-content:center;">Bepul boshlash</button>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="pricing-card premium">
+        <div class="pricing-header">
+          <div class="pricing-plan-name">Premium</div>
+          <div class="stars">
+            <span class="star">★</span><span class="star">★</span>
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+        <div class="flex-between" style="align-items:flex-start;">
+          <ul class="pricing-features">
+            <li class="pricing-feature-item">Video darslar</li>
+            <li class="pricing-feature-item">AI yordamchi</li>
+            <li class="pricing-feature-item">Ortina Kod muharriri</li>
+            <li class="pricing-feature-item">To'liq analytiks</li>
+          </ul>
+          <div style="text-align:right;">
+            <div class="pricing-price">350,000</div>
+            <div style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:2px;">UZS/oy</div>
+          </div>
+        </div>
+        <button class="btn-premium" style="width:100%;margin-top:24px;">Premium olish</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════
+     FOOTER
+════════════════════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+
+      <div class="footer-logo">
+        <div class="logo-icon" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2979ff,#7b2fff);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;">On</div>
+        OnOlam
+      </div>
+
+      <nav class="footer-nav">
+        <a href="#">Biz haqimizda</a>
+        <a href="#">Kurslar</a>
+        <a href="#">Tariflar</a>
+        <a href="#">Blog</a>
+      </nav>
+
+      <div class="footer-social">
+        <a class="social-link" href="#">
+          <div class="social-icon">T</div>
+          Telegram
+        </a>
+        <a class="social-link" href="#">
+          <div class="social-icon">iL</div>
+          iLikestrs
+        </a>
+        <a class="social-link" href="#">
+          <div class="social-icon">@</div>
+          Email
+        </a>
+      </div>
+
+      <div class="footer-newsletter">
+        <input class="footer-input" type="text" placeholder="Matnm">
+        <button class="btn-primary" style="padding:10px 18px;font-size:0.85rem;">Yuborish</button>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">© 2024 OnOlam · Barcha huquqlar himoyalangan</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
