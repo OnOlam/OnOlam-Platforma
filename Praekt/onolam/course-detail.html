@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — HTML Kursi</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+/* ── COURSE DETAIL ── */
+.cd-hero{background:var(--void-2);border-bottom:1px solid var(--border);padding:32px 0;}
+.cd-hero-inner{display:grid;grid-template-columns:1fr 320px;gap:40px;align-items:start;}
+.cd-breadcrumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-3);margin-bottom:16px;}
+.cd-breadcrumb a{color:var(--text-3);transition:var(--t);}.cd-breadcrumb a:hover{color:var(--neon);}
+.cd-breadcrumb span{color:var(--text-4);}
+.cd-hero h1{font-size:clamp(22px,3vw,32px);font-weight:800;margin-bottom:10px;}
+.cd-hero h1 span{color:var(--neon);}
+.cd-hero-desc{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:20px;max-width:560px;}
+.cd-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.cd-tag{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--text-3);background:var(--surface);}
+.cd-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.cd-stat{text-align:center;}
+.cd-stat .sn{font-size:20px;font-weight:800;color:var(--neon);}
+.cd-stat .sl{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;}
+
+/* Right: enroll card */
+.enroll-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;position:sticky;top:calc(var(--nav-h) + 16px);}
+.enroll-thumb{height:140px;background:linear-gradient(135deg,var(--void-3),var(--surface-2));border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:64px;margin-bottom:16px;border:1px solid var(--border);}
+.enroll-price{font-size:28px;font-weight:800;color:var(--neon);margin-bottom:4px;}
+.enroll-price span{font-size:14px;color:var(--text-3);font-weight:400;}
+.enroll-card p{font-size:12px;color:var(--text-3);margin-bottom:16px;}
+.enroll-features{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.ef-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2);}
+.ef-icon{color:var(--neon);flex-shrink:0;}
+
+/* Main layout */
+.cd-main{display:grid;grid-template-columns:1fr 320px;gap:28px;padding:32px 0;}
+.cd-content{}
+
+/* Tabs */
+.cd-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:28px;}
+.cd-tab{font-size:13px;font-weight:600;color:var(--text-3);padding:10px 18px;border:none;background:transparent;cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;transition:var(--t);margin-bottom:-1px;}
+.cd-tab:hover{color:var(--text-1);}
+.cd-tab.active{color:var(--neon);border-bottom-color:var(--neon);}
+
+/* Lessons list */
+.module-block{margin-bottom:24px;}
+.module-title{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--void-3);border:1px solid var(--border);border-radius:var(--r-lg) var(--r-lg) 0 0;cursor:pointer;}
+.module-title h3{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.module-title .mc{font-size:11px;color:var(--text-3);}
+.module-title .marr{font-size:14px;color:var(--text-3);transition:transform .2s;}
+.module-title.open .marr{transform:rotate(180deg);}
+.module-lessons{border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r-lg) var(--r-lg);overflow:hidden;}
+
+.ll-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:var(--t);text-decoration:none;color:inherit;}
+.ll-item:last-child{border-bottom:none;}
+.ll-item:hover{background:var(--void-3);}
+.ll-num{font-size:11px;color:var(--text-4);width:20px;flex-shrink:0;text-align:right;}
+.ll-icon-wrap{width:34px;height:34px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--void-3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.ll-icon-wrap.done{background:var(--neon-faint);border-color:rgba(0,255,65,.3);}
+.ll-icon-wrap.active{background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.3);}
+.ll-info{flex:1;min-width:0;}
+.ll-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.ll-meta{font-size:11px;color:var(--text-3);display:flex;align-items:center;gap:8px;}
+.ll-type{display:inline-flex;align-items:center;gap:3px;}
+.ll-right{flex-shrink:0;display:flex;align-items:center;gap:8px;}
+.ll-lock{font-size:12px;color:var(--text-4);}
+.ll-dur{font-size:11px;color:var(--text-3);}
+
+/* Right col */
+.cd-right{display:flex;flex-direction:column;gap:16px;}
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;}
+.info-card h4{font-size:13px;font-weight:700;margin-bottom:14px;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;font-size:11px;}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.skill-tag{font-size:11px;padding:4px 10px;border-radius:4px;background:var(--void-3);border:1px solid var(--border);color:var(--text-2);}
+
+/* Requirements */
+.req-list{display:flex;flex-direction:column;gap:8px;}
+.req-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-2);}
+.req-item::before{content:'→';color:var(--neon);flex-shrink:0;}
+
+@media(max-width:960px){.cd-hero-inner,.cd-main{grid-template-columns:1fr;}.enroll-card{position:static;}.cd-right{display:none;}}
+@media(max-width:600px){.cd-stats{gap:16px;}.cd-tabs{overflow-x:auto;}.cd-tab{white-space:nowrap;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">⚡</div>On<span>Olam</span></a>
+    <div class="navbar-center">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="courses.html"   class="nav-link active">Kurslar</a>
+    </div>
+    <div class="navbar-right">
+      <a href="pricing.html"><button class="btn btn-neon btn-sm">⚡ Pro</button></a>
+      <div class="navbar-avatar" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      </div>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <div class="drawer-user">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      <div class="drawer-user-info"><h4>Halimjon</h4><span class="badge badge-free">Free</span></div>
+    </div>
+    <a href="dashboard.html"   class="drawer-link"><span class="di">🏠</span> Dashboard</a>
+    <a href="courses.html"     class="drawer-link active"><span class="di">📚</span> Kurslar</a>
+    <a href="certificate.html" class="drawer-link"><span class="di">🏆</span> Sertifikatlar</a>
+    <div class="drawer-sep"></div>
+    <a href="profile.html" class="drawer-link"><span class="di">⚙️</span> Profil</a>
+    <a href="login.html"   class="drawer-link exit"><span class="di">↩</span> Chiqish</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="cd-hero">
+  <div class="container">
+    <div class="cd-hero-inner">
+      <div>
+        <div class="cd-breadcrumb">
+          <a href="courses.html">Kurslar</a>
+          <span>/</span>
+          <span style="color:var(--text-1)" id="cdCourseTitle">Yuklanmoqda...</span>
+        </div>
+        <div class="eyebrow">Frontend · Boshlang'ich</div>
+        <h1 id="cdTitle">Yuklanmoqda...</h1>
+        <p class="cd-hero-desc" id="cdDesc">Yuklanmoqda...</p>
+        <div class="cd-tags">
+          <span class="cd-tag">🌐 HTML5</span>
+          <span class="cd-tag">📝 Matn darslar</span>
+          <span class="cd-tag">⚡ Interaktiv</span>
+          <span class="cd-tag">🆓 Bepul</span>
+          <span class="cd-tag">🎯 Boshlang'ich</span>
+        </div>
+        <div class="cd-stats">
+          <div class="cd-stat"><div class="sn" id="cdLessonCount">0</div><div class="sl">Darslar</div></div>
+          <div class="cd-stat"><div class="sn" id="cdDuration">0h</div><div class="sl">Jami vaqt</div></div>
+          <div class="cd-stat"><div class="sn">4.8</div><div class="sl">Reyting</div></div>
+          <div class="cd-stat"><div class="sn" style="color:var(--yellow)" id="cdProgress">0%</div><div class="sl">Progressingiz</div></div>
+        </div>
+      </div>
+
+      <!-- Enroll card -->
+      <div class="enroll-card anim-up">
+        <div class="enroll-thumb" id="cdIcon">📚</div>
+        <div class="enroll-price" id="cdPrice">Bepul</div>
+        <p id="cdShortDesc">Yuklanmoqda...</p>
+        <div class="enroll-features">
+          <div class="ef-item"><span class="ef-icon">✔</span> 5 ta matn dars</div>
+          <div class="ef-item"><span class="ef-icon">✔</span> Har darsda mashq</div>
+          <div class="ef-item"><span class="ef-icon">✔</span> Interaktiv kod editor</div>
+          <div class="ef-item"><span class="ef-icon" style="color:var(--text-4)">🔒</span> <span style="color:var(--text-4)">Video darslar (Pro)</span></div>
+          <div class="ef-item"><span class="ef-icon" style="color:var(--text-4)">🔒</span> <span style="color:var(--text-4)">Sertifikat (Pro)</span></div>
+        </div>
+        <button class="btn btn-neon btn-full btn-lg" id="cdEnrollBtn" onclick="enrollOrContinue()">Yuklanmoqda...</button>
+        <div style="margin-top:12px;">
+          <div class="progress"><div class="progress-fill" id="cdProgressBar" style="width:0%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-top:6px;">
+            <span id="cdProgressText">0/0 dars tugallandi</span><span id="cdProgressPct">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+  <div class="cd-main">
+
+    <!-- Content -->
+    <div class="cd-content">
+      <div class="cd-tabs">
+        <button class="cd-tab active" onclick="showTab('lessons',this)">Darslar</button>
+        <button class="cd-tab" onclick="showTab('about',this)">Kurs haqida</button>
+        <button class="cd-tab" onclick="showTab('reviews',this)">Sharhlar</button>
+      </div>
+
+      <!-- LESSONS TAB -->
+      <div id="tab-lessons">
+
+        <!-- Module 1 -->
+        <div class="module-block">
+          <div class="module-title open" onclick="toggleModule(this)">
+            <h3>📦 <span>Modul 1</span> — HTML asoslari</h3>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span class="mc">3/3 dars</span>
+              <span class="marr">▾</span>
+            </div>
+          </div>
+          <div class="module-lessons">
+            <a href="lesson.html" class="ll-item">
+              <span class="ll-num">1</span>
+              <div class="ll-icon-wrap done">✅</div>
+              <div class="ll-info">
+                <h4>HTML bilan tanishish</h4>
+                <div class="ll-meta">
+                  <span class="ll-type">📝 Matn</span>
+                  <span>·</span>
+                  <span>10 daq</span>
+                </div>
+              </div>
+              <div class="ll-right">
+                <span class="chip chip-green">Tugallandi</span>
+              </div>
+            </a>
+            <a href="lesson.html" class="ll-item">
+              <span class="ll-num">2</span>
+              <div class="ll-icon-wrap done">✅</div>
+              <div class="ll-info">
+                <h4>Teglar va atributlar</h4>
+                <div class="ll-meta"><span class="ll-type">📝 Matn</span><span>·</span><span>15 daq</span></div>
+              </div>
+              <div class="ll-right">
+                <span class="chip chip-green">Tugallandi</span>
+              </div>
+            </a>
+            <a href="lesson.html" class="ll-item">
+              <span class="ll-num">3</span>
+              <div class="ll-icon-wrap active">▶</div>
+              <div class="ll-info">
+                <h4>Formalar va inputlar</h4>
+                <div class="ll-meta"><span class="ll-type">📝 Matn</span><span>·</span><span>20 daq</span></div>
+              </div>
+              <div class="ll-right">
+                <span class="chip chip-yellow">Davom etmoqda</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="module-block">
+          <div class="module-title" onclick="toggleModule(this)">
+            <h3>📦 <span>Modul 2</span> — Kengaytirilgan HTML</h3>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span class="mc">0/2 dars</span>
+              <span class="marr">▾</span>
+            </div>
+          </div>
+          <div class="module-lessons" style="display:none;">
+            <a href="lesson.html" class="ll-item">
+              <span class="ll-num">4</span>
+              <div class="ll-icon-wrap">📄</div>
+              <div class="ll-info">
+                <h4>Jadvallar va ro'yxatlar</h4>
+                <div class="ll-meta"><span class="ll-type">📝 Matn</span><span>·</span><span>18 daq</span></div>
+              </div>
+              <div class="ll-right"><span class="ll-dur">18 daq</span></div>
+            </a>
+            <div class="ll-item" onclick="location.href='pricing.html'">
+              <span class="ll-num">5</span>
+              <div class="ll-icon-wrap" style="opacity:.5">🔒</div>
+              <div class="ll-info">
+                <h4 style="color:var(--text-3)">Semantik HTML <span class="badge badge-pro" style="margin-left:6px;">Pro</span></h4>
+                <div class="ll-meta"><span class="ll-type">📹 Video</span><span>·</span><span>25 daq</span></div>
+              </div>
+              <div class="ll-right"><span class="ll-lock">🔒</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ABOUT TAB -->
+      <div id="tab-about" style="display:none;">
+        <div class="card">
+          <h3 style="margin-bottom:16px;">Kurs haqida</h3>
+          <p style="margin-bottom:16px;">Bu kurs HTML ni noldan o'rgatadi. Har bir dars qisqa, amaliy va interaktiv. Har darsdan keyin mashq bor — brauzer ichida bevosita kod yozasiz.</p>
+          <h4 style="margin-bottom:12px;margin-top:20px;">Nimalarni o'rganasiz:</h4>
+          <div class="req-list">
+            <div class="req-item">HTML hujjat tuzilishi va DOCTYPE</div>
+            <div class="req-item">Barcha asosiy teglar va atributlar</div>
+            <div class="req-item">Formalar, inputlar, validatsiya</div>
+            <div class="req-item">Jadvallar va ro'yxatlar</div>
+            <div class="req-item">Semantik HTML5 elementlari</div>
+          </div>
+          <h4 style="margin-bottom:12px;margin-top:20px;">Talablar:</h4>
+          <div class="req-list">
+            <div class="req-item">Kompyuter yoki telefon kifoya</div>
+            <div class="req-item">Oldindan bilim shart emas</div>
+            <div class="req-item">Internet brauzer (Chrome/Firefox)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVIEWS TAB -->
+      <div id="tab-reviews" style="display:none;">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card card-sm">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <div style="width:34px;height:34px;border-radius:var(--r-md);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;">👨‍💻</div>
+              <div><div style="font-size:13px;font-weight:700;">Sardor T.</div><div style="color:var(--neon);font-size:12px;">★★★★★</div></div>
+              <span style="margin-left:auto;font-size:11px;color:var(--text-3);">3 kun oldin</span>
+            </div>
+            <p style="font-size:13px;">"Juda tushunарли tushuntirilgan. Har bir darsda amaliy mashq bo'lganligi yaxshi."</p>
+          </div>
+          <div class="card card-sm">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <div style="width:34px;height:34px;border-radius:var(--r-md);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;">👩‍💻</div>
+              <div><div style="font-size:13px;font-weight:700;">Malika B.</div><div style="color:var(--neon);font-size:12px;">★★★★★</div></div>
+              <span style="margin-left:auto;font-size:11px;color:var(--text-3);">1 hafta oldin</span>
+            </div>
+            <p style="font-size:13px;">"HTML ni 3 kunda o'rgandim. Endi CSS boshlayapman. Platformа judda qulay."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right col -->
+    <div class="cd-right">
+      <div class="info-card">
+        <h4>O'rganiladigan ko'nikmalar</h4>
+        <div class="skill-tags">
+          <span class="skill-tag">HTML5</span>
+          <span class="skill-tag">Teglar</span>
+          <span class="skill-tag">Atributlar</span>
+          <span class="skill-tag">Formalar</span>
+          <span class="skill-tag">Jadvallar</span>
+          <span class="skill-tag">Semantika</span>
+        </div>
+      </div>
+      <div class="info-card">
+        <h4>Keyingi kurs</h4>
+        <a href="course-detail.html" style="text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--void-3);border:1px solid var(--border);border-radius:var(--r-lg);transition:var(--t);" onmouseover="this.style.borderColor='rgba(0,255,65,.2)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:28px;">🎨</span>
+            <div>
+              <div style="font-size:13px;font-weight:700;">CSS Asoslari</div>
+              <div style="font-size:11px;color:var(--text-3);">Flexbox, Grid, Animatsiya</div>
+            </div>
+            <span style="margin-left:auto;color:var(--neon);font-size:16px;">→</span>
+          </div>
+        </a>
+      </div>
+      <div class="info-card">
+        <h4>Muallif</h4>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:44px;height:44px;border-radius:var(--r-lg);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👨‍🏫</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;">OnOlam jamoasi</div>
+            <div style="font-size:11px;color:var(--text-3);">Senior Web Developer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div style="border-top:1px solid var(--border);padding:20px 0;">
+  <div class="container"><div class="footer-inner" style="padding:0;"><div class="footer-copy">© 2026 <span>OnOlam</span>.</div><div class="footer-links"><a href="#">Yordam</a><a href="courses.html">Kurslar</a></div></div></div>
+</div>
+
+<script src="js/burger.js"></script>
+<script src="js/api.js"></script>
+<script src="js/course-detail.js"></script>
+<script>
+function showTab(name, el){
+  document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display='none');
+  document.querySelectorAll('.cd-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-'+name).style.display = 'block';
+  el.classList.add('active');
+}
+function toggleModule(header){
+  const lessons = header.nextElementSibling;
+  const isOpen  = lessons.style.display !== 'none';
+  lessons.style.display = isOpen ? 'none' : 'block';
+  header.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — User tafsiloti</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="Qidirish..."></div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link active"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html" class="as-link"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"    class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow"><a href="users.html" style="color:var(--neon);">← Foydalanuvchilar</a></div>
+        <h1>👤 Sherzod Karimov</h1>
+        <p>ID: #30247 · Ro'yxat: 12-mart 2026 · Oxirgi kirish: bugun, 14:32 · <span class="risk-badge risk-safe">✔ Xavfsiz</span></p>
+      </div>
+      <div class="aph-right">
+        <button class="btn btn-neon btn-sm" onclick="toast('Pro berildi! ✔','success')">⚡ Pro ber</button>
+        <button class="btn btn-ghost btn-sm" onclick="openModal('msgModal')">📧 Xabar</button>
+        <button class="btn btn-ghost btn-sm" onclick="openModal('blockModal')">🚫 Bloklash</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:20px;" class="anim-up anim-d1">
+
+      <!-- Left col -->
+      <div>
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-body" style="text-align:center;">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=u1" style="width:80px;height:80px;border-radius:var(--r-xl);border:2px solid var(--border-2);margin-bottom:12px;">
+            <div style="font-size:16px;font-weight:800;margin-bottom:4px;">Sherzod Karimov</div>
+            <div style="font-size:12px;color:var(--text-3);margin-bottom:10px;">@sherzod_dev</div>
+            <span class="badge badge-free" style="margin-bottom:20px;display:inline-block;">Free</span>
+            <div style="display:flex;flex-direction:column;gap:8px;text-align:left;font-size:12px;">
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">Email</span><span>sherzod@gmail.com</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">Telefon</span><span>+998 90 123 45 67</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">Davlat</span><span>🇺🇿 O'zbekiston</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">Shahar</span><span>Toshkent</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">IP (oxirgi)</span><span>195.158.2.45</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">Qurilma</span><span>Android · Chrome</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span style="color:var(--text-3)">Manba</span><span>Telegram</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:var(--text-3)">Xavf darajasi</span><span class="risk-badge risk-safe">✔ Xavfsiz</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-header"><h3>🔐 Kirish tarixi</h3></div>
+          <div class="sc-body" style="padding:0 20px;">
+            <div style="display:flex;flex-direction:column;gap:0;">
+              <div style="padding:10px 0;border-bottom:1px solid var(--border);"><div style="font-size:12px;font-weight:600;">Bugun, 14:32</div><div style="font-size:10px;color:var(--text-3);">Chrome · Android · Toshkent · 195.158.2.45</div></div>
+              <div style="padding:10px 0;border-bottom:1px solid var(--border);"><div style="font-size:12px;font-weight:600;">Kecha, 20:15</div><div style="font-size:10px;color:var(--text-3);">Chrome · Android · Toshkent · 195.158.2.45</div></div>
+              <div style="padding:10px 0;border-bottom:1px solid var(--border);"><div style="font-size:12px;font-weight:600;">2 kun oldin, 09:30</div><div style="font-size:10px;color:var(--text-3);">Firefox · Windows · Toshkent · 195.158.2.45</div></div>
+              <div style="padding:10px 0;"><div style="font-size:12px;font-weight:600;">14-mart, 15:44</div><div style="font-size:10px;color:var(--text-3);">Chrome · Android · Toshkent · 195.158.2.45</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="sc-header"><h3>🚫 Bloklash sozlamalari</h3></div>
+          <div class="sc-body" style="display:flex;flex-direction:column;gap:8px;">
+            <button class="btn btn-ghost btn-sm btn-full" onclick="confirmAction('Email bloklashni xohlaysizmi?',()=>toast('Email bloklandi','warning'))">📧 Email bloklash</button>
+            <button class="btn btn-ghost btn-sm btn-full" onclick="confirmAction('Qurilma bloklashni xohlaysizmi?',()=>toast('Qurilma bloklandi','warning'))">📱 Qurilma bloklash</button>
+            <button class="btn btn-ghost btn-sm btn-full" onclick="confirmAction('IP bloklashni xohlaysizmi?',()=>toast('IP bloklandi','warning'))">🌐 IP bloklash</button>
+            <button class="btn btn-danger btn-sm btn-full" onclick="openModal('blockModal')">🚫 To'liq bloklash va xabar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right col -->
+      <div>
+        <div class="admin-stats" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px;">
+          <div class="astat"><div class="astat-icon">📚</div><div class="astat-num">3</div><div class="astat-label">Kurslar</div></div>
+          <div class="astat"><div class="astat-icon">✅</div><div class="astat-num">12</div><div class="astat-label">Darslar</div></div>
+          <div class="astat"><div class="astat-icon">🔥</div><div class="astat-num yellow">7</div><div class="astat-label">Streak</div></div>
+          <div class="astat"><div class="astat-icon">⏱</div><div class="astat-num">4.2h</div><div class="astat-label">Bu hafta</div></div>
+        </div>
+
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-header"><h3>📚 Kurs progressi</h3></div>
+          <div class="sc-body">
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>🌐 HTML Asoslari</span><span style="color:var(--neon)">60% · 3/5 dars tugatildi</span></div><div class="progress"><div class="progress-fill" style="width:60%"></div></div><div style="font-size:10px;color:var(--text-3);margin-top:3px;">Oxirgi faollik: bugun, 14:20</div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>🎨 CSS Asoslari</span><span style="color:var(--neon)">40% · 2/5 dars tugatildi</span></div><div class="progress"><div class="progress-fill" style="width:40%"></div></div><div style="font-size:10px;color:var(--text-3);margin-top:3px;">Oxirgi faollik: kecha, 20:00</div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span>🐍 Python</span><span style="color:var(--neon)">20% · 1/5 dars tugatildi</span></div><div class="progress"><div class="progress-fill" style="width:20%"></div></div><div style="font-size:10px;color:var(--text-3);margin-top:3px;">Oxirgi faollik: 3 kun oldin</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-header"><h3>💳 To'lovlar tarixi</h3></div>
+          <div class="sc-body" style="padding:20px;text-align:center;"><div style="font-size:32px;margin-bottom:12px;">💳</div><div style="font-size:13px;color:var(--text-3);">Bu foydalanuvchi Free tarifda — hech qanday to'lov yo'q.</div><div style="margin-top:12px;"><button class="btn btn-neon btn-sm" onclick="toast('Pro tarif qo\'shilmoqda...','info')">⚡ Bepul Pro ber</button></div></div>
+        </div>
+
+        <div class="section-card">
+          <div class="sc-header"><h3>📧 Admin xabar yuborish</h3></div>
+          <div class="sc-body">
+            <div class="input-group"><label class="input-label">Yuborish usuli</label><select class="input admin-select"><option>Email orqali</option><option>Platforma bildirishnoma</option><option>Ikkalasi</option></select></div>
+            <div class="input-group"><label class="input-label">Xabar matni</label><textarea class="input" style="min-height:80px;" placeholder="Xabar yozing..."></textarea></div>
+            <button class="btn btn-neon btn-sm" onclick="toast('Xabar yuborildi ✔','success')">📧 Yuborish</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- BLOCK MODAL -->
+<div class="admin-modal" id="blockModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('blockModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:460px;">
+    <div class="modal-header"><h3>🚫 Foydalanuvchini bloklash</h3><div class="modal-close" onclick="closeModal('blockModal')">✕</div></div>
+    <div class="modal-body">
+      <div style="background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:var(--r-md);padding:12px;margin-bottom:16px;font-size:12px;color:var(--red-accent);">⚠️ Sherzod Karimov bloklangandan so'ng platformaga kira olmaydi.</div>
+      <div class="input-group"><label class="input-label">Bloklash sababi</label><input class="input" type="text" placeholder="Qoidabuzarlik sababi..."></div>
+      <div class="input-group"><label class="input-label">Bloklash turi</label>
+        <select class="input admin-select"><option>Faqat akkaunt</option><option>Akkaunt + email</option><option>Akkaunt + IP</option><option>Akkaunt + qurilma</option><option>To'liq (akkaunt + email + IP + qurilma)</option></select>
+      </div>
+      <div class="input-group"><label class="input-label">Bloklash muddati</label>
+        <select class="input admin-select"><option>1 kun</option><option>7 kun</option><option>30 kun</option><option>Doimiy</option></select>
+      </div>
+      <div class="input-group"><label class="input-label">Foydalanuvchiga xabar</label><textarea class="input" style="min-height:70px;">Sizning akkauntingiz qoidabuzarlik sababli cheklandi. Murojaat uchun: hello@onolam.uz</textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('blockModal')">Bekor</button>
+      <button class="btn btn-danger btn-sm" onclick="toast('Foydalanuvchi bloklandi + xabar yuborildi ✔','error');closeModal('blockModal')">Bloklash va Xabar yuborish</button>
+    </div>
+  </div>
+</div>
+
+<!-- MSG MODAL -->
+<div class="admin-modal" id="msgModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('msgModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:440px;">
+    <div class="modal-header"><h3>📧 Xabar yuborish</h3><div class="modal-close" onclick="closeModal('msgModal')">✕</div></div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Yuborish usuli</label><select class="input admin-select"><option>Email</option><option>Bildirishnoma</option><option>Ikkalasi</option></select></div>
+      <div class="input-group"><label class="input-label">Sarlavha</label><input class="input" type="text" placeholder="Xabar sarlavhasi..."></div>
+      <div class="input-group"><label class="input-label">Xabar</label><textarea class="input" style="min-height:100px;" placeholder="Xabar matni..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('msgModal')">Bekor</button>
+      <button class="btn btn-neon btn-sm" onclick="toast('Xabar yuborildi ✔','success');closeModal('msgModal')">Yuborish</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — Dars Muharriri</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+  <style>
+.editor-layout{display:grid;grid-template-columns:1fr 320px;gap:20px;}
+.editor-toolbar{display:flex;align-items:center;gap:4px;padding:10px 14px;background:var(--void-3);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:6px;}
+.tool-btn{width:30px;height:30px;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:var(--t);font-family:var(--font);color:var(--text-2);}
+.tool-btn:hover{border-color:var(--neon-dim);color:var(--neon);background:var(--neon-faint);}
+.tool-sep{width:1px;height:20px;background:var(--border);margin:0 2px;}
+.tool-select{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-1);font-family:var(--font);font-size:11px;padding:4px 8px;outline:none;cursor:pointer;}
+.editor-area{min-height:400px;padding:24px;outline:none;font-size:14px;color:var(--text-1);line-height:1.8;background:var(--void);border:none;}
+.editor-area:focus{outline:none;}
+.editor-area[placeholder]:empty::before{content:attr(placeholder);color:var(--text-4);}
+.video-upload-zone{border:2px dashed var(--border);border-radius:var(--r-xl);padding:40px;text-align:center;cursor:pointer;transition:var(--t);}
+.video-upload-zone:hover{border-color:var(--neon-dim);background:var(--neon-faint);}
+.video-preview{background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;display:none;}
+.vp-header{padding:10px 14px;background:var(--void-3);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.vp-thumb{height:180px;background:linear-gradient(135deg,var(--void-3),var(--surface));display:flex;align-items:center;justify-content:center;font-size:48px;cursor:pointer;}
+.upload-progress{height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;margin-top:8px;display:none;}
+.up-fill{height:100%;background:linear-gradient(90deg,var(--neon-dim),var(--neon));animation:progressAnim 2s ease forwards;}
+@keyframes progressAnim{from{width:0}to{width:85%}}
+.word-count{font-size:11px;color:var(--text-4);padding:8px 14px;border-top:1px solid var(--border);}
+@media(max-width:900px){.editor-layout{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="Qidirish..."></div>
+  <div class="topbar-right">
+    <button class="btn btn-ghost btn-sm" onclick="toast('Qoralama saqlandi','success')">💾 Qoralama</button>
+    <button class="btn btn-neon btn-sm" onclick="publishLesson()">🚀 Nashr etish</button>
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin" onclick="location.href='settings.html'"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link active"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html" class="as-link"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"    class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow"><a href="lessons.html" style="color:var(--text-3)">Darslar</a> / Yangi dars</div>
+        <h1>✏️ Dars muharriri</h1>
+      </div>
+      <div class="aph-right">
+        <button class="btn btn-ghost btn-sm" onclick="location.href='lessons.html'">← Orqaga</button>
+        <button class="btn btn-ghost btn-sm" onclick="previewLesson()">👁 Ko'rish</button>
+        <button class="btn btn-neon btn-sm" onclick="publishLesson()">🚀 Nashr etish</button>
+      </div>
+    </div>
+
+    <div class="editor-layout anim-up anim-d1">
+
+      <!-- EDITOR -->
+      <div>
+        <!-- Sarlavha -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-body">
+            <input class="input" type="text" placeholder="Dars sarlavhasi..." style="font-size:18px;font-weight:700;border:none;background:transparent;padding:0;outline:none;width:100%;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;border-radius:0;" id="lessonTitle">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <select class="admin-select" id="lessonCourse"><option>🌐 HTML</option><option>🎨 CSS</option><option>⚡ JavaScript</option><option>🐍 Python</option><option>🗄️ SQL</option><option>📱 Termux</option><option>🐧 Linux</option></select>
+              <input class="input" type="number" placeholder="Dars raqami" style="width:120px;" value="6">
+              <select class="admin-select" id="lessonType"><option>📝 Matn</option><option>📹 Video + Matn</option><option>🎮 Interaktiv</option></select>
+              <select class="admin-select" id="lessonAccess"><option>🆓 Free</option><option>⚡ Pro</option></select>
+              <input class="input" type="number" placeholder="Davomiylik (daq)" style="width:150px;" value="20">
+            </div>
+          </div>
+        </div>
+
+        <!-- Rich Text Editor -->
+        <div class="section-card" style="margin-bottom:16px;padding:0;overflow:hidden;">
+          <div class="editor-toolbar">
+            <select class="tool-select" onchange="execCmd('formatBlock',this.value)">
+              <option value="p">Paragraf</option>
+              <option value="h2">H2 Sarlavha</option>
+              <option value="h3">H3 Sarlavha</option>
+              <option value="h4">H4 Sarlavha</option>
+            </select>
+            <select class="tool-select" onchange="execCmd('fontSize',this.value)">
+              <option value="3">Normal</option>
+              <option value="4">Katta</option>
+              <option value="5">Juda katta</option>
+              <option value="2">Kichik</option>
+            </select>
+            <div class="tool-sep"></div>
+            <button class="tool-btn" onclick="execCmd('bold')" title="Bold"><strong>B</strong></button>
+            <button class="tool-btn" onclick="execCmd('italic')" title="Italic"><em>I</em></button>
+            <button class="tool-btn" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+            <button class="tool-btn" onclick="execCmd('strikeThrough')" title="Strike"><s>S</s></button>
+            <div class="tool-sep"></div>
+            <button class="tool-btn" onclick="execCmd('foreColor','#00ff41')" title="Yashil rang" style="color:#00ff41;">A</button>
+            <button class="tool-btn" onclick="execCmd('foreColor','#ffd700')" title="Sariq rang" style="color:#ffd700;">A</button>
+            <button class="tool-btn" onclick="execCmd('foreColor','#ff4757')" title="Qizil rang" style="color:#ff4757;">A</button>
+            <button class="tool-btn" onclick="execCmd('foreColor','#00b4ff')" title="Ko'k rang" style="color:#00b4ff;">A</button>
+            <div class="tool-sep"></div>
+            <button class="tool-btn" onclick="execCmd('insertUnorderedList')" title="Ro'yxat">≡</button>
+            <button class="tool-btn" onclick="execCmd('insertOrderedList')" title="Raqamli ro'yxat">1.</button>
+            <button class="tool-btn" onclick="execCmd('justifyLeft')" title="Chap">⬅</button>
+            <button class="tool-btn" onclick="execCmd('justifyCenter')" title="Markazga">↔</button>
+            <button class="tool-btn" onclick="insertCode()" title="Kod blok">&lt;/&gt;</button>
+            <button class="tool-btn" onclick="insertInfoBox('tip')" title="Maslahat">💡</button>
+            <button class="tool-btn" onclick="insertInfoBox('warn')" title="Ogohlantirish">⚠️</button>
+            <div class="tool-sep"></div>
+            <button class="tool-btn" onclick="execCmd('undo')" title="Orqaga">↩</button>
+            <button class="tool-btn" onclick="execCmd('redo')" title="Oldinga">↪</button>
+          </div>
+          <div class="editor-area" id="lessonContent" contenteditable="true"
+            placeholder="Dars matnini shu yerga yozing...&#10;&#10;Formatlash tugmalarini ishlating: B (qalin), I (qiya), ranglar, sarlavhalar, ro'yxatlar va kod bloklari.">
+          </div>
+          <div class="word-count" id="wordCount">0 so'z · 0 belgi</div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-header">
+            <h3>🎯 Quiz (ixtiyoriy)</h3>
+            <button class="btn btn-ghost btn-sm" onclick="addQuizOption()">+ Variant qo'shish</button>
+          </div>
+          <div class="sc-body">
+            <div class="input-group"><label class="input-label">Savol</label><input class="input" type="text" placeholder="Test savoli..." id="quizQuestion"></div>
+            <div id="quizOptions" style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;gap:8px;align-items:center;"><input type="radio" name="correct" value="0"><input class="input" type="text" placeholder="A variant" style="flex:1;"><button class="tbl-btn danger" onclick="this.parentElement.remove()">✕</button></div>
+              <div style="display:flex;gap:8px;align-items:center;"><input type="radio" name="correct" value="1"><input class="input" type="text" placeholder="B variant" style="flex:1;"><button class="tbl-btn danger" onclick="this.parentElement.remove()">✕</button></div>
+              <div style="display:flex;gap:8px;align-items:center;"><input type="radio" name="correct" value="2"><input class="input" type="text" placeholder="C variant (to'g'ri)" style="flex:1;"><button class="tbl-btn danger" onclick="this.parentElement.remove()">✕</button></div>
+              <div style="display:flex;gap:8px;align-items:center;"><input type="radio" name="correct" value="3"><input class="input" type="text" placeholder="D variant" style="flex:1;"><button class="tbl-btn danger" onclick="this.parentElement.remove()">✕</button></div>
+            </div>
+            <p style="font-size:11px;color:var(--text-3);margin-top:8px;">☝ To'g'ri javob oldidagi radio tugmasini bosing</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div>
+        <!-- Video upload -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-header"><h3>📹 Video (Pro uchun)</h3></div>
+          <div class="sc-body">
+            <div class="video-upload-zone" id="videoZone" onclick="fakeVideoUpload()">
+              <div style="font-size:40px;margin-bottom:12px;">📹</div>
+              <div style="font-size:13px;font-weight:700;margin-bottom:6px;">Video yuklash</div>
+              <div style="font-size:12px;color:var(--text-3);">MP4, MOV, AVI · Max 2GB</div>
+              <div style="font-size:11px;color:var(--text-4);margin-top:8px;">Yoki sudrab tashlang</div>
+            </div>
+            <div class="upload-progress" id="uploadProg"><div class="up-fill" id="upFill"></div></div>
+            <div id="uploadStatus" style="font-size:12px;color:var(--text-3);margin-top:8px;display:none;"></div>
+            <div class="video-preview" id="videoPreview" style="margin-top:12px;">
+              <div class="vp-header">
+                <span style="font-size:12px;color:var(--text-2);">dars-3-formalar.mp4</span>
+                <button class="tbl-btn danger" onclick="removeVideo()">✕</button>
+              </div>
+              <div class="vp-thumb" onclick="toast('Video preview...','info')">▶</div>
+              <div style="padding:12px;font-size:12px;color:var(--text-3);">
+                Davomiylik: 12:34 · O'lcham: 245MB · 1080p
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="section-card" style="margin-bottom:16px;">
+          <div class="sc-header"><h3>⚙️ Dars sozlamalari</h3></div>
+          <div class="sc-body" style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:13px;font-weight:600;">Nashr holati</div><div style="font-size:11px;color:var(--text-3);">Faol yoki qoralama</div></div>
+              <label class="toggle-sw"><input type="checkbox" checked id="publishToggle"><span class="toggle-slider"></span></label>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:13px;font-weight:600;">Qo'shimcha materiallar</div><div style="font-size:11px;color:var(--text-3);">PDF, fayllar</div></div>
+              <label class="toggle-sw"><input type="checkbox"><span class="toggle-slider"></span></label>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:13px;font-weight:600;">AI ga qo'shish</div><div style="font-size:11px;color:var(--text-3);">AI bilimlar bazasiga</div></div>
+              <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEO -->
+        <div class="section-card">
+          <div class="sc-header"><h3>🔍 Meta ma'lumot</h3></div>
+          <div class="sc-body">
+            <div class="input-group"><label class="input-label">Meta sarlavha</label><input class="input" type="text" placeholder="SEO sarlavha..."></div>
+            <div class="input-group"><label class="input-label">Tavsif</label><textarea class="input" placeholder="Qisqa tavsif..." style="min-height:60px;"></textarea></div>
+            <div class="input-group"><label class="input-label">Teglar</label><input class="input" type="text" placeholder="html, forma, input"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+<script>
+// Rich text editor
+function execCmd(cmd, val=null){
+  document.getElementById('lessonContent').focus();
+  document.execCommand(cmd, false, val);
+  updateWordCount();
+}
+
+function updateWordCount(){
+  const text = document.getElementById('lessonContent').innerText;
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  document.getElementById('wordCount').textContent = words + ' so\'z · ' + text.length + ' belgi';
+}
+
+document.getElementById('lessonContent').addEventListener('input', updateWordCount);
+
+function insertCode(){
+  const code = prompt('Kod kiriting:');
+  if(code){
+    document.getElementById('lessonContent').focus();
+    document.execCommand('insertHTML', false,
+      `<div style="background:#010801;border:1px solid #1a3a1a;border-radius:8px;padding:16px;margin:12px 0;font-family:monospace;font-size:13px;color:#00ff41;">${code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`);
+  }
+}
+
+function insertInfoBox(type){
+  const icons = {tip:'💡', warn:'⚠️'};
+  const colors = {tip:'rgba(0,255,65,.06)', warn:'rgba(255,215,0,.06)'};
+  const borders = {tip:'rgba(0,255,65,.2)', warn:'rgba(255,215,0,.2)'};
+  const text = prompt('Matn kiriting:');
+  if(text){
+    document.getElementById('lessonContent').focus();
+    document.execCommand('insertHTML', false,
+      `<div style="display:flex;gap:10px;padding:14px;background:${colors[type]};border:1px solid ${borders[type]};border-radius:8px;margin:12px 0;font-size:13px;color:#e8ffe8;">
+        <span>${icons[type]}</span><span>${text}</span>
+      </div>`);
+  }
+}
+
+function addQuizOption(){
+  const n = document.getElementById('quizOptions').children.length;
+  const letters = ['A','B','C','D','E','F'];
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  div.innerHTML = `<input type="radio" name="correct" value="${n}">
+    <input class="input" type="text" placeholder="${letters[n]||n+1} variant" style="flex:1;">
+    <button class="tbl-btn danger" onclick="this.parentElement.remove()">✕</button>`;
+  document.getElementById('quizOptions').appendChild(div);
+}
+
+function fakeVideoUpload(){
+  document.getElementById('uploadProg').style.display='block';
+  document.getElementById('uploadStatus').style.display='block';
+  document.getElementById('uploadStatus').textContent='Yuklanmoqda... 0%';
+  let pct=0;
+  const t=setInterval(()=>{
+    pct+=Math.random()*15;
+    if(pct>=100){pct=100;clearInterval(t);
+      document.getElementById('uploadStatus').textContent='✔ Yuklandi: dars-video.mp4';
+      document.getElementById('uploadStatus').style.color='var(--neon)';
+      document.getElementById('videoPreview').style.display='block';
+      document.getElementById('videoZone').style.display='none';
+      toast('Video muvaffaqiyatli yuklandi!','success');
+    } else {
+      document.getElementById('uploadStatus').textContent=`Yuklanmoqda... ${Math.floor(pct)}%`;
+    }
+  },200);
+}
+
+function removeVideo(){
+  document.getElementById('videoPreview').style.display='none';
+  document.getElementById('videoZone').style.display='block';
+  document.getElementById('uploadProg').style.display='none';
+  document.getElementById('uploadStatus').style.display='none';
+}
+
+function previewLesson(){
+  window.open('../lesson.html','_blank');
+}
+
+function publishLesson(){
+  const title=document.getElementById('lessonTitle').value;
+  if(!title){toast('Sarlavha kiriting!','error');return;}
+  toast('Dars nashr etildi: '+title,'success');
+  setTimeout(()=>location.href='lessons.html',1500);
+}
+</script>
+</body>
+</html>

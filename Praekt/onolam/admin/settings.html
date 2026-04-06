@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — Sozlamalar</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+  <style>
+.stabs{display:flex;gap:4px;margin-bottom:24px;overflow-x:auto;border-bottom:1px solid var(--border);padding-bottom:0;}
+.stab{font-size:12px;font-weight:600;color:var(--text-3);padding:10px 16px;border:none;background:transparent;cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;transition:var(--t);white-space:nowrap;margin-bottom:-1px;}
+.stab:hover{color:var(--text-1);}
+.stab.active{color:var(--neon);border-bottom-color:var(--neon);}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;}
+.sr-info h4{font-size:13px;font-weight:600;margin-bottom:3px;}
+.sr-info p{font-size:11px;color:var(--text-3);}
+.block-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);}
+.block-item:last-child{border-bottom:none;}
+.bi-info{flex:1;}
+.bi-info h5{font-size:12px;font-weight:600;margin-bottom:2px;}
+.bi-info p{font-size:10px;color:var(--text-3);}
+.coupon-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.coupon-row:last-child{border-bottom:none;}
+.coupon-code{font-size:13px;font-weight:800;color:var(--neon);font-family:var(--font);letter-spacing:.05em;}
+  </style>
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="Sozlamalar bo'yicha qidirish..."></div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html"  class="as-link active"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"     class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow">Tizim</div>
+        <h1>Sozlamalar ⚙️</h1>
+        <p>Platforma to'liq konfiguratsiyasi</p>
+      </div>
+      <div class="aph-right">
+        <button class="btn btn-neon btn-sm" onclick="toast('Barcha sozlamalar saqlandi ✔','success')">💾 Hammasini saqlash</button>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="stabs anim-up anim-d1">
+      <button class="stab active" onclick="showStab('general',this)">⚙️ Umumiy</button>
+      <button class="stab" onclick="showStab('access',this)">🔐 Kirish huquqlari</button>
+      <button class="stab" onclick="showStab('block',this)">🚫 Bloklashlar</button>
+      <button class="stab" onclick="showStab('coupon',this)">🎫 Kuponlar</button>
+      <button class="stab" onclick="showStab('announce',this)">📢 E'lonlar</button>
+      <button class="stab" onclick="showStab('security',this)">🛡️ Xavfsizlik</button>
+      <button class="stab" onclick="showStab('admin',this)">👤 Admin profil</button>
+    </div>
+
+    <!-- GENERAL -->
+    <div id="stab-general" class="anim-up anim-d2">
+      <div class="section-card" style="margin-bottom:20px;">
+        <div class="sc-header"><h3>🌐 Platforma asosiy sozlamalari</h3></div>
+        <div class="sc-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+            <div class="input-group"><label class="input-label">Platforma nomi</label><input class="input" type="text" value="OnOlam"></div>
+            <div class="input-group"><label class="input-label">Domen</label><input class="input" type="text" value="onolam.uz"></div>
+            <div class="input-group"><label class="input-label">Til (asosiy)</label><select class="input admin-select"><option>O'zbek tili</option><option>Rus tili</option><option>Ingliz tili</option></select></div>
+            <div class="input-group"><label class="input-label">Vaqt mintaqasi</label><select class="input admin-select"><option selected>UTC+5 (Toshkent)</option><option>UTC+3 (Moskva)</option><option>UTC+0 (London)</option></select></div>
+          </div>
+          <div class="input-group"><label class="input-label">Platforma tavsifi</label><textarea class="input" style="min-height:70px;">O'zbek tilidagi birinchi dasturlash va kiberxavfsizlik o'quv platformasi.</textarea></div>
+          <div class="input-group"><label class="input-label">Aloqa email</label><input class="input" type="email" value="hello@onolam.uz"></div>
+          <button class="btn btn-neon btn-sm" onclick="toast('Saqlandi ✔','success')">Saqlash</button>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="sc-header"><h3>🎛️ Platforma holati</h3></div>
+        <div class="sc-body">
+          <div class="setting-row">
+            <div class="sr-info"><h4>Platforma faol</h4><p>O'chirsangiz, barcha foydalanuvchilar texnik xizmat sahifasini ko'radi</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked id="siteActive"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>Yangi ro'yxatdan o'tish</h4><p>Yangi foydalanuvchilar platformaga ro'yxatdan o'ta oladi</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>Pro tarif sotish</h4><p>To'lov sahifasi orqali Pro tarif sotib olish mumkin</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>Pro hamjamiyat</h4><p>Pro foydalanuvchilar hamjamiyatga kirishi</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>AI Chat</h4><p>Foydalanuvchilar uchun AI yordamchisi</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCESS CONTROL -->
+    <div id="stab-access" style="display:none;" class="anim-up">
+      <div class="section-card" style="margin-bottom:20px;">
+        <div class="sc-header"><h3>🔐 Sahifalarga kirish huquqlari</h3><span style="font-size:11px;color:var(--text-3);">Free va Pro uchun alohida boshqaring</span></div>
+        <div class="sc-body">
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;">
+            <div style="padding:10px 16px;background:var(--void-3);font-size:11px;font-weight:800;color:var(--text-4);text-transform:uppercase;border-bottom:1px solid var(--border);">Sahifa</div>
+            <div style="padding:10px 16px;background:var(--void-3);font-size:11px;font-weight:800;color:var(--text-4);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:center;">Free</div>
+            <div style="padding:10px 16px;background:var(--void-3);font-size:11px;font-weight:800;color:var(--neon);text-transform:uppercase;border-bottom:1px solid var(--border);text-align:center;">Pro</div>
+            
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;">📝 Matn darslar</div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;">📹 Video darslar</div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;">💻 Terminal</div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;">🤖 AI Chat</div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><span style="font-size:11px;color:var(--yellow);">3/kun</span></div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:13px;">🏆 Sertifikat</div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+            
+            <div style="padding:12px 16px;font-size:13px;">👥 Pro Hamjamiyat</div>
+            <div style="padding:12px 16px;text-align:center;"><label class="toggle-sw"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+            <div style="padding:12px 16px;text-align:center;"><label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+          </div>
+          <div style="margin-top:16px;"><button class="btn btn-neon btn-sm" onclick="toast('Kirish huquqlari saqlandi ✔','success')">Saqlash</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK -->
+    <div id="stab-block" style="display:none;" class="anim-up">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="section-card">
+          <div class="sc-header"><h3>🚫 Bloklangan IP manzillar</h3><button class="btn btn-ghost btn-sm" onclick="openModal('addBlockModal')">+ Qo'shish</button></div>
+          <div class="sc-body" style="padding:0 20px;">
+            <div class="block-item"><div class="bi-info"><h5>45.32.11.8</h5><p>Sababı: Brute force · 19-mart 2026</p></div><button class="tbl-btn danger" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Olib tashlash</button></div>
+            <div class="block-item"><div class="bi-info"><h5>192.168.44.23</h5><p>Sababı: Bot/Scraper · 19-mart 2026</p></div><button class="tbl-btn danger" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Olib tashlash</button></div>
+            <div class="block-item"><div class="bi-info"><h5>78.90.12.44</h5><p>Sababı: Spam · 17-mart 2026</p></div><button class="tbl-btn danger" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Olib tashlash</button></div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="sc-header"><h3>📧 Bloklangan emaillar</h3><button class="btn btn-ghost btn-sm" onclick="openModal('addBlockModal')">+ Qo'shish</button></div>
+          <div class="sc-body" style="padding:0 20px;">
+            <div class="block-item"><div class="bi-info"><h5>temp_123@yopmail.com</h5><p>Sababı: Shubhali ro'yxat · Bugun</p></div><button class="tbl-btn danger" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Olib tashlash</button></div>
+            <div class="block-item"><div class="bi-info"><h5>spam@guerrillamail.com</h5><p>Sababı: Spam · 18-mart 2026</p></div><button class="tbl-btn danger" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Olib tashlash</button></div>
+            <div class="block-item"><div class="bi-info"><h5>*@yopmail.com (domen)</h5><p>Sababı: Vaqtinchalik email domen</p></div><button class="tbl-btn danger" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Olib tashlash</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card" style="margin-top:20px;">
+        <div class="sc-header"><h3>👤 Bloklangan foydalanuvchilar</h3></div>
+        <div class="tbl-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Foydalanuvchi</th><th>Sabab</th><th>Blok turi</th><th>Sana</th><th>Xabar</th><th>Amallar</th></tr></thead>
+            <tbody>
+              <tr class="row-red">
+                <td><div class="tbl-user"><div class="tbl-avatar"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=block1"></div><div class="tbl-user-info"><h5>spammer_99</h5><p>spammer@mail.com</p></div></div></td>
+                <td>Spam va reklama postlar</td>
+                <td><span class="risk-badge risk-danger">To'liq blok</span></td>
+                <td>17-mart 2026</td>
+                <td><span style="font-size:11px;color:var(--neon);">✔ Xabar yuborildi</span></td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-btn warning" onclick="toast('Blok turi o\'zgartirildi','warning')">Tahrirlash</button>
+                  <button class="tbl-btn primary" onclick="confirmAction('Blokdan chiqarish?',()=>toast('Blok olib tashlandi','success'))">Blokdan chiqarish</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- COUPONS -->
+    <div id="stab-coupon" style="display:none;" class="anim-up">
+      <div class="admin-page-header" style="margin-bottom:16px;">
+        <div class="aph-left"><h3 style="font-size:16px;font-weight:800;">🎫 Kupon kodlar</h3></div>
+        <div class="aph-right"><button class="btn btn-neon btn-sm" onclick="openModal('addCouponModal')">+ Yangi kupon</button></div>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="atw-header"><h3>Faol kuponlar</h3></div>
+        <div class="tbl-wrap">
+          <table class="admin-table" id="couponTable">
+            <thead><tr><th>Kod</th><th>Chegirma</th><th>Tur</th><th>Foydalanilgan/Limit</th><th>Muddati</th><th>Holat</th><th>Amallar</th></tr></thead>
+            <tbody>
+              <tr class="row-green">
+                <td><span class="coupon-code">ONOLAM30</span></td>
+                <td><strong style="color:var(--neon);">30%</strong></td>
+                <td>Pro tarif</td>
+                <td>47 / 100</td>
+                <td>31-mart 2026</td>
+                <td><span class="chip chip-green">Faol</span></td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-btn primary" onclick="toast('Kupon nusxalandi: ONOLAM30','success')">Nusxa</button>
+                  <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('Kupon o\'chirildi','error'))">O'chirish</button>
+                </div></td>
+              </tr>
+              <tr class="row-green">
+                <td><span class="coupon-code">YANGIOY50</span></td>
+                <td><strong style="color:var(--neon);">50%</strong></td>
+                <td>Pro (birinchi oy)</td>
+                <td>12 / 50</td>
+                <td>1-aprel 2026</td>
+                <td><span class="chip chip-green">Faol</span></td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-btn primary" onclick="toast('Kupon nusxalandi: YANGIOY50','success')">Nusxa</button>
+                  <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('Kupon o\'chirildi','error'))">O'chirish</button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><span class="coupon-code" style="color:var(--text-3);">MART2026</span></td>
+                <td><strong>20%</strong></td>
+                <td>Yillik tarif</td>
+                <td>100 / 100</td>
+                <td>31-mart 2026</td>
+                <td><span class="chip">Tugagan</span></td>
+                <td><div class="tbl-actions">
+                  <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCE SETTINGS -->
+    <div id="stab-announce" style="display:none;" class="anim-up">
+      <div class="section-card">
+        <div class="sc-header"><h3>📢 Platforma e'lonlari</h3><button class="btn btn-neon btn-sm" onclick="openModal('newAnnounceModal')">+ Yangi e'lon</button></div>
+        <div class="sc-body" style="padding:0 20px;">
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="padding:16px 0;border-bottom:1px solid var(--border);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+                <div><div style="font-size:13px;font-weight:700;margin-bottom:4px;">🎉 Yangi kurslar qo'shildi!</div><div style="font-size:12px;color:var(--text-2);">Termux va Linux kurslari endi mavjud. Pro foydalanuvchilar uchun.</div><div style="font-size:11px;color:var(--text-3);margin-top:4px;">Yuborildi: 15-mart 2026 · Barcha foydalanuvchilarga</div></div>
+                <div style="display:flex;gap:6px;flex-shrink:0;"><button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button></div>
+              </div>
+            </div>
+            <div style="padding:16px 0;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+                <div><div style="font-size:13px;font-weight:700;margin-bottom:4px;">⚡ Pro tarif chegirmasi!</div><div style="font-size:12px;color:var(--text-2);">Mart oyi uchun 30% chegirma! ONOLAM30 kodi bilan.</div><div style="font-size:11px;color:var(--text-3);margin-top:4px;">Yuborildi: 10-mart 2026 · Free foydalanuvchilarga</div></div>
+                <div style="display:flex;gap:6px;flex-shrink:0;"><button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div id="stab-security" style="display:none;" class="anim-up">
+      <div class="section-card" style="margin-bottom:20px;">
+        <div class="sc-header"><h3>🛡️ Xavfsizlik sozlamalari</h3></div>
+        <div class="sc-body">
+          <div class="setting-row">
+            <div class="sr-info"><h4>Brute force himoyasi</h4><p>5 marta noto'g'ri login → 15 daqiqa blok</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>VPN/Proxy aniqlash</h4><p>VPN orqali kirishda ogohlantirish ko'rsatish</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>Bot himoyasi (Rate Limiting)</h4><p>Sekundiga 10+ so'rovda avtomatik blok</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <div class="sr-info"><h4>Vaqtinchalik email bloklash</h4><p>yopmail, guerrillamail va boshqa temp emaillar</p></div>
+            <label class="toggle-sw"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+          </div>
+          <div class="input-group" style="margin-top:16px;"><label class="input-label">Noto'g'ri login urinish chegarasi</label>
+            <div style="display:flex;gap:8px;align-items:center;"><input class="input" type="number" value="5" min="1" max="20" style="width:80px;"><span style="font-size:12px;color:var(--text-3);">marta → avtomatik blok</span></div>
+          </div>
+          <button class="btn btn-neon btn-sm" onclick="toast('Xavfsizlik sozlamalari saqlandi ✔','success')">Saqlash</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN PROFILE -->
+    <div id="stab-admin" style="display:none;" class="anim-up">
+      <div class="section-card">
+        <div class="sc-header"><h3>👤 Admin profil va parol</h3></div>
+        <div class="sc-body">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+            <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" style="width:64px;height:64px;border-radius:var(--r-xl);border:2px solid var(--border-2);">
+            <div><div style="font-size:16px;font-weight:800;margin-bottom:4px;">Super Admin</div><div style="font-size:13px;color:var(--text-3);">admin@onolam.uz</div><div style="margin-top:6px;"><span class="risk-badge risk-danger" style="font-size:11px;">SUPER ADMIN</span></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="input-group"><label class="input-label">Ism</label><input class="input" type="text" value="Admin"></div>
+            <div class="input-group"><label class="input-label">Email</label><input class="input" type="email" value="admin@onolam.uz"></div>
+            <div class="input-group"><label class="input-label">Joriy parol</label><input class="input" type="password" placeholder="••••••••"></div>
+            <div class="input-group"><label class="input-label">Yangi parol</label><input class="input" type="password" placeholder="••••••••"></div>
+          </div>
+          <button class="btn btn-neon btn-sm" style="margin-top:8px;" onclick="toast('Admin profil yangilandi ✔','success')">Saqlash</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ADD BLOCK MODAL -->
+<div class="admin-modal" id="addBlockModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('addBlockModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:440px;">
+    <div class="modal-header"><h3>🚫 Bloklash qo'shish</h3><div class="modal-close" onclick="closeModal('addBlockModal')">✕</div></div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Bloklash turi</label>
+        <select class="input admin-select" id="blockType" onchange="updateBlockType(this.value)">
+          <option value="ip">IP manzil</option>
+          <option value="email">Email manzil</option>
+          <option value="domain">Email domen (*@domen.com)</option>
+          <option value="user">Foydalanuvchi (username)</option>
+          <option value="device">Qurilma ID</option>
+        </select>
+      </div>
+      <div class="input-group"><label class="input-label" id="blockValueLabel">IP manzil</label><input class="input" type="text" id="blockValue" placeholder="45.32.11.8"></div>
+      <div class="input-group"><label class="input-label">Sabab</label><input class="input" type="text" placeholder="Masalan: Brute force, spam..."></div>
+      <div class="input-group"><label class="input-label">Xabar yuborish</label>
+        <div style="display:flex;gap:12px;margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" id="notifyBlock"> Foydalanuvchiga xabar yuborish</label>
+        </div>
+      </div>
+      <div class="input-group" id="notifyMsgGroup" style="display:none;"><label class="input-label">Xabar matni</label><textarea class="input" style="min-height:70px;">Sizning akkauntingiz qoidabuzarlik sababli vaqtincha cheklandi. Murojaat uchun: hello@onolam.uz</textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('addBlockModal')">Bekor</button>
+      <button class="btn btn-danger btn-sm" onclick="toast('Bloklandi ✔','error');closeModal('addBlockModal')">Bloklash</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD COUPON MODAL -->
+<div class="admin-modal" id="addCouponModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('addCouponModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:440px;">
+    <div class="modal-header"><h3>🎫 Yangi kupon yaratish</h3><div class="modal-close" onclick="closeModal('addCouponModal')">✕</div></div>
+    <div class="modal-body">
+      <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:16px;">
+        <div class="input-group" style="flex:1;margin-bottom:0;"><label class="input-label">Kupon kodi</label><input class="input" type="text" placeholder="ONOLAM30" id="couponCode" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()"></div>
+        <button class="btn btn-ghost btn-sm" style="margin-bottom:0;" onclick="genCode()">🔄 Yaratish</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="input-group"><label class="input-label">Chegirma (%)</label><input class="input" type="number" value="20" min="1" max="100"></div>
+        <div class="input-group"><label class="input-label">Foydalanish limiti</label><input class="input" type="number" value="100" min="1"></div>
+        <div class="input-group"><label class="input-label">Boshlanish</label><input class="input" type="date"></div>
+        <div class="input-group"><label class="input-label">Tugash</label><input class="input" type="date"></div>
+      </div>
+      <div class="input-group"><label class="input-label">Qo'llaniladigan tarif</label>
+        <select class="input admin-select"><option>Pro (oylik)</option><option>Pro (yillik)</option><option>Ikkalasi</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('addCouponModal')">Bekor</button>
+      <button class="btn btn-neon btn-sm" onclick="toast('Kupon yaratildi: '+document.getElementById('couponCode').value,'success');closeModal('addCouponModal')">Yaratish</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW ANNOUNCE MODAL -->
+<div class="admin-modal" id="newAnnounceModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('newAnnounceModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:480px;">
+    <div class="modal-header"><h3>📢 Yangi e'lon</h3><div class="modal-close" onclick="closeModal('newAnnounceModal')">✕</div></div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Kimga</label><select class="input admin-select"><option>Barcha foydalanuvchilar</option><option>Faqat Pro</option><option>Faqat Free</option></select></div>
+      <div class="input-group"><label class="input-label">Sarlavha</label><input class="input" type="text" placeholder="E'lon sarlavhasi..."></div>
+      <div class="input-group"><label class="input-label">Xabar matni</label><textarea class="input" style="min-height:80px;" placeholder="E'lon matni..."></textarea></div>
+      <div class="input-group"><label class="input-label">Ko'rinish</label><select class="input admin-select"><option>Bildirishnoma (ichki)</option><option>Bannerda ko'rsatish</option><option>Email yuborish</option><option>Hammasi</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('newAnnounceModal')">Bekor</button>
+      <button class="btn btn-neon btn-sm" onclick="toast('E\'lon yuborildi ✔','success');closeModal('newAnnounceModal')">Yuborish</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+<script>
+function showStab(name, el){
+  document.querySelectorAll('[id^="stab-"]').forEach(t => t.style.display='none');
+  document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+  document.getElementById('stab-'+name).style.display='block';
+  el.classList.add('active');
+}
+
+function updateBlockType(val){
+  const labels = {ip:'IP manzil', email:'Email manzil', domain:'Email domen', user:'Username', device:'Qurilma ID'};
+  const placeholders = {ip:'45.32.11.8', email:'user@mail.com', domain:'*@yopmail.com', user:'username_99', device:'device_abc123'};
+  document.getElementById('blockValueLabel').textContent = labels[val];
+  document.getElementById('blockValue').placeholder = placeholders[val];
+}
+
+document.getElementById('notifyBlock').addEventListener('change', function(){
+  document.getElementById('notifyMsgGroup').style.display = this.checked ? 'block' : 'none';
+});
+
+function genCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for(let i=0;i<8;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('couponCode').value = code;
+}
+</script>
+</body>
+</html>

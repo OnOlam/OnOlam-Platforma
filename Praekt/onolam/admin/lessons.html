@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — Darslar</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+  <style>
+.course-tabs-admin{display:flex;gap:4px;margin-bottom:20px;overflow-x:auto;}
+.cta-btn{font-size:12px;font-weight:600;padding:8px 16px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--surface);color:var(--text-3);cursor:pointer;font-family:var(--font);transition:var(--t);white-space:nowrap;}
+.cta-btn:hover{color:var(--text-1);border-color:var(--border-2);}
+.cta-btn.active{color:var(--neon);background:var(--neon-faint);border-color:rgba(0,255,65,.2);}
+.lesson-row{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);transition:var(--t);cursor:grab;}
+.lesson-row:hover{background:var(--void-3);}
+.lesson-row:last-child{border-bottom:none;}
+.drag-handle{color:var(--text-4);font-size:16px;cursor:grab;flex-shrink:0;}
+.lesson-num{font-size:11px;color:var(--text-4);width:20px;text-align:center;flex-shrink:0;}
+.lesson-icon-admin{width:36px;height:36px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--void-3);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.lesson-info-admin{flex:1;min-width:0;}
+.lesson-info-admin h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.lesson-info-admin p{font-size:11px;color:var(--text-3);}
+  </style>
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="Kurs yoki dars qidirish..."></div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin" onclick="location.href='settings.html'"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link active"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html" class="as-link"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"    class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow">Kontent boshqaruvi</div>
+        <h1>Darslar 📚</h1>
+        <p>Barcha kurslar va darslarni boshqaring</p>
+      </div>
+      <div class="aph-right">
+        <button class="btn btn-ghost btn-sm" onclick="toast('Kurs qo\'shish...','info')">+ Yangi kurs</button>
+        <a href="lesson-editor.html"><button class="btn btn-neon btn-sm">+ Yangi dars</button></a>
+      </div>
+    </div>
+
+    <!-- Course tabs -->
+    <div class="course-tabs-admin anim-up anim-d1">
+      <button class="cta-btn active" onclick="setTab(this)">🌐 HTML (5)</button>
+      <button class="cta-btn" onclick="setTab(this)">🎨 CSS (5)</button>
+      <button class="cta-btn" onclick="setTab(this)">⚡ JavaScript (5)</button>
+      <button class="cta-btn" onclick="setTab(this)">🐍 Python (5)</button>
+      <button class="cta-btn" onclick="setTab(this)">🗄️ SQL (5)</button>
+      <button class="cta-btn" onclick="setTab(this)">📱 Termux (5)</button>
+      <button class="cta-btn" onclick="setTab(this)">🐧 Linux (5)</button>
+    </div>
+
+    <!-- Lessons list -->
+    <div class="admin-table-wrap anim-up anim-d2">
+      <div class="atw-header">
+        <h3>🌐 HTML Asoslari — Darslar ro'yxati</h3>
+        <div class="atw-tools">
+          <span style="font-size:11px;color:var(--text-3);">☰ Sudrab tartib o'zgartiring</span>
+          <a href="lesson-editor.html"><button class="btn btn-neon btn-sm">+ Dars qo'shish</button></a>
+        </div>
+      </div>
+
+      <div class="lesson-row">
+        <span class="drag-handle">⠿</span><span class="lesson-num">1</span>
+        <div class="lesson-icon-admin">✅</div>
+        <div class="lesson-info-admin">
+          <h4>HTML bilan tanishish</h4>
+          <p>📝 Matn · Free · 10 daqiqa · 12,847 ko'rgan</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="chip chip-green">Faol</span>
+          <a href="lesson-editor.html"><button class="tbl-btn primary">Tahrirlash</button></a>
+          <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button>
+        </div>
+      </div>
+      <div class="lesson-row">
+        <span class="drag-handle">⠿</span><span class="lesson-num">2</span>
+        <div class="lesson-icon-admin">✅</div>
+        <div class="lesson-info-admin">
+          <h4>Teglar va atributlar</h4>
+          <p>📝 Matn · Free · 15 daqiqa · 11,234 ko'rgan</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="chip chip-green">Faol</span>
+          <a href="lesson-editor.html"><button class="tbl-btn primary">Tahrirlash</button></a>
+          <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button>
+        </div>
+      </div>
+      <div class="lesson-row">
+        <span class="drag-handle">⠿</span><span class="lesson-num">3</span>
+        <div class="lesson-icon-admin" style="background:rgba(255,215,0,.08);border-color:rgba(255,215,0,.2);">▶</div>
+        <div class="lesson-info-admin">
+          <h4>Formalar va inputlar</h4>
+          <p>📝 Matn · Free · 20 daqiqa · 8,543 ko'rgan</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="chip chip-green">Faol</span>
+          <a href="lesson-editor.html"><button class="tbl-btn primary">Tahrirlash</button></a>
+          <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button>
+        </div>
+      </div>
+      <div class="lesson-row">
+        <span class="drag-handle">⠿</span><span class="lesson-num">4</span>
+        <div class="lesson-icon-admin">📄</div>
+        <div class="lesson-info-admin">
+          <h4>Jadvallar va ro'yxatlar</h4>
+          <p>📝 Matn · Free · 18 daqiqa · 6,234 ko'rgan</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="chip chip-green">Faol</span>
+          <a href="lesson-editor.html"><button class="tbl-btn primary">Tahrirlash</button></a>
+          <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button>
+        </div>
+      </div>
+      <div class="lesson-row">
+        <span class="drag-handle">⠿</span><span class="lesson-num">5</span>
+        <div class="lesson-icon-admin" style="background:var(--neon-faint);border-color:rgba(0,255,65,.2);">🔒</div>
+        <div class="lesson-info-admin">
+          <h4>Semantik HTML5</h4>
+          <p>📹 Video + Matn · <strong style="color:var(--neon)">Pro</strong> · 25 daqiqa · 2,134 ko'rgan</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="chip chip-green">Faol</span>
+          <a href="lesson-editor.html"><button class="tbl-btn primary">Tahrirlash</button></a>
+          <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">O'chirish</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+<script>
+function setTab(el){ document.querySelectorAll('.cta-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
+</script>
+</body>
+</html>

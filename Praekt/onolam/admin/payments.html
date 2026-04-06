@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — To'lovlar</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="To'lov ID yoki user..."></div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link active"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html" class="as-link"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"    class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow">Moliya</div>
+        <h1>To'lovlar 💳</h1>
+        <p>Barcha to'lovlar, narxlar va to'lov tizimlari</p>
+      </div>
+      <div class="aph-right">
+        <select class="admin-select"><option>Mart 2026</option><option>Fevral 2026</option><option>Yanvar 2026</option></select>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV('payTable','payments')">📊 Export</button>
+        <button class="btn btn-neon btn-sm" onclick="openModal('priceModal')">💰 Narxlarni o'zgartirish</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="admin-stats anim-up anim-d1">
+      <div class="astat"><div class="astat-icon">💰</div><div class="astat-num yellow" data-target="43488">0</div><div class="astat-label">Oylik daromad ($)</div><span class="astat-change up">+12.4%</span></div>
+      <div class="astat"><div class="astat-icon">📈</div><div class="astat-num" data-target="4832">0</div><div class="astat-label">Pro obunalar</div><span class="astat-change up">+23</span></div>
+      <div class="astat"><div class="astat-icon">↩</div><div class="astat-num red" data-target="3">0</div><div class="astat-label">Qaytarishlar</div><span class="astat-change same">—</span></div>
+      <div class="astat"><div class="astat-icon">❌</div><div class="astat-num red" data-target="8">0</div><div class="astat-label">Rad etilgan</div><span class="astat-change same">—</span></div>
+    </div>
+
+    <!-- Grafik -->
+    <div class="chart-card anim-up anim-d2">
+      <div class="chart-card-header">
+        <h3>Oylik daromad grafigi (2026)</h3>
+        <span style="font-size:12px;color:var(--neon);">Jami: $287,430</span>
+      </div>
+      <div class="mini-chart">
+        <div class="mc-bar-wrap"><div class="mc-bar" style="height:52%" data-val="$38K"></div><div class="mc-label">Yan</div></div>
+        <div class="mc-bar-wrap"><div class="mc-bar" style="height:61%" data-val="$42K"></div><div class="mc-label">Fev</div></div>
+        <div class="mc-bar-wrap"><div class="mc-bar" style="height:72%" data-val="$49K" data-tooltip="$49K"></div><div class="mc-label">Mar</div></div>
+        <div class="mc-bar-wrap"><div class="mc-bar blue-bar" style="height:35%" data-val="Rejalangan"></div><div class="mc-label">Apr</div></div>
+        <div class="mc-bar-wrap"><div class="mc-bar blue-bar" style="height:40%" data-val="Rejalangan"></div><div class="mc-label">May</div></div>
+        <div class="mc-bar-wrap"><div class="mc-bar blue-bar" style="height:38%" data-val="Rejalangan"></div><div class="mc-label">Iyn</div></div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--text-3);">
+        <span style="color:var(--neon);">■</span> Haqiqiy
+        <span style="color:var(--blue-accent);">■</span> Rejalashtirilgan
+      </div>
+    </div>
+
+    <!-- To'lovlar jadvali -->
+    <div class="admin-table-wrap anim-up anim-d3">
+      <div class="atw-header">
+        <h3>So'ngi to'lovlar</h3>
+        <div class="atw-tools">
+          <select class="admin-select"><option>Barchasi</option><option>Muvaffaqiyatli</option><option>Rad etilgan</option><option>Qaytarilgan</option></select>
+          <div class="atw-search"><span>🔍</span><input type="text" placeholder="Qidirish..." oninput="searchTable(this,'payTable')"></div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="admin-table" id="payTable">
+          <thead>
+            <tr>
+              <th onclick="sortTable(this,0)">To'lov ID <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,1)">Foydalanuvchi <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,2)">Summa <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,3)">Tarif <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,4)">Usul <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,5)">Sana <span class="sort-arr">↕</span></th>
+              <th>Holat</th>
+              <th>Amallar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-green">
+              <td><code style="font-size:11px;color:var(--neon);">#PAY-2026-001</code></td>
+              <td><div class="tbl-user"><div class="tbl-avatar"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=u2"></div><div class="tbl-user-info"><h5>Dilnoza Yusupova</h5><p>dilnoza@mail.ru</p></div></div></td>
+              <td><strong style="color:var(--neon);">$9.00</strong></td>
+              <td><span class="badge badge-pro">Pro / oy</span></td>
+              <td>💳 Uzcard</td>
+              <td>19-mart 2026, 14:32</td>
+              <td><span class="chip chip-green">✔ Muvaffaqiyatli</span></td>
+              <td><div class="tbl-actions">
+                <button class="tbl-btn primary" onclick="toast('To\'lov tafsiloti','info')">Ko'rish</button>
+                <button class="tbl-btn danger" onclick="confirmAction('Qaytarishni xohlaysizmi?',()=>toast('Qaytarildi','error'))">Qaytarish</button>
+              </div></td>
+            </tr>
+            <tr class="row-green">
+              <td><code style="font-size:11px;color:var(--neon);">#PAY-2026-002</code></td>
+              <td><div class="tbl-user"><div class="tbl-avatar"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=u4"></div><div class="tbl-user-info"><h5>Jasur Toshmatov</h5><p>jasur@gmail.com</p></div></div></td>
+              <td><strong style="color:var(--neon);">$9.00</strong></td>
+              <td><span class="badge badge-pro">Pro / oy</span></td>
+              <td>📱 PayMe</td>
+              <td>18-mart 2026, 11:15</td>
+              <td><span class="chip chip-green">✔ Muvaffaqiyatli</span></td>
+              <td><div class="tbl-actions">
+                <button class="tbl-btn primary" onclick="toast('To\'lov tafsiloti','info')">Ko'rish</button>
+                <button class="tbl-btn danger" onclick="confirmAction('Qaytarishni xohlaysizmi?',()=>toast('Qaytarildi','error'))">Qaytarish</button>
+              </div></td>
+            </tr>
+            <tr class="row-red">
+              <td><code style="font-size:11px;color:var(--red-accent);">#PAY-2026-003</code></td>
+              <td><div class="tbl-user"><div class="tbl-avatar"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=anon"></div><div class="tbl-user-info"><h5>Noma'lum user</h5><p>temp@yopmail.com</p></div></div></td>
+              <td><strong style="color:var(--red-accent);">$9.00</strong></td>
+              <td><span class="badge badge-pro">Pro / oy</span></td>
+              <td>💳 Visa</td>
+              <td>17-mart 2026, 09:44</td>
+              <td><span class="chip chip-red">✗ Rad etildi</span></td>
+              <td><div class="tbl-actions">
+                <button class="tbl-btn primary" onclick="toast('To\'lov rad sababi: mablag\' yetarli emas','error')">Ko'rish</button>
+              </div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="atw-footer">
+        <p>Jami 4,832 ta to'lovdan 1–3 ko'rsatilmoqda · Oylik: $43,488</p>
+        <div class="pagination">
+          <button class="pg-btn active">1</button>
+          <button class="pg-btn">2</button>
+          <button class="pg-btn">3</button>
+          <button class="pg-btn">→</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- PRICE MODAL -->
+<div class="admin-modal" id="priceModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('priceModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:480px;">
+    <div class="modal-header"><h3>💰 Narxlarni o'zgartirish</h3><div class="modal-close" onclick="closeModal('priceModal')">✕</div></div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Pro tarif (oylik, $)</label><input class="input" type="number" value="9" min="1"></div>
+      <div class="input-group"><label class="input-label">Pro tarif (yillik, $)</label><input class="input" type="number" value="75" min="1"></div>
+      <div class="input-group"><label class="input-label">Jamoa tarifi (kishi/oy, $)</label><input class="input" type="number" value="6" min="1"></div>
+      <div class="input-group"><label class="input-label">Minimal jamoa (kishi)</label><input class="input" type="number" value="5" min="2"></div>
+      <div style="background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:var(--r-md);padding:12px;font-size:12px;color:var(--red-accent);">⚠️ Narxni o'zgartirish mavjud obunalarga ta'sir qilmaydi. Faqat yangi obunalarga qo'llanadi.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('priceModal')">Bekor</button>
+      <button class="btn btn-neon btn-sm" onclick="toast('Narxlar yangilandi ✔','success');closeModal('priceModal')">Saqlash</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+</body>
+</html>

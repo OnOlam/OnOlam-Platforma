@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Kurslar</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+/* ── COURSES PAGE ── */
+.courses-hero{background:var(--void-2);border-bottom:1px solid var(--border);padding:40px 0 0;}
+.courses-hero .container{display:flex;flex-direction:column;gap:24px;}
+.ch-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.ch-top h1{font-size:clamp(22px,3vw,32px);font-weight:800;margin-bottom:6px;}
+.ch-top h1 span{color:var(--neon);}
+.ch-top p{font-size:13px;color:var(--text-3);max-width:440px;}
+
+/* Search bar */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 16px;width:280px;transition:var(--t);}
+.search-bar:focus-within{border-color:var(--neon-dim);box-shadow:0 0 0 3px var(--neon-faint);}
+.search-bar input{flex:1;background:transparent;border:none;outline:none;font-family:var(--font);font-size:13px;color:var(--text-1);}
+.search-bar input::placeholder{color:var(--text-4);}
+.search-bar span{color:var(--text-3);font-size:16px;}
+
+/* Filter tabs */
+.filter-tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:0;-webkit-overflow-scrolling:touch;}
+.filter-tabs::-webkit-scrollbar{display:none;}
+.ftab{font-size:12px;font-weight:600;color:var(--text-3);padding:10px 18px;border-radius:var(--r-md) var(--r-md) 0 0;border:1px solid transparent;border-bottom:none;cursor:pointer;transition:var(--t);white-space:nowrap;background:transparent;font-family:var(--font);position:relative;bottom:-1px;}
+.ftab:hover{color:var(--text-1);background:var(--surface);}
+.ftab.active{color:var(--neon);background:var(--void);border-color:var(--border);border-bottom-color:var(--void);}
+
+/* Main content */
+.courses-main{padding:32px 0;}
+
+/* Category header */
+.cat-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.cat-header h2{font-size:18px;font-weight:700;}
+.cat-header .cat-count{font-size:12px;color:var(--text-3);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:20px;}
+
+/* Course cards */
+.cg-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;}
+
+.ccard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;cursor:pointer;transition:var(--t-md);text-decoration:none;display:flex;flex-direction:column;}
+.ccard:hover{border-color:rgba(0,255,65,.25);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.5);}
+
+.ccard-thumb{height:120px;position:relative;display:flex;align-items:center;justify-content:center;font-size:52px;overflow:hidden;}
+.ccard-thumb::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--void-3),var(--surface-2));z-index:0;}
+.ccard-thumb .ccard-emoji{position:relative;z-index:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5));}
+.ccard-thumb .ccard-locked{position:absolute;top:10px;right:10px;z-index:2;}
+
+.ccard-body{padding:16px;flex:1;display:flex;flex-direction:column;gap:8px;}
+.ccard-body h3{font-size:15px;font-weight:700;margin-bottom:2px;}
+.ccard-body p{font-size:12px;color:var(--text-3);line-height:1.5;flex:1;}
+.ccard-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid var(--border);}
+.ccard-meta span{font-size:11px;color:var(--text-3);}
+
+/* Progress overlay on thumb */
+.ccard-prog{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--void);}
+.ccard-prog div{height:100%;background:linear-gradient(90deg,var(--neon-dim),var(--neon));}
+
+/* Started / Locked states */
+.ccard.started .ccard-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.3),transparent);}
+.ccard.locked{opacity:.65;}
+.ccard.locked:hover{transform:none;border-color:var(--border);}
+
+/* Detail panel (side panel on click) */
+.course-detail-panel{position:fixed;top:0;right:-420px;width:420px;height:100dvh;background:var(--void-2);border-left:1px solid var(--border);z-index:600;transition:right .3s ease;overflow-y:auto;display:flex;flex-direction:column;}
+.course-detail-panel.open{right:0;box-shadow:-20px 0 60px rgba(0,0,0,.7);}
+.cdp-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:var(--void-2);z-index:1;}
+.cdp-close{width:32px;height:32px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:var(--t);flex-shrink:0;}
+.cdp-close:hover{border-color:var(--red);color:var(--red);}
+.cdp-body{padding:24px;flex:1;}
+.cdp-icon{font-size:56px;text-align:center;margin-bottom:16px;}
+.cdp-body h2{font-size:22px;font-weight:800;margin-bottom:8px;}
+.cdp-body p{font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:20px;}
+.cdp-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px;}
+.cdp-meta-item{text-align:center;}
+.cdp-meta-item .dm-num{font-size:18px;font-weight:800;color:var(--neon);}
+.cdp-meta-item .dm-label{font-size:10px;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;}
+.cdp-lessons{display:flex;flex-direction:column;gap:4px;margin-bottom:24px;}
+.cdp-lesson{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--void-3);font-size:13px;color:var(--text-2);cursor:pointer;transition:var(--t);}
+.cdp-lesson:hover{background:var(--surface);color:var(--text-1);}
+.cdp-lesson .dl-num{font-size:11px;color:var(--text-4);width:20px;flex-shrink:0;}
+.cdp-lesson .dl-icon{font-size:14px;flex-shrink:0;}
+.cdp-lesson .dl-name{flex:1;}
+.cdp-lesson .dl-status{font-size:10px;font-weight:700;flex-shrink:0;}
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:599;opacity:0;pointer-events:none;transition:opacity .3s;}
+.panel-overlay.open{opacity:1;pointer-events:all;}
+
+/* All courses section */
+.all-section{margin-bottom:40px;}
+
+@media(max-width:1024px){.cg-4{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:768px){.cg-4{grid-template-columns:repeat(2,1fr);}.ch-top{flex-direction:column;}.search-bar{width:100%;}.course-detail-panel{width:100%;right:-100%;}.cdp-header h3{font-size:14px;}}
+@media(max-width:480px){.cg-4{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">⚡</div>On<span>Olam</span></a>
+    <div class="navbar-center">
+      <a href="dashboard.html"     class="nav-link">Dashboard</a>
+      <a href="courses.html"       class="nav-link active">Kurslar</a>
+      <a href="pro-community.html" class="nav-link">Hamjamiyat</a>
+    </div>
+    <div class="navbar-right">
+      <a href="pricing.html"><button class="btn btn-neon btn-sm">⚡ Pro</button></a>
+      <div class="navbar-avatar" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      </div>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <div class="drawer-user">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      <div class="drawer-user-info"><h4>Halimjon</h4><span class="badge badge-free">Free</span></div>
+    </div>
+    <a href="dashboard.html"     class="drawer-link"><span class="di">🏠</span> Dashboard</a>
+    <a href="courses.html"       class="drawer-link active"><span class="di">📚</span> Kurslar</a>
+    <a href="certificate.html"   class="drawer-link"><span class="di">🏆</span> Sertifikatlar</a>
+    <a href="pro-community.html" class="drawer-link"><span class="di">👥</span> Hamjamiyat</a>
+    <div class="drawer-sep"></div>
+    <a href="profile.html" class="drawer-link"><span class="di">⚙️</span> Profil</a>
+    <a href="login.html"   class="drawer-link exit"><span class="di">↩</span> Chiqish</a>
+  </div>
+</div>
+
+<!-- Panel overlay -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+
+<!-- Course detail panel -->
+<div class="course-detail-panel" id="detailPanel">
+  <div class="cdp-header">
+    <div class="cdp-close" onclick="closePanel()">✕</div>
+    <h3 id="panelTitle">Kurs haqida</h3>
+  </div>
+  <div class="cdp-body">
+    <div class="cdp-icon" id="panelIcon">🌐</div>
+    <h2 id="panelName">HTML</h2>
+    <p id="panelDesc">Veb sahifalar tuzilishini o'rganing. Teglar, atributlar, formalar, semantik HTML.</p>
+    <div class="cdp-meta">
+      <div class="cdp-meta-item"><div class="dm-num">5</div><div class="dm-label">Darslar</div></div>
+      <div class="cdp-meta-item"><div class="dm-num">~3h</div><div class="dm-label">Vaqt</div></div>
+      <div class="cdp-meta-item"><div class="dm-num" id="panelPct">60%</div><div class="dm-label">Progress</div></div>
+    </div>
+    <div class="progress mb-16"><div class="progress-fill" id="panelProg" style="width:60%"></div></div>
+    <div class="cdp-lessons" id="panelLessons"></div>
+    <a href="course-detail.html" id="panelDetailLink"><button class="btn btn-neon btn-full btn-lg">Kursni ochish →</button></a>
+  </div>
+</div>
+
+<!-- COURSES HERO -->
+<div class="courses-hero">
+  <div class="container">
+    <div class="ch-top">
+      <div>
+        <div class="eyebrow">Kurslar</div>
+        <h1>Barcha <span>kurslar</span></h1>
+        <p>8 yo'nalish, bepul matn darslar. Pro bilan terminal va video.</p>
+      </div>
+      <div>
+        <div class="search-bar">
+          <span>🔍</span>
+          <input type="text" id="searchInp" placeholder="Kurs qidirish..." oninput="filterCourses(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="filter-tabs">
+      <button class="ftab active" onclick="setTab(this,'all')">Hammasi</button>
+      <button class="ftab" onclick="setTab(this,'started')">Boshlangan</button>
+      <button class="ftab" onclick="setTab(this,'free')">Bepul</button>
+      <button class="ftab" onclick="setTab(this,'pro')">Pro</button>
+      <button class="ftab" onclick="setTab(this,'frontend')">Frontend</button>
+      <button class="ftab" onclick="setTab(this,'backend')">Backend</button>
+      <button class="ftab" onclick="setTab(this,'terminal')">Terminal</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="courses-main">
+  <div class="container">
+
+    <div class="all-section" id="coursesContainer">
+          <div id="coursesLoading" style="text-align:center;padding:48px;color:var(--text-3);">
+            <div style="font-size:48px;margin-bottom:16px;">⏳</div>
+            <p>Kurslar yuklanmoqda...</p>
+          </div>
+        </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<div style="border-top:1px solid var(--border);padding:20px 0;">
+  <div class="container"><div class="footer-inner" style="padding:0;"><div class="footer-copy">© 2026 <span>OnOlam</span>.</div><div class="footer-links"><a href="#">Yordam</a><a href="#">Telegram</a></div></div></div>
+</div>
+
+<script src="js/burger.js"></script>
+<script src="js/api.js"></script>
+<script src="js/courses.js?v=99"></script>
+<script>
+const COURSES = {
+  HTML:{icon:'🌐',desc:'HTML Asoslari. Teglar, formalar, semantika, jadvallar va media.',pct:60,lessons:[{n:'HTML bilan tanishish',done:true},{n:'Teglar va atributlar',done:true},{n:'Formalar',active:true},{n:'Jadvallar',done:false},{n:'Semantik HTML',done:false}]},
+  CSS:{icon:'🎨',desc:'CSS Asoslari. Selektorlar, Flexbox, Grid, animatsiyalar.',pct:40,lessons:[{n:'CSS bilan tanishish',done:true},{n:'Selektorlar',done:true},{n:'Flexbox',active:true},{n:'Grid',done:false},{n:'Animatsiyalar',done:false}]},
+  JavaScript:{icon:'⚡',desc:'JavaScript. DOM, hodisalar, async/await, fetch API.',pct:0,lessons:[{n:'JS bilan tanishish'},{n:"O'zgaruvchilar"},{n:'Funksiyalar'},{n:'DOM manipulyatsiya'},{n:'Async/Await'}]},
+  Python:{icon:'🐍',desc:"Python Asoslari. O'zgaruvchilar, funksiyalar, OOP.",pct:20,lessons:[{n:'Python bilan tanishish',done:true},{n:"O'zgaruvchilar"},{n:'Funksiyalar'},{n:'OOP'},{n:'Fayllar'}]},
+  SQL:{icon:'🗄️',desc:'SQL Asoslari. SELECT, JOIN, GROUP BY, indekslar.',pct:0,lessons:[{n:'SQL ga kirish'},{n:'SELECT va WHERE'},{n:'JOIN amallari'},{n:'GROUP BY'},{n:'Indekslar'}]},
+};
+
+function openPanel(name, icon, desc, pct, lessons){
+  document.getElementById('panelTitle').textContent = name + ' kursi';
+  document.getElementById('panelIcon').textContent  = icon;
+  document.getElementById('panelName').textContent  = name;
+  document.getElementById('panelDesc').textContent  = desc;
+  document.getElementById('panelPct').textContent   = pct + '%';
+  document.getElementById('panelProg').style.width  = pct + '%';
+
+  const ll = document.getElementById('panelLessons');
+  ll.innerHTML = '';
+  lessons.forEach((l,i)=>{
+    const status = l.done ? '<span class="dl-status" style="color:var(--neon)">✔</span>' : l.active ? '<span class="dl-status" style="color:var(--yellow)">▶</span>' : '<span class="dl-status" style="color:var(--text-4)">○</span>';
+    ll.innerHTML += `<div class="cdp-lesson" onclick="location.href='lesson.html'"><span class="dl-num">${i+1}</span><span class="dl-icon">${l.done?'✅':l.active?'▶':'📄'}</span><span class="dl-name">${l.n}</span>${status}</div>`;
+  });
+
+  document.getElementById('detailPanel').classList.add('open');
+  document.getElementById('panelOverlay').classList.add('open');
+  document.body.classList.add('no-scroll');
+}
+
+function closePanel(){
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('panelOverlay').classList.remove('open');
+  document.body.classList.remove('no-scroll');
+}
+
+function showProAlert(){
+  if(confirm('Bu kurs Pro tarifda mavjud.\nPro tarifga o\'tishni xohlaysizmi?')){
+    location.href='pricing.html';
+  }
+}
+
+// setTab va filterCourses — courses.js da ishlaydi
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
+</script>
+</body>
+</html>

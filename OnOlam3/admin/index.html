@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — Kirish</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+  <style>
+.admin-login{min-height:100dvh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:24px;}
+.al-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.35;}
+.al-orb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(0,255,65,.05),transparent 70%);pointer-events:none;}
+.al-box{position:relative;z-index:1;width:100%;max-width:420px;background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 40px rgba(0,255,65,.04);}
+.al-header{padding:32px 32px 24px;border-bottom:1px solid var(--border);text-align:center;}
+.al-logo{display:flex;align-items:center;justify-content:center;gap:10px;font-size:20px;font-weight:800;margin-bottom:8px;}
+.al-logo .logo-icon{width:36px;height:36px;background:var(--neon-faint);border:1px solid rgba(0,255,65,.3);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.al-logo span{color:var(--neon);}
+.al-warning{display:flex;align-items:center;gap:8px;background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:var(--r-md);padding:10px 14px;font-size:12px;color:var(--red-accent);margin-top:12px;}
+.al-body{padding:28px 32px;}
+.al-label{font-size:11px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px;}
+.al-input-wrap{position:relative;margin-bottom:16px;}
+.al-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);color:var(--text-1);font-family:var(--font);font-size:13px;padding:11px 42px 11px 14px;outline:none;transition:var(--t);}
+.al-input:focus{border-color:var(--neon-dim);box-shadow:0 0 0 3px var(--neon-faint);}
+.al-input::placeholder{color:var(--text-4);}
+.al-input.err{border-color:var(--red-accent);box-shadow:0 0 0 3px var(--red-faint);}
+.al-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--text-4);cursor:pointer;}
+.al-options{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.al-remember{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-3);cursor:pointer;}
+.al-remember input{accent-color:var(--neon);width:13px;height:13px;}
+.al-forgot{font-size:12px;color:var(--neon);}
+.al-footer{padding:16px 32px;border-top:1px solid var(--border);background:var(--void-3);}
+.al-footer p{font-size:11px;color:var(--text-4);text-align:center;}
+.al-attempts{text-align:center;margin-top:12px;font-size:12px;color:var(--red-accent);display:none;}
+.btn-loading-state::after{content:'';width:14px;height:14px;border:2px solid transparent;border-top-color:var(--void);border-radius:50%;animation:spin .7s linear infinite;margin-left:8px;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+<div class="al-grid"></div>
+<div class="al-orb"></div>
+<div class="admin-login">
+  <div class="al-box anim-up">
+    <div class="al-header">
+      <div class="al-logo">
+        <div class="logo-icon">⚡</div>
+        On<span>Olam</span>
+      </div>
+      <div style="font-size:10px;font-weight:800;color:var(--red-accent);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;">ADMIN PANEL</div>
+      <div class="al-warning">⚠️ Faqat ruxsat etilgan shaxslar uchun. Barcha harakatlar kuzatiladi.</div>
+    </div>
+
+    <div class="al-body">
+      <label class="al-label">Admin Email</label>
+      <div class="al-input-wrap">
+        <input class="al-input" id="adminEmail" type="email" placeholder="admin@onolam.uz" autocomplete="email">
+        <span class="al-icon">📧</span>
+      </div>
+
+      <label class="al-label">Parol</label>
+      <div class="al-input-wrap">
+        <input class="al-input" id="adminPass" type="password" placeholder="••••••••" autocomplete="current-password">
+        <span class="al-icon" id="passToggle" onclick="togglePass()">👁️</span>
+      </div>
+
+      <div class="al-options">
+        <label class="al-remember"><input type="checkbox"> Eslab qolish</label>
+        <a class="al-forgot" href="#">Parolni unutdim?</a>
+      </div>
+
+      <button class="btn btn-neon btn-full btn-lg" id="loginBtn" onclick="adminLogin()">
+        Admin kirish →
+      </button>
+
+      <div class="al-attempts" id="attemptsMsg">
+        ⚠ Noto'g'ri urinish. <span id="attCount">3</span> ta urinish qoldi.
+      </div>
+    </div>
+
+    <div class="al-footer">
+      <p>admin.onolam.uz · Barcha harakatlar IP va qurilma bilan kuzatiladi</p>
+    </div>
+  </div>
+</div>
+
+<script>
+let attempts = 3;
+function togglePass(){
+  const i=document.getElementById('adminPass');
+  const t=document.getElementById('passToggle');
+  i.type=i.type==='password'?'text':'password';
+  t.textContent=i.type==='password'?'👁️':'🙈';
+}
+function adminLogin(){
+  const email=document.getElementById('adminEmail').value.trim();
+  const pass=document.getElementById('adminPass').value;
+  const btn=document.getElementById('loginBtn');
+  document.querySelectorAll('.al-input').forEach(i=>i.classList.remove('err'));
+
+  if(!email){document.getElementById('adminEmail').classList.add('err');return;}
+  if(!pass) {document.getElementById('adminPass').classList.add('err');return;}
+
+  btn.textContent='Tekshirilmoqda';
+  btn.classList.add('btn-loading-state');
+  btn.disabled=true;
+
+  setTimeout(()=>{
+    // Demo: har qanday email+parol bilan kirsa bo'ladi
+    window.location.href='dashboard.html';
+  },1200);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin();});
+</script>
+</body>
+</html>

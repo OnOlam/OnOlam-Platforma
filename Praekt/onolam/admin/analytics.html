@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — Analytics</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+  <style>
+.map-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px;}
+.country-bar{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.country-bar:last-child{border-bottom:none;}
+.cb-flag{font-size:18px;flex-shrink:0;}
+.cb-info{flex:1;}
+.cb-info h5{font-size:12px;font-weight:600;margin-bottom:3px;}
+.cb-bar{height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;}
+.cb-fill{height:100%;background:var(--neon);border-radius:2px;}
+.cb-num{font-size:11px;color:var(--neon);font-weight:700;flex-shrink:0;}
+.visit-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.visit-row:last-child{border-bottom:none;}
+.vr-page{flex:1;color:var(--text-2);}
+.vr-num{color:var(--neon);font-weight:700;min-width:50px;text-align:right;}
+.vr-bar{width:80px;height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;}
+.vr-fill{height:100%;background:var(--neon);border-radius:2px;}
+.threat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px;transition:var(--t-md);}
+.threat-card:hover{border-color:var(--red-accent);}
+.threat-card.high{border-color:rgba(255,71,87,.3);background:rgba(255,71,87,.03);}
+.threat-card.medium{border-color:rgba(255,215,0,.2);}
+.tc-icon{font-size:22px;flex-shrink:0;}
+.tc-info{flex:1;}
+.tc-info h4{font-size:13px;font-weight:700;margin-bottom:4px;}
+.tc-info p{font-size:11px;color:var(--text-3);line-height:1.6;}
+.tc-time{font-size:10px;color:var(--text-4);flex-shrink:0;}
+.device-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.device-row:last-child{border-bottom:none;}
+.dr-icon{font-size:20px;flex-shrink:0;}
+.dr-info{flex:1;}
+.dr-info h5{font-size:12px;font-weight:600;margin-bottom:3px;}
+.dr-bar{height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden;}
+.dr-fill{height:100%;background:linear-gradient(90deg,var(--neon-dim),var(--neon));border-radius:2px;}
+.dr-pct{font-size:12px;font-weight:800;color:var(--neon);}
+  </style>
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="IP, sahifa, URL qidirish..."></div>
+  <div class="topbar-right">
+    <span class="live-dot" style="font-size:12px;margin-right:4px;">Real vaqt</span>
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link active"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html" class="as-link"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"    class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow">Kuzatuv tizimi</div>
+        <h1>Analytics & Xavfsizlik 📡</h1>
+        <p>Barcha tashrif buyuruvchilar, sahifa ko'rishlar va xavfsizlik tahlili</p>
+      </div>
+      <div class="aph-right">
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:var(--r-md);padding:6px 12px;">
+          <span style="font-size:14px;">🚨</span>
+          <span style="font-size:12px;color:var(--red-accent);font-weight:700;">12 ta yangi ogohlantirish</span>
+        </div>
+        <select class="admin-select"><option>Bugun</option><option>Hafta</option><option selected>Oy</option></select>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV('visitorTable','analytics')">📊 Export</button>
+      </div>
+    </div>
+
+    <!-- Ranglar tushuntirishi -->
+    <div style="display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:14px 20px;margin-bottom:24px;flex-wrap:wrap;" class="anim-up anim-d1">
+      <span style="font-size:12px;color:var(--text-3);font-weight:700;">Rang kodi:</span>
+      <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon);"></div><span style="font-size:12px;">Ro'yxatdan o'tgan foydalanuvchi</span></div>
+      <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--text-2);"></div><span style="font-size:12px;">Tashrif buyuruvchi (ro'yxatdan o'tmagan)</span></div>
+      <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 6px var(--yellow);"></div><span style="font-size:12px;">Shubhali xatti-harakat</span></div>
+      <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:50%;background:var(--red-accent);box-shadow:0 0 6px var(--red-accent);"></div><span style="font-size:12px;">Hujum urinishi / Bloklangan</span></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="admin-stats anim-up anim-d2" style="grid-template-columns:repeat(4,1fr);">
+      <div class="astat"><div class="astat-icon">👁</div><div class="astat-num" data-target="84320">0</div><div class="astat-label">Sahifa ko'rishlar (oy)</div><span class="astat-change up">+18%</span></div>
+      <div class="astat"><div class="astat-icon">🌐</div><div class="astat-num" data-target="892">0</div><div class="astat-label">Hozir onlayn</div><span class="astat-change up">Real vaqt</span></div>
+      <div class="astat"><div class="astat-icon">⚠️</div><div class="astat-num yellow" data-target="7">0</div><div class="astat-label">Shubhali faollik</div><span class="astat-change down">Diqqat</span></div>
+      <div class="astat"><div class="astat-icon">🚫</div><div class="astat-num red" data-target="23">0</div><div class="astat-label">Bloklangan IP</div><span class="astat-change same">+3 bugun</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;" class="anim-up anim-d3">
+
+      <!-- Sahifa ko'rishlar grafigi -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3>Kunlik tashrif (hafta)</h3>
+          <span style="font-size:11px;color:var(--text-3);">Jami: 84,320</span>
+        </div>
+        <div class="mini-chart">
+          <div class="mc-bar-wrap"><div class="mc-bar" style="height:55%" data-val="9,840"></div><div class="mc-label">Du</div></div>
+          <div class="mc-bar-wrap"><div class="mc-bar" style="height:72%" data-val="12,890"></div><div class="mc-label">Se</div></div>
+          <div class="mc-bar-wrap"><div class="mc-bar" style="height:48%" data-val="8,560"></div><div class="mc-label">Ch</div></div>
+          <div class="mc-bar-wrap"><div class="mc-bar" style="height:90%" data-val="16,100"></div><div class="mc-label">Pa</div></div>
+          <div class="mc-bar-wrap"><div class="mc-bar" style="height:67%" data-val="11,940"></div><div class="mc-label">Ju</div></div>
+          <div class="mc-bar-wrap"><div class="mc-bar blue-bar" style="height:35%" data-val="6,230"></div><div class="mc-label">Sh</div></div>
+          <div class="mc-bar-wrap"><div class="mc-bar blue-bar" style="height:28%" data-val="4,980"></div><div class="mc-label">Ya</div></div>
+        </div>
+      </div>
+
+      <!-- Qurilmalar -->
+      <div class="chart-card">
+        <div class="chart-card-header"><h3>Qurilmalar bo'yicha</h3></div>
+        <div>
+          <div class="device-row">
+            <span class="dr-icon">📱</span>
+            <div class="dr-info"><h5>Mobil (Android/iOS)</h5><div class="dr-bar"><div class="dr-fill" style="width:68%"></div></div></div>
+            <span class="dr-pct">68%</span>
+          </div>
+          <div class="device-row">
+            <span class="dr-icon">💻</span>
+            <div class="dr-info"><h5>Kompyuter (Windows/Mac)</h5><div class="dr-bar"><div class="dr-fill" style="width:24%"></div></div></div>
+            <span class="dr-pct">24%</span>
+          </div>
+          <div class="device-row">
+            <span class="dr-icon">📟</span>
+            <div class="dr-info"><h5>Planshet</h5><div class="dr-bar"><div class="dr-fill" style="width:8%"></div></div></div>
+            <span class="dr-pct">8%</span>
+          </div>
+        </div>
+        <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+          <div style="font-size:11px;font-weight:800;color:var(--text-4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Brauzlar</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="chip chip-green">Chrome 54%</span>
+            <span class="chip">Firefox 18%</span>
+            <span class="chip">Safari 15%</span>
+            <span class="chip">Boshqa 13%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;margin-bottom:20px;" class="anim-up anim-d4">
+
+      <!-- Sahifalar statistikasi -->
+      <div class="section-card">
+        <div class="sc-header"><h3>Sahifalar bo'yicha tashrif</h3></div>
+        <div class="sc-body" style="padding:0 20px;">
+          <div class="visit-row"><span class="vr-page">/ (Bosh sahifa)</span><div class="vr-bar"><div class="vr-fill" style="width:100%"></div></div><span class="vr-num">24,150</span></div>
+          <div class="visit-row"><span class="vr-page">/courses</span><div class="vr-bar"><div class="vr-fill" style="width:72%"></div></div><span class="vr-num">17,410</span></div>
+          <div class="visit-row"><span class="vr-page">/lesson</span><div class="vr-bar"><div class="vr-fill" style="width:61%"></div></div><span class="vr-num">14,720</span></div>
+          <div class="visit-row"><span class="vr-page">/pricing</span><div class="vr-bar"><div class="vr-fill" style="width:45%"></div></div><span class="vr-num">10,860</span></div>
+          <div class="visit-row"><span class="vr-page">/register</span><div class="vr-bar"><div class="vr-fill" style="width:38%"></div></div><span class="vr-num">9,180</span></div>
+          <div class="visit-row"><span class="vr-page">/dashboard</span><div class="vr-bar"><div class="vr-fill" style="width:32%"></div></div><span class="vr-num">7,740</span></div>
+          <div class="visit-row"><span class="vr-page">/login</span><div class="vr-bar"><div class="vr-fill" style="width:26%"></div></div><span class="vr-num">6,280</span></div>
+          <div class="visit-row"><span class="vr-page">/certificate</span><div class="vr-bar"><div class="vr-fill" style="width:18%"></div></div><span class="vr-num">4,340</span></div>
+        </div>
+      </div>
+
+      <!-- Davlatlar -->
+      <div class="section-card">
+        <div class="sc-header"><h3>Tashrif manbalari</h3></div>
+        <div class="sc-body" style="padding:0 20px;">
+          <div class="country-bar"><span class="cb-flag">🇺🇿</span><div class="cb-info"><h5>O'zbekiston</h5><div class="cb-bar"><div class="cb-fill" style="width:85%"></div></div></div><span class="cb-num">71,672</span></div>
+          <div class="country-bar"><span class="cb-flag">🇷🇺</span><div class="cb-info"><h5>Rossiya</h5><div class="cb-bar"><div class="cb-fill" style="width:12%"></div></div></div><span class="cb-num">10,118</span></div>
+          <div class="country-bar"><span class="cb-flag">🇰🇿</span><div class="cb-info"><h5>Qozog'iston</h5><div class="cb-bar"><div class="cb-fill" style="width:5%"></div></div></div><span class="cb-num">4,216</span></div>
+          <div class="country-bar"><span class="cb-flag">🌐</span><div class="cb-info"><h5>Boshqa</h5><div class="cb-bar"><div class="cb-fill" style="width:3%"></div></div></div><span class="cb-num">2,530</span></div>
+          <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+            <div style="font-size:11px;font-weight:800;color:var(--text-4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;">Manba</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-2);">
+              <div style="display:flex;justify-content:space-between;"><span>Telegram</span><span style="color:var(--neon)">42%</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Google</span><span style="color:var(--neon)">28%</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>To'g'ridan</span><span style="color:var(--neon)">18%</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Boshqa</span><span style="color:var(--neon)">12%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Xavfsizlik hodisalari -->
+    <div class="section-card anim-up anim-d5">
+      <div class="sc-header">
+        <h3>🚨 Xavfsizlik hodisalari</h3>
+        <div style="display:flex;gap:8px;">
+          <span class="chip chip-red">12 yangi</span>
+          <button class="btn btn-ghost btn-sm" onclick="toast('Barchasi ko\'rib chiqildi','success')">Barchasini o'qildi deb belgilash</button>
+        </div>
+      </div>
+      <div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px;">
+        <div class="threat-card high">
+          <span class="tc-icon">🚨</span>
+          <div class="tc-info">
+            <h4>Brute Force hujumi — 127 urinish</h4>
+            <p>IP: 45.32.11.8 (Rossiya) · 127 marta noto'g'ri parol kiritish · /login sahifasida · VPN orqali</p>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="tbl-btn danger" onclick="toast('IP bloklandi: 45.32.11.8','error')">🚫 IP Bloklash</button>
+              <button class="tbl-btn primary" onclick="toast('Batafsil ko\'rilmoqda','info')">Ko'rish</button>
+            </div>
+          </div>
+          <div class="tc-time">5 daq oldin</div>
+        </div>
+        <div class="threat-card medium">
+          <span class="tc-icon">⚠️</span>
+          <div class="tc-info">
+            <h4>Shubhali ro'yxatdan o'tish — Vaqtinchalik email</h4>
+            <p>temp_123@yopmail.com · VPN orqali kirish (Niderlandiya) · Birinchi kirishi</p>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="tbl-btn warning" onclick="toast('Email bloklandi','warning')">📧 Email blok</button>
+              <button class="tbl-btn danger" onclick="toast('User bloklandi','error')">🚫 Bloklash</button>
+            </div>
+          </div>
+          <div class="tc-time">15 daq oldin</div>
+        </div>
+        <div class="threat-card medium">
+          <span class="tc-icon">🤖</span>
+          <div class="tc-info">
+            <h4>Bot / Crawler aniqlandi</h4>
+            <p>IP: 192.168.44.23 · Sekundiga 50+ so'rov · /courses va /lessons sahifalarini skraypilash urinishi</p>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="tbl-btn danger" onclick="toast('IP bloklandi','error')">🚫 IP Bloklash</button>
+              <button class="tbl-btn primary" onclick="toast('Rate limit qo\'yildi','info')">⏱ Rate limit</button>
+            </div>
+          </div>
+          <div class="tc-time">45 daq oldin</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barcha tashrif buyuruvchilar -->
+    <div class="admin-table-wrap anim-up">
+      <div class="atw-header">
+        <h3>So'ngi tashrif buyuruvchilar</h3>
+        <div class="atw-tools">
+          <select class="admin-select"><option>Barchasi</option><option style="color:var(--neon)">🟢 Foydalanuvchilar</option><option>⚪ Tashrif buyuruvchilar</option><option style="color:var(--yellow)">🟡 Shubhali</option><option style="color:var(--red-accent)">🔴 Xavfli</option></select>
+          <div class="atw-search"><span>🔍</span><input type="text" placeholder="IP qidirish..." oninput="searchTable(this,'visitorTable')"></div>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="admin-table" id="visitorTable">
+          <thead>
+            <tr>
+              <th>Holat</th>
+              <th onclick="sortTable(this,1)">Foydalanuvchi / IP <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,2)">Sahifa <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,3)">Qurilma <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,4)">Davlat <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,5)">Manba <span class="sort-arr">↕</span></th>
+              <th onclick="sortTable(this,6)">Vaqt <span class="sort-arr">↕</span></th>
+              <th>Amallar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="row-green">
+              <td><div style="width:10px;height:10px;border-radius:50%;background:var(--neon);box-shadow:0 0 6px var(--neon);margin:0 auto;"></div></td>
+              <td><div class="tbl-user"><div class="tbl-avatar"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=u2"></div><div class="tbl-user-info"><h5>Dilnoza Yusupova</h5><p>195.158.2.46 · O'zbekiston</p></div></div></td>
+              <td>/lesson · dars 3</td>
+              <td>📱 Android · Chrome</td>
+              <td>🇺🇿 Toshkent</td>
+              <td>Telegram</td>
+              <td>Hozir</td>
+              <td><div class="tbl-actions"><button class="tbl-btn primary" onclick="toast('Foydalanuvchi tafsiloti','info')">Ko'rish</button></div></td>
+            </tr>
+            <tr>
+              <td><div style="width:10px;height:10px;border-radius:50%;background:var(--text-2);margin:0 auto;"></div></td>
+              <td><div class="tbl-user-info"><h5>Noma'lum</h5><p>91.234.55.12 · O'zbekiston</p></div></td>
+              <td>/pricing</td>
+              <td>💻 Windows · Firefox</td>
+              <td>🇺🇿 Samarqand</td>
+              <td>Google</td>
+              <td>2 daq oldin</td>
+              <td><div class="tbl-actions"><button class="tbl-btn" onclick="toast('Tashrif buyuruvchi — ro\'yxatdan o\'tmagan','info')">Ko'rish</button></div></td>
+            </tr>
+            <tr class="row-yellow">
+              <td><div style="width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 6px var(--yellow);margin:0 auto;"></div></td>
+              <td><div class="tbl-user-info"><h5>Anon User</h5><p>92.45.11.8 · VPN (NL)</p></div></td>
+              <td>/login — 5 urinish</td>
+              <td>💻 Linux · Chrome</td>
+              <td>🌐 VPN</td>
+              <td>To'g'ridan</td>
+              <td>15 daq oldin</td>
+              <td><div class="tbl-actions"><button class="tbl-btn warning" onclick="toast('Kuzatuvga olindi','warning')">Kuzatish</button><button class="tbl-btn danger" onclick="confirmAction('IP bloklashni xohlaysizmi?',()=>toast('IP bloklandi','error'))">Blok</button></div></td>
+            </tr>
+            <tr class="row-red">
+              <td><div style="width:10px;height:10px;border-radius:50%;background:var(--red-accent);box-shadow:0 0 6px var(--red-accent);margin:0 auto;animation:livePulse 1.5s infinite;"></div></td>
+              <td><div class="tbl-user-info"><h5>Bot/Scanner</h5><p>45.32.11.8 · Rossiya</p></div></td>
+              <td>/login — 127 urinish</td>
+              <td>🤖 Bot</td>
+              <td>🇷🇺 Moskva</td>
+              <td>To'g'ridan</td>
+              <td>Hozir (aktiv)</td>
+              <td><div class="tbl-actions"><button class="tbl-btn danger" onclick="confirmAction('IP bloklashni xohlaysizmi?',()=>toast('IP bloklandi: 45.32.11.8','error'))">🚫 IP Blok</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="atw-footer">
+        <p>Bugun 8,432 ta tashrif · Ro'yxatdan o'tganlar: 5,123 (🟢) · Mehmonlar: 3,127 (⚪) · Shubhali: 7 (🟡) · Bloklangan: 23 (🔴)</p>
+        <div class="pagination">
+          <button class="pg-btn active">1</button>
+          <button class="pg-btn">2</button>
+          <button class="pg-btn">3</button>
+          <button class="pg-btn">→</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+</body>
+</html>

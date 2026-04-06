@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>OnOlam Admin — Export tizimi</title>
+  <link rel="stylesheet" href="style/admin.css">
+</head>
+<body>
+<div class="admin-wrap">
+<nav class="admin-sidebar">
+  <div class="sb-logo"><div class="sb-logo-icon">⚡</div><div class="sb-logo-text"><h2>On<span>Olam</span></h2><p>Admin Panel</p></div></div>
+  <div class="sb-admin-info"><div class="sb-admin-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt=""></div><div class="sb-admin-meta"><h5>Halimjon (Admin)</h5><p>Super Admin</p></div><div class="sb-online"></div></div>
+  <nav class="sb-nav">
+    <div class="sb-section-label">Asosiy</div>
+    <a href="index.html" class="sb-link"><span class="si">📊</span> Dashboard</a>
+    <a href="users.html" class="sb-link"><span class="si">👥</span> Foydalanuvchilar<span class="sb-badge">243</span></a>
+    <a href="lessons.html" class="sb-link "><span class="si">📚</span> Darslar</a>
+    <div class="sb-section-label">Moliya</div>
+    <a href="payments.html" class="sb-link "><span class="si">💳</span> To'lovlar</a>
+    <a href="coupons.html" class="sb-link "><span class="si">🎫</span> Kuponlar</a>
+    <div class="sb-section-label">Platforma</div>
+    <a href="community.html" class="sb-link "><span class="si">👾</span> Hamjamiyat</a>
+    <a href="ai-train.html" class="sb-link "><span class="si">🤖</span> AI O'qitish</a>
+    <a href="announcements.html" class="sb-link "><span class="si">📢</span> E'lonlar</a>
+    <div class="sb-section-label">Tahlil</div>
+    <a href="analytics.html" class="sb-link "><span class="si">🔍</span> Analytics<span class="sb-badge red">!</span></a>
+    <a href="notifications.html" class="sb-link "><span class="si">🔔</span> Bildirishnomalar<span class="sb-badge red">5</span></a>
+    <div class="sb-section-label">Tizim</div>
+    <a href="export.html" class="sb-link active"><span class="si">📤</span> Export</a>
+    <a href="settings.html" class="sb-link "><span class="si">⚙️</span> Sozlamalar</a>
+    <div class="sb-section-label"></div>
+    <a href="../login.html" class="sb-link danger"><span class="si">↩</span> Chiqish</a>
+  </nav>
+  <div class="sb-footer"><div class="sb-version">OnOlam Admin v1.0 · 2026</div></div>
+</nav>
+<div class="admin-main">
+  <div class="admin-topbar">
+    <div class="topbar-title">Export tizimi</div>
+    <div class="topbar-right">
+      <div class="topbar-clock" id="adminClock">00:00:00</div>
+      <div class="topbar-notif" onclick="location.href='notifications.html'">🔔<div class="notif-dot"></div></div>
+      <div class="topbar-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt=""></div>
+    </div>
+  </div>
+  <div class="admin-page" id="mainContent">
+    <div class="page-head anim-up">
+      <h1 id="pageTitle">Yuklanmoqda...</h1>
+      <p id="pageDesc"></p>
+    </div>
+    <div id="pageBody" class="anim-up d1"></div>
+  </div>
+</div>
+</div>
+<div class="toast-wrap"></div>
+<script src="js/admin.js"></script>
+<script src="js/pages/export.js"></script>
+</body>
+</html>

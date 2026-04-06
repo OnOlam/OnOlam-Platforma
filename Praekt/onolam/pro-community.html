@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Pro Hamjamiyat</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+/* ── PRO COMMUNITY ── */
+.comm-layout{display:grid;grid-template-columns:280px 1fr 300px;gap:0;height:calc(100dvh - var(--nav-h));overflow:hidden;}
+
+/* ── LEFT: channels ── */
+.comm-left{border-right:1px solid var(--border);background:var(--void-2);display:flex;flex-direction:column;overflow:hidden;}
+.cl-top{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.cl-top h3{font-size:14px;font-weight:800;}
+.cl-top button{width:28px;height:28px;background:var(--neon-faint);border:1px solid rgba(0,255,65,.2);border-radius:var(--r-md);color:var(--neon);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--t);}
+.cl-top button:hover{background:rgba(0,255,65,.15);}
+.cl-scroll{flex:1;overflow-y:auto;padding:10px 8px;}
+.cl-section{margin-bottom:8px;}
+.cl-section-label{font-size:10px;font-weight:800;color:var(--text-4);text-transform:uppercase;letter-spacing:.1em;padding:8px 10px 4px;}
+.channel{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-md);cursor:pointer;transition:var(--t);border:1px solid transparent;}
+.channel:hover{background:var(--surface);border-color:var(--border);}
+.channel.active{background:var(--neon-faint);border-color:rgba(0,255,65,.15);}
+.ch-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center;}
+.ch-info{flex:1;min-width:0;}
+.ch-name{font-size:13px;font-weight:500;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.channel.active .ch-name{color:var(--neon);font-weight:600;}
+.ch-badge{min-width:18px;height:18px;background:var(--neon);color:var(--void);font-size:10px;font-weight:800;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px;flex-shrink:0;}
+
+/* Online users in left panel */
+.cl-user{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:var(--r-md);cursor:pointer;transition:var(--t);}
+.cl-user:hover{background:var(--surface);}
+.cl-user-av{width:28px;height:28px;border-radius:var(--r-sm);border:1px solid var(--border);overflow:hidden;flex-shrink:0;position:relative;}
+.cl-user-av img{width:100%;height:100%;object-fit:cover;}
+.cl-user-av .online-dot{position:absolute;bottom:-1px;right:-1px;width:8px;height:8px;border-radius:50%;background:var(--neon);border:1.5px solid var(--void-2);box-shadow:0 0 4px var(--neon);}
+.cl-user-name{font-size:12px;color:var(--text-3);}
+
+/* ── CENTER: feed/chat ── */
+.comm-center{display:flex;flex-direction:column;overflow:hidden;}
+.cc-header{padding:14px 20px;border-bottom:1px solid var(--border);background:var(--void-3);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.cc-header h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.cc-header p{font-size:12px;color:var(--text-3);}
+.cc-header-right{margin-left:auto;display:flex;align-items:center;gap:6px;}
+
+/* Feed tabs */
+.feed-tabs{display:flex;gap:4px;padding:10px 16px 0;border-bottom:1px solid var(--border);background:var(--void-3);flex-shrink:0;}
+.ftb{font-size:12px;font-weight:600;color:var(--text-3);padding:7px 14px;border:none;background:transparent;cursor:pointer;font-family:var(--font);border-bottom:2px solid transparent;transition:var(--t);margin-bottom:-1px;white-space:nowrap;}
+.ftb:hover{color:var(--text-1);}
+.ftb.active{color:var(--neon);border-bottom-color:var(--neon);}
+
+/* Feed */
+.comm-feed{flex:1;overflow-y:auto;padding:20px;}
+
+/* Post card */
+.post-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;margin-bottom:16px;transition:var(--t-md);}
+.post-card:hover{border-color:var(--border-2);}
+.post-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.post-avatar{width:38px;height:38px;border-radius:var(--r-lg);border:1px solid var(--border-2);overflow:hidden;flex-shrink:0;}
+.post-avatar img{width:100%;height:100%;object-fit:cover;}
+.post-meta{flex:1;}
+.post-meta h4{font-size:13px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;gap:6px;}
+.post-meta p{font-size:11px;color:var(--text-3);}
+.post-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:3px;}
+.post-body{font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:14px;}
+.post-body code{font-size:12px;color:var(--neon);background:var(--void-3);padding:1px 5px;border-radius:3px;}
+.post-body a{color:var(--neon);}
+
+/* Code snippet in post */
+.post-code{background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin:12px 0;}
+.pc-head{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--void-3);border-bottom:1px solid var(--border);}
+.pc-head span{font-size:11px;color:var(--text-3);}
+.pc-copy{font-size:11px;color:var(--neon);background:transparent;border:none;cursor:pointer;font-family:var(--font);}
+.pc-body{padding:14px 16px;overflow-x:auto;}
+.pc-body pre{font-size:12px;line-height:1.8;color:var(--neon);}
+
+/* Post image */
+.post-img{border-radius:var(--r-lg);overflow:hidden;margin:12px 0;border:1px solid var(--border);background:var(--void-3);min-height:120px;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--text-4);}
+
+/* Post actions */
+.post-actions{display:flex;align-items:center;gap:4px;padding-top:12px;border-top:1px solid var(--border);}
+.pa-btn{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);padding:6px 12px;border-radius:var(--r-md);background:transparent;border:none;cursor:pointer;font-family:var(--font);transition:var(--t);}
+.pa-btn:hover{color:var(--text-1);background:var(--void-3);}
+.pa-btn.liked{color:var(--neon);}
+.pa-btn.liked:hover{color:var(--neon);}
+.post-actions .pa-sep{flex:1;}
+
+/* New post box */
+.new-post-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:16px;margin-bottom:20px;}
+.np-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;}
+.np-avatar{width:36px;height:36px;border-radius:var(--r-lg);border:1px solid var(--border-2);overflow:hidden;flex-shrink:0;}
+.np-avatar img{width:100%;height:100%;object-fit:cover;}
+.np-input{flex:1;background:var(--void-3);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 14px;font-family:var(--font);font-size:13px;color:var(--text-1);outline:none;resize:none;min-height:60px;max-height:140px;transition:var(--t);}
+.np-input:focus{border-color:var(--neon-dim);box-shadow:0 0 0 3px var(--neon-faint);}
+.np-input::placeholder{color:var(--text-4);}
+.np-footer{display:flex;align-items:center;gap:8px;}
+.np-tools{display:flex;gap:4px;flex:1;}
+.np-tool{width:32px;height:32px;background:transparent;border:1px solid var(--border);border-radius:var(--r-md);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:var(--t);}
+.np-tool:hover{border-color:var(--neon-dim);background:var(--neon-faint);}
+
+/* ── RIGHT: sidebar ── */
+.comm-right{border-left:1px solid var(--border);background:var(--void-2);overflow-y:auto;display:flex;flex-direction:column;}
+.cr-section{padding:16px;border-bottom:1px solid var(--border);}
+.cr-section h4{font-size:11px;font-weight:800;color:var(--text-4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;}
+
+/* Online now */
+.online-user{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.online-user:last-child{border-bottom:none;}
+.ou-av{width:34px;height:34px;border-radius:var(--r-md);border:1px solid var(--border-2);overflow:hidden;flex-shrink:0;position:relative;}
+.ou-av img{width:100%;height:100%;object-fit:cover;}
+.ou-dot{position:absolute;bottom:-1px;right:-1px;width:9px;height:9px;border-radius:50%;background:var(--neon);border:1.5px solid var(--void-2);box-shadow:0 0 4px var(--neon);}
+.ou-info{flex:1;}
+.ou-info h5{font-size:12px;font-weight:600;margin-bottom:1px;}
+.ou-info p{font-size:10px;color:var(--text-3);}
+
+/* Top members */
+.top-member{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.top-member:last-child{border-bottom:none;}
+.tm-rank{font-size:11px;font-weight:800;color:var(--text-4);width:16px;flex-shrink:0;text-align:center;}
+.tm-rank.gold{color:var(--yellow);}
+.tm-av{width:30px;height:30px;border-radius:var(--r-sm);border:1px solid var(--border);overflow:hidden;flex-shrink:0;}
+.tm-av img{width:100%;height:100%;object-fit:cover;}
+.tm-info{flex:1;}
+.tm-info h5{font-size:12px;font-weight:600;margin-bottom:1px;}
+.tm-info p{font-size:10px;color:var(--text-3);}
+.tm-pts{font-size:11px;font-weight:800;color:var(--neon);}
+
+/* Pro gate overlay */
+.pro-gate{position:absolute;inset:0;background:rgba(2,12,2,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px;z-index:50;backdrop-filter:blur(4px);}
+
+/* Responsive */
+@media(max-width:1100px){.comm-layout{grid-template-columns:240px 1fr;}.comm-right{display:none;}}
+@media(max-width:768px){
+  #projectsBox{grid-template-columns:1fr!important;}
+  .comm-layout{grid-template-columns:1fr;height:calc(100dvh - var(--nav-h));overflow:hidden;position:relative;}
+  .comm-left{position:fixed;top:var(--nav-h);left:-100%;width:85%;max-width:320px;height:calc(100dvh - var(--nav-h));z-index:500;transition:left .3s ease;border-right:1px solid var(--border);box-shadow:4px 0 20px rgba(0,0,0,.5);}
+  .comm-left.open{left:0;}
+  .comm-right{display:none;}
+  .comm-center{height:calc(100dvh - var(--nav-h));overflow:hidden;}
+  .cc-header{padding:10px 12px;}
+  .comm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:499;}
+  .comm-overlay.show{display:block;}
+}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">⚡</div>On<span>Olam</span></a>
+    <div class="navbar-center">
+      <a href="dashboard.html"     class="nav-link">Dashboard</a>
+      <a href="courses.html"       class="nav-link">Kurslar</a>
+      <a href="pro-community.html" class="nav-link active">Hamjamiyat</a>
+    </div>
+    <div class="navbar-right">
+      <a href="pricing.html"><button class="btn btn-neon btn-sm">⚡ Pro</button></a>
+      <div class="navbar-avatar" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      </div>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <div class="drawer-user">
+      <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=halimjon" alt="av">
+      <div class="drawer-user-info"><h4>Halimjon</h4><span class="badge badge-free">Free</span></div>
+    </div>
+    <a href="dashboard.html"     class="drawer-link"><span class="di">🏠</span> Dashboard</a>
+    <a href="courses.html"       class="drawer-link"><span class="di">📚</span> Kurslar</a>
+    <a href="certificate.html"   class="drawer-link"><span class="di">🏆</span> Sertifikatlar</a>
+    <a href="pro-community.html" class="drawer-link active"><span class="di">👥</span> Hamjamiyat</a>
+    <a href="pricing.html"       class="drawer-link"><span class="di">⚡</span> Pro olish</a>
+    <div class="drawer-sep"></div>
+    <a href="profile.html" class="drawer-link"><span class="di">⚙️</span> Profil</a>
+    <a href="login.html"   class="drawer-link exit"><span class="di">↩</span> Chiqish</a>
+  </div>
+</div>
+
+<!-- COMMUNITY LAYOUT -->
+<div class="comm-overlay" id="commOverlay" onclick="closeSidebar()"></div>
+<div class="comm-layout">
+
+  <!-- LEFT: channels -->
+  <div class="comm-left">
+    <div class="cl-top">
+      <h3>⚡ OnOlam Pro</h3>
+      
+    </div>
+    <div class="cl-scroll">
+
+      <div class="cl-section">
+        <div class="cl-section-label">Kanallar</div>
+        <div id="channelList">
+          <div style="padding:8px 10px;color:var(--text-3);font-size:12px;">Yuklanmoqda...</div>
+        </div>
+      </div>
+
+      <div class="cl-section">
+        <div class="cl-section-label">Bugun faol</div>
+        <div id="onlineUsers">
+          <div style="padding:8px 10px;color:var(--text-3);font-size:11px;">Yuklanmoqda...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CENTER: feed -->
+  <div class="comm-center" style="position:relative;">
+
+    <!-- Pro gate for free users — comment out to disable -->
+    <div class="pro-gate" id="proGate" style="display:none;">
+      <span style="font-size:56px;">👥</span>
+      <h2 style="font-size:22px;font-weight:800;">Pro Hamjamiyat</h2>
+      <p style="font-size:14px;color:var(--text-2);max-width:360px;line-height:1.7;">Pro foydalanuvchilar bir-birlari bilan loyihalar ulashadi, kod review so'raydi va savol-javob qiladi. Qo'shiling!</p>
+      <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;">
+        <a href="pricing.html"><button class="btn btn-neon btn-full btn-lg">Pro boshlash — $9/oy →</button></a>
+
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;">
+        <div style="text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--neon);">240+</div><div style="font-size:11px;color:var(--text-3);">Pro a'zo</div></div>
+        <div style="text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--neon);">50+</div><div style="font-size:11px;color:var(--text-3);">Loyiha</div></div>
+        <div style="text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--neon);">12</div><div style="font-size:11px;color:var(--text-3);">Onlayn</div></div>
+      </div>
+    </div>
+
+    <div class="cc-header">
+      <button id="sidebarToggle" onclick="toggleSidebar()"
+              style="display:none;background:none;border:1px solid var(--border);
+                     border-radius:var(--r-md);padding:6px 10px;color:var(--text-1);
+                     cursor:pointer;font-size:16px;flex-shrink:0;">☰</button>
+      <div style="flex:1;min-width:0;">
+        <h3><span style="color:var(--neon)">#</span> <span id="channelName">umumiy</span></h3>
+        <p id="channelDesc" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Umumiy muhokama — hammaga ochiq kanal</p>
+      </div>
+      <div class="cc-header-right">
+        <button class="btn btn-ghost btn-sm" onclick="toggleSearch()">🔍</button>
+      </div>
+    </div>
+
+    <div class="feed-tabs">
+      <button class="ftb active" onclick="setFeedTab('posts',this)">📌 Postlar</button>
+      <button class="ftb" onclick="setFeedTab('chat',this)">💬 Chat</button>
+      <button class="ftb" onclick="setFeedTab('projects',this)">🗂 Loyihalar</button>
+    </div>
+
+    <!-- POSTS feed -->
+    <div class="comm-feed" id="feed-posts">
+
+      <!-- New post -->
+      <div class="new-post-box" id="newPostBox" style="padding:12px;">
+        <textarea class="np-input" id="newPostInput"
+          placeholder="Narsa ulashing, savol bering..."
+          rows="2" style="width:100%;box-sizing:border-box;margin-bottom:8px;"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+        <div id="mediaPreview" style="margin-bottom:6px;"></div>
+        <div id="linkInput" style="display:none;margin-bottom:6px;">
+          <input type="url" id="postLink" placeholder="https://..."
+                 style="width:100%;background:var(--surface);border:1px solid var(--border);
+                        border-radius:var(--r-md);padding:8px 12px;font-size:13px;
+                        color:var(--text-1);font-family:var(--font);box-sizing:border-box;">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="file" id="mediaImageInput" accept="image/*" style="display:none" onchange="handleMediaSelect(this,'image')">
+          <input type="file" id="mediaVideoInput" accept="video/mp4,video/webm" style="display:none" onchange="handleMediaSelect(this,'video')">
+          <input type="file" id="mediaFileInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" style="display:none" onchange="handleMediaSelect(this,'file')">
+          <div id="mediaPreview" style="margin-bottom:6px;"></div>
+          <div id="linkInput" style="display:none;margin-bottom:6px;">
+            <input type="url" id="postLink" placeholder="https://..."
+                   style="width:100%;background:var(--surface);border:1px solid var(--border);
+                          border-radius:var(--r-md);padding:8px 12px;font-size:13px;
+                          color:var(--text-1);font-family:var(--font);box-sizing:border-box;">
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="position:relative;">
+              <button class="np-tool" onclick="toggleMediaMenu()" title="Media" style="font-size:16px;">📎</button>
+              <div id="mediaMenu" style="display:none;position:absolute;bottom:40px;left:0;
+                   background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-lg);
+                   padding:6px;flex-direction:row;gap:4px;z-index:100;">
+                <button class="np-tool" onclick="selectMedia('image');closeMediaMenu()">🖼️</button>
+                <button class="np-tool" onclick="selectMedia('video');closeMediaMenu()">🎥</button>
+                <button class="np-tool" onclick="selectMedia('link');closeMediaMenu()">🔗</button>
+                <button class="np-tool" onclick="selectMedia('file');closeMediaMenu()">📁</button>
+              </div>
+            </div>
+            <button class="btn btn-neon btn-sm" onclick="submitPost()" style="flex:1;">➤ Ulashish</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="searchResults" style="display:none;margin:16px;"></div>
+      <div id="postsBox" style="margin-top:16px;"></div>
+    </div>
+
+    <div class="comm-feed" id="feed-chat" style="display:none;flex-direction:column;padding:0;">
+
+      <!-- Chat ichki tablar -->
+      <div style="display:flex;border-bottom:1px solid var(--border);background:var(--void-3);flex-shrink:0;">
+        <button class="ftb active" id="chatTabGeneral" onclick="switchChatTab('general',this)"
+                style="flex:1;padding:12px;border:none;background:none;color:var(--neon);
+                       font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid var(--neon);">
+          💬 Umumiy
+        </button>
+        <button class="ftb" id="chatTabDM" onclick="switchChatTab('dm',this)"
+                style="flex:1;padding:12px;border:none;background:none;color:var(--text-3);
+                       font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;">
+          ✉️ Shaxsiy
+          <span id="dmUnreadBadge" style="display:none;background:var(--red);color:white;
+                border-radius:50%;width:16px;height:16px;font-size:10px;
+                align-items:center;justify-content:center;margin-left:4px;"></span>
+        </button>
+      </div>
+
+      <!-- Umumiy chat -->
+      <div id="generalChatBox" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+        <div id="chatMsgs" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;min-height:200px;"></div>
+        <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--void-3);">
+          <input type="text" id="chatInput" placeholder="Xabar yozing..."
+               style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+                      padding:10px 14px;font-size:13px;color:var(--text-1);font-family:var(--font);"
+               onkeydown="if(event.key==='Enter')sendChatMsg()">
+          <button onclick="sendChatMsg()" class="btn btn-neon btn-sm">➤</button>
+        </div>
+      </div>
+
+      <!-- Shaxsiy chat -->
+      <div id="dmChatBox" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+        <!-- Suhbatlar ro'yxati -->
+        <div id="dmConversations" style="flex:1;overflow-y:auto;padding:8px;">
+          <div style="padding:16px;text-align:center;color:var(--text-3);">Yuklanmoqda...</div>
+        </div>
+        <!-- Yangi xabar -->
+        <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--void-3);">
+          <button onclick="showNewDM()" class="btn btn-neon btn-full btn-sm">
+            ✉️ Yangi xabar yozish
+          </button>
+        </div>
+      </div>
+
+      <!-- DM suhbat oynasi -->
+      <div id="dmChatWindow" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+        <div id="dmChatHeader" style="padding:12px 16px;border-bottom:1px solid var(--border);
+             background:var(--void-3);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <button onclick="closeDMWindow()" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;">←</button>
+          <img id="dmUserAvatar" src="" style="width:32px;height:32px;border-radius:50%;">
+          <div>
+            <div id="dmUserName" style="font-size:13px;font-weight:700;"></div>
+            <div id="dmUserUsername" style="font-size:11px;color:var(--text-4);"></div>
+          </div>
+        </div>
+        <div id="dmMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;"></div>
+        <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--void-3);">
+          <input type="text" id="dmInput" placeholder="Xabar yozing..."
+                 style="flex:1;background:var(--surface);border:1px solid var(--border);
+                        border-radius:var(--r-md);padding:10px 14px;font-size:13px;
+                        color:var(--text-1);font-family:var(--font);"
+                 onkeydown="if(event.key==='Enter')sendDM()">
+          <button onclick="sendDM()" class="btn btn-neon btn-sm">➤</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PROJECTS feed -->
+    <div class="comm-feed" id="feed-projects" style="display:none;flex-direction:column;padding:0;">
+      <!-- Loyihalar ichki tablar -->
+      <div style="display:flex;border-bottom:1px solid var(--border);background:var(--void-3);flex-shrink:0;">
+        <button class="ftb active" id="projTabAll" onclick="switchProjectTab('all',this)"
+                style="flex:1;padding:10px;border:none;background:none;color:var(--neon);
+                       font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid var(--neon);">
+          🌐 Umumiy
+        </button>
+        <button class="ftb" id="projTabMine" onclick="switchProjectTab('mine',this)"
+                style="flex:1;padding:10px;border:none;background:none;color:var(--text-3);
+                       font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;">
+          👤 Mening
+        </button>
+      </div>
+      <div id="projectsBox" style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px;overflow-y:auto;"></div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: sidebar -->
+  <div class="comm-right">
+    <div class="cr-section">
+      <h4>Onlayn hozir</h4>
+      <div id="onlineUsersList">
+        <div style="font-size:12px;color:var(--text-3);padding:8px 0;">Yuklanmoqda...</div>
+      </div>
+    </div>
+
+    <div class="cr-section">
+      <h4>Top a'zolar</h4>
+      <div id="topMembersList">
+        <div style="font-size:12px;color:var(--text-3);padding:8px 0;">Yuklanmoqda...</div>
+      </div>
+    </div>
+
+    <div class="cr-section">
+      <h4>Bugungi faollik</h4>
+      <div id="dailyStats" style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--text-2);">
+        <div style="color:var(--text-3);">Yuklanmoqda...</div>
+      </div>
+    </div>
+
+    <div class="cr-section">
+      <h4>Havolalar</h4>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <a href="#" style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:6px;padding:5px 0;transition:var(--t);" onmouseover="this.style.color='var(--neon)'" onmouseout="this.style.color='var(--text-3)'">📋 Hamjamiyat qoidalari</a>
+        <a href="#" style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:6px;padding:5px 0;transition:var(--t);" onmouseover="this.style.color='var(--neon)'" onmouseout="this.style.color='var(--text-3)'">✈️ Telegram kanal</a>
+        <a href="#" style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:6px;padding:5px 0;transition:var(--t);" onmouseover="this.style.color='var(--neon)'" onmouseout="this.style.color='var(--text-3)'">❓ Yordam markazi</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/burger.js"></script>
+<script src="js/api.js"></script>
+<script src="js/community.js?v=80"></script>
+<!-- Loyiha qo'shish modali -->
+<div id="projectModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px;width:90%;max-width:480px;">
+    <h3 style="font-size:16px;font-weight:800;margin-bottom:20px;">🚀 Loyiha qo'shish</h3>
+
+    <div style="margin-bottom:14px;">
+      <label style="font-size:12px;color:var(--text-3);display:block;margin-bottom:6px;">Loyiha nomi *</label>
+      <input type="text" id="projName" placeholder="Masalan: Portfolio Landing Page"
+             style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+                    padding:10px 14px;font-size:13px;color:var(--text-1);font-family:var(--font);box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="font-size:12px;color:var(--text-3);display:block;margin-bottom:6px;">Tavsif *</label>
+      <textarea id="projDesc" placeholder="Loyiha haqida qisqacha..."
+             style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+                    padding:10px 14px;font-size:13px;color:var(--text-1);font-family:var(--font);
+                    box-sizing:border-box;resize:vertical;min-height:80px;"></textarea>
+    </div>
+
+    <div style="margin-bottom:14px;">
+      <label style="font-size:12px;color:var(--text-3);display:block;margin-bottom:6px;">GitHub link *</label>
+      <input type="url" id="projGithub" placeholder="https://github.com/username/repo"
+             style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+                    padding:10px 14px;font-size:13px;color:var(--text-1);font-family:var(--font);box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <label style="font-size:12px;color:var(--text-3);display:block;margin-bottom:6px;">Texnologiyalar</label>
+      <input type="text" id="projTech" placeholder="HTML, CSS, JavaScript, Python..."
+             style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+                    padding:10px 14px;font-size:13px;color:var(--text-1);font-family:var(--font);box-sizing:border-box;">
+    </div>
+
+    <div style="display:flex;gap:10px;">
+      <button onclick="closeProjectModal()" class="btn btn-ghost btn-full">Bekor qilish</button>
+      <button onclick="submitProject()" class="btn btn-neon btn-full">Qo'shish →</button>
+    </div>
+  </div>
+</div>
+<!-- QIDIRUV MODALI -->
+<div id="searchModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+     z-index:2000;align-items:center;justify-content:center;">
+  <div style="background:var(--void-2);border:1px solid var(--border);border-radius:var(--r-xl);
+              width:85%;max-width:600px;max-height:85vh;display:flex;flex-direction:column;
+              overflow:hidden;">
+
+    <!-- Qidiruv input -->
+    <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;">🔍</span>
+      <input type="text" id="modalSearchInput" placeholder="User, loyiha yoki post izlang..."
+             style="flex:1;background:none;border:none;font-size:15px;color:var(--text-1);
+                    font-family:var(--font);outline:none;"
+             oninput="modalSearch(this.value)"
+             onkeydown="if(event.key==='Escape')closeSearchModal()">
+      <button onclick="closeSearchModal()"
+              style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:20px;">✕</button>
+    </div>
+
+    <!-- Natijalar -->
+    <div id="modalSearchResults" style="overflow-y:auto;flex:1;padding:16px;">
+      <div style="text-align:center;padding:32px;color:var(--text-3);">
+        <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+        <p>Biror narsa izlang</p>
+        <p style="font-size:12px;margin-top:8px;">User nomi, loyiha nomi yoki post matnini kiriting</p>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

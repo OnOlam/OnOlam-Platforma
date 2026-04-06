@@ -472,6 +472,7 @@
 </div>
 
 <script src="js/burger.js"></script>
+<script src="js/api.js"></script>
 <script>
 function setChannel(el, name, desc){
   document.querySelectorAll('.channel').forEach(c => c.classList.remove('active'));
@@ -523,3 +524,14 @@ function publishPost(){
 </script>
 </body>
 </html>
+<script>
+// Pro gate — real tekshiruv
+document.addEventListener('DOMContentLoaded', () => {
+  api.updateNavUser();
+  if (!api.Token.isLoggedIn() || !api.Token.isPro()) {
+    document.getElementById('proGate')?.style.setProperty('display', 'flex');
+  } else {
+    document.getElementById('proGate')?.style.setProperty('display', 'none');
+  }
+});
+</script>

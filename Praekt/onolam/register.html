@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam — Ro'yxatdan o'tish</title>
+  <link rel="stylesheet" href="style/globals.css">
+  <style>
+.auth-page{min-height:100dvh;display:flex;flex-direction:column;}
+.auth-wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:calc(100dvh - var(--nav-h));}
+
+/* Left — form (register da chap tomonda) */
+.auth-right{display:flex;align-items:center;justify-content:center;padding:48px 40px;background:var(--void);overflow-y:auto;}
+.auth-form-wrap{width:100%;max-width:420px;padding:24px 0;}
+.auth-form-head{margin-bottom:28px;}
+.auth-form-head .eyebrow{margin-bottom:10px;}
+.auth-form-head h1{font-size:clamp(22px,3vw,30px);font-weight:800;margin-bottom:8px;}
+.auth-form-head p{font-size:13px;color:var(--text-3);}
+.auth-form-head p a{color:var(--neon);font-weight:600;}
+
+/* Steps indicator */
+.steps{display:flex;gap:8px;margin-bottom:28px;}
+.step{flex:1;height:3px;border-radius:2px;background:var(--surface-3);transition:background .3s;}
+.step.done{background:var(--neon);}
+.step.active{background:var(--neon-dim);}
+.steps-label{display:flex;justify-content:space-between;font-size:10px;color:var(--text-4);margin-top:4px;letter-spacing:.04em;}
+
+.auth-form{display:flex;flex-direction:column;}
+.auth-form .input-group{margin-bottom:14px;}
+.input-icon-wrap{position:relative;}
+.input-icon-wrap .input{padding-right:44px;}
+.input-icon-wrap .ii{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--text-4);cursor:pointer;transition:var(--t);}
+.input-icon-wrap .ii:hover{color:var(--text-2);}
+
+/* Two-col grid */
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* Password strength */
+.pass-strength{margin-top:6px;}
+.ps-bar{display:flex;gap:4px;margin-bottom:4px;}
+.ps-seg{flex:1;height:3px;border-radius:2px;background:var(--surface-3);transition:background .3s;}
+.ps-seg.weak  {background:var(--red);}
+.ps-seg.fair  {background:var(--yellow);}
+.ps-seg.strong{background:var(--neon);}
+.ps-label{font-size:10px;color:var(--text-4);}
+
+/* Terms */
+.terms-check{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text-3);margin-bottom:20px;line-height:1.5;}
+.terms-check input{width:14px;height:14px;accent-color:var(--neon);cursor:pointer;flex-shrink:0;margin-top:2px;}
+.terms-check a{color:var(--neon);}
+
+/* Errors */
+.input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,71,87,.1);}
+.input.ok{border-color:var(--neon-dim);}
+.input-err{font-size:11px;color:var(--red);margin-top:4px;display:none;}
+.input-err.show{display:block;}
+.input-hint{font-size:11px;color:var(--text-4);margin-top:4px;}
+
+/* Social */
+.auth-social{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.social-btn{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:600;padding:10px;border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);color:var(--text-2);cursor:pointer;transition:var(--t);font-family:var(--font);}
+.social-btn:hover{border-color:var(--border-2);color:var(--text-1);background:var(--surface-2);}
+.auth-divider{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--text-4);margin:16px 0;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-bottom{margin-top:20px;text-align:center;font-size:12px;color:var(--text-3);}
+.auth-bottom a{color:var(--neon);font-weight:600;}
+
+/* Right panel */
+.auth-left{background:var(--void-2);border-left:1px solid var(--border);padding:48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+.auth-left-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:40px 40px;opacity:.4;}
+.auth-left-orb{position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,65,.07) 0%,transparent 70%);pointer-events:none;}
+.auth-left-content{position:relative;z-index:1;}
+.auth-left h2{font-size:clamp(20px,2.5vw,30px);font-weight:800;line-height:1.2;margin-bottom:16px;}
+.auth-left h2 span{color:var(--neon);}
+.auth-left > div > p{font-size:14px;color:var(--text-2);line-height:1.7;max-width:360px;margin-bottom:36px;}
+
+/* Plan comparison */
+.plan-compare{display:flex;flex-direction:column;gap:10px;}
+.plan-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--r-lg);border:1px solid var(--border);background:var(--void-3);font-size:13px;color:var(--text-2);}
+.plan-row.highlight{border-color:rgba(0,255,65,.2);background:var(--neon-faint);}
+.plan-row .pr-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0;}
+.plan-row .pr-badge{margin-left:auto;flex-shrink:0;}
+
+/* Loading */
+.btn-loading{opacity:.7;pointer-events:none;}
+.btn-loading::after{content:'';width:14px;height:14px;border:2px solid transparent;border-top-color:var(--void);border-radius:50%;animation:spin .7s linear infinite;margin-left:8px;display:inline-block;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .auth-wrap{grid-template-columns:1fr;}
+  .auth-left{display:none;}
+  .auth-right{padding:24px 16px;align-items:flex-start;}
+  .auth-form-wrap{padding:16px 0;max-width:100%;}
+  .form-grid-2{grid-template-columns:1fr;}
+}
+  </style>
+</head>
+<body class="auth-page">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="navbar-logo">
+      <div class="logo-icon">⚡</div>On<span>Olam</span>
+    </a>
+    <div class="navbar-right">
+      <span style="font-size:12px;color:var(--text-3)">Hisobingiz bormi?</span>
+      <a href="login.html"><button class="btn btn-ghost btn-sm">Kirish</button></a>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-body">
+    <a href="index.html" class="drawer-link"><span class="di">🏠</span> Bosh sahifa</a>
+    <a href="login.html" class="drawer-link"><span class="di">🔑</span> Kirish</a>
+    <div class="drawer-sep"></div>
+    <a href="login.html"><button class="btn btn-ghost btn-full">Hisobga kirish</button></a>
+  </div>
+</div>
+
+<div class="auth-wrap">
+
+  <!-- Left — form -->
+  <div class="auth-right">
+    <div class="auth-form-wrap anim-up">
+
+      <div class="auth-form-head">
+        <div class="eyebrow">Ro'yxatdan o'tish</div>
+        <h1>Hisob yarating</h1>
+        <p>Allaqachon hisobingiz bormi? <a href="login.html">Kiring →</a></p>
+      </div>
+
+      <!-- Progress steps -->
+      <div class="steps" id="steps">
+        <div class="step active" id="s1"></div>
+        <div class="step" id="s2"></div>
+        <div class="step" id="s3"></div>
+      </div>
+      <div class="steps-label">
+        <span>Shaxsiy ma'lumot</span>
+        <span>Hisob</span>
+        <span>Tarif</span>
+      </div>
+
+      <!-- Social signup -->
+      <div class="auth-social" style="margin-top:20px;">
+        <button class="social-btn"><span>🌐</span> Google</button>
+        <button class="social-btn"><span>✈️</span> Telegram</button>
+      </div>
+      <div class="auth-divider">yoki to'ldiring</div>
+
+      <!-- STEP 1 -->
+      <div id="step1">
+        <div class="auth-form">
+          <div class="form-grid-2">
+            <div class="input-group">
+              <label class="input-label">Ism</label>
+              <input class="input" id="regFirst" type="text" placeholder="Ism" autocomplete="given-name">
+              <div class="input-err" id="firstErr">Ismni kiriting</div>
+            </div>
+            <div class="input-group">
+              <label class="input-label">Familiya</label>
+              <input class="input" id="regLast" type="text" placeholder="Familiya" autocomplete="family-name">
+              <div class="input-err" id="lastErr">Familiyani kiriting</div>
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Email</label>
+            <div class="input-icon-wrap">
+              <input class="input" id="regEmail" type="email" placeholder="user@gmail.com" autocomplete="email">
+              <span class="ii">📧</span>
+            </div>
+            <div class="input-err" id="emailErr">To'g'ri email kiriting</div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Username</label>
+            <div class="input-icon-wrap">
+              <input class="input" id="regUser" type="text" placeholder="foydalanuvchi_nomi" autocomplete="username" oninput="checkUsername(this)">
+              <span class="ii" id="userIcon">👤</span>
+            </div>
+            <div class="input-hint">Faqat harf, raqam va _ ishlating</div>
+            <div class="input-err" id="userErr">Username kamida 3 ta belgi bo'lishi kerak</div>
+          </div>
+          <button class="btn btn-neon btn-full btn-lg" onclick="goStep(2)">Davom etish →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step2" style="display:none;">
+        <div class="auth-form">
+          <div class="input-group">
+            <label class="input-label">Parol</label>
+            <div class="input-icon-wrap">
+              <input class="input" id="regPass" type="password" placeholder="Kuchli parol o'ylab toping" oninput="checkStrength(this.value)" autocomplete="new-password">
+              <span class="ii" id="togglePass2">👁️</span>
+            </div>
+            <div class="pass-strength">
+              <div class="ps-bar">
+                <div class="ps-seg" id="ps1"></div>
+                <div class="ps-seg" id="ps2"></div>
+                <div class="ps-seg" id="ps3"></div>
+                <div class="ps-seg" id="ps4"></div>
+              </div>
+              <span class="ps-label" id="psLabel">Parol kuchi</span>
+            </div>
+            <div class="input-err" id="passErr">Kamida 8 ta belgi</div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Parolni tasdiqlang</label>
+            <div class="input-icon-wrap">
+              <input class="input" id="regPass2" type="password" placeholder="Parolni qaytaring" autocomplete="new-password">
+              <span class="ii">🔒</span>
+            </div>
+            <div class="input-err" id="pass2Err">Parollar mos kelmadi</div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Telefon (ixtiyoriy)</label>
+            <input class="input" id="regPhone" type="tel" placeholder="+998 90 123 45 67" autocomplete="tel">
+          </div>
+          <div style="display:flex;gap:10px;margin-top:4px;">
+            <button class="btn btn-ghost btn-full" onclick="goStep(1)">← Orqaga</button>
+            <button class="btn btn-neon btn-full btn-lg" onclick="goStep(3)">Davom etish →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div id="step3" style="display:none;">
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:20px;">Tarif tanlang — keyinchalik o'zgartirish mumkin:</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+          <label style="cursor:pointer;">
+            <div class="plan-row" id="planFree" style="cursor:pointer;" onclick="selectPlan('free')">
+              <span class="pr-icon">🆓</span>
+              <div>
+                <div style="font-weight:700;color:var(--text-1)">Free</div>
+                <div style="font-size:11px;color:var(--text-3)">Matn darslar · Bepul</div>
+              </div>
+              <div class="pr-badge"><span class="badge badge-free">Tanlangan</span></div>
+            </div>
+          </label>
+          <label style="cursor:pointer;">
+            <div class="plan-row highlight" id="planPro" style="cursor:pointer;" onclick="selectPlan('pro')">
+              <span class="pr-icon">⚡</span>
+              <div>
+                <div style="font-weight:700;color:var(--text-1)">Pro — $9/oy</div>
+                <div style="font-size:11px;color:var(--text-3)">Terminal · Video · Sertifikat · Hamjamiyat</div>
+              </div>
+              <div class="pr-badge"><span class="badge badge-pro">Tavsiya</span></div>
+            </div>
+          </label>
+        </div>
+
+        <div class="terms-check">
+          <input type="checkbox" id="termsCheck">
+          <label for="termsCheck">
+            <a href="#">Foydalanish shartlari</a> va <a href="#">Maxfiylik siyosati</a> ga roziman
+          </label>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost btn-full" onclick="goStep(2)">← Orqaga</button>
+          <button class="btn btn-neon btn-full btn-lg" id="regBtn" onclick="handleRegister()">Hisob yaratish →</button>
+        </div>
+
+        <div class="auth-bottom">
+          Hisobingiz bormi? <a href="login.html">Kiring</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right — info panel -->
+  <div class="auth-left">
+    <div class="auth-left-grid"></div>
+    <div class="auth-left-orb"></div>
+
+    <div class="auth-left-content">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;text-decoration:none;color:var(--text-1);margin-bottom:48px;">
+        <div class="logo-icon">⚡</div>On<span style="color:var(--neon)">Olam</span>
+      </a>
+
+      <h2>Bepul boshlang,<br>keyin <span>Pro</span> bilan<br>kengaying</h2>
+      <p>30,000+ foydalanuvchi allaqachon o'rganmoqda. Bugun qo'shiling.</p>
+
+      <div class="plan-compare">
+        <div class="plan-row">
+          <span class="pr-icon">✅</span>
+          <span>Barcha matn darslar — bepul</span>
+        </div>
+        <div class="plan-row">
+          <span class="pr-icon">✅</span>
+          <span>8 ta kurs yo'nalishi</span>
+        </div>
+        <div class="plan-row">
+          <span class="pr-icon">✅</span>
+          <span>Brauzer kodi editoru</span>
+        </div>
+        <div class="plan-row highlight">
+          <span class="pr-icon">⚡</span>
+          <span>Pro: Terminal + Video</span>
+          <span class="pr-badge"><span class="badge badge-pro">Pro</span></span>
+        </div>
+        <div class="plan-row highlight">
+          <span class="pr-icon">🏆</span>
+          <span>Pro: Rasmiy sertifikat</span>
+          <span class="pr-badge"><span class="badge badge-pro">Pro</span></span>
+        </div>
+        <div class="plan-row highlight">
+          <span class="pr-icon">👥</span>
+          <span>Pro: Hamjamiyat va loyihalar</span>
+          <span class="pr-badge"><span class="badge badge-pro">Pro</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="position:relative;z-index:1;font-size:12px;color:var(--text-3);">
+      <a href="#" style="color:var(--neon)">Maxfiylik siyosati</a> · 
+      <a href="#" style="color:var(--neon)">Shartlar</a> · 
+      © 2026 OnOlam
+    </div>
+  </div>
+
+</div>
+
+<script src="js/burger.js"></script>
+<script src="js/api.js"></script>
+<script src="js/register.js"></script>
+<script>
+// selectedPlan va currentStep register.js da boshqariladi
+
+// Password toggle
+document.getElementById('togglePass2').addEventListener('click', function(){
+  const i = document.getElementById('regPass');
+  i.type = i.type==='password' ? 'text' : 'password';
+  this.textContent = i.type==='password' ? '👁️' : '🙈';
+});
+
+// Password strength
+function checkStrength(v){
+  const segs = ['ps1','ps2','ps3','ps4'];
+  const lbl  = document.getElementById('psLabel');
+  let score  = 0;
+  if(v.length >= 8) score++;
+  if(/[A-Z]/.test(v)) score++;
+  if(/[0-9]/.test(v)) score++;
+  if(/[^A-Za-z0-9]/.test(v)) score++;
+
+  segs.forEach((id,i) => {
+    const el = document.getElementById(id);
+    el.className = 'ps-seg';
+    if(i < score){
+      if(score<=1) el.classList.add('weak');
+      else if(score<=2) el.classList.add('fair');
+      else el.classList.add('strong');
+    }
+  });
+
+  const labels = ['','Zaif','O\'rtacha','Yaxshi','Kuchli'];
+  lbl.textContent = labels[score] || 'Parol kuchi';
+  lbl.style.color = score<=1 ? 'var(--red)' : score<=2 ? 'var(--yellow)' : 'var(--neon)';
+}
+
+// Username check
+function checkUsername(el){
+  const v = el.value.replace(/[^a-zA-Z0-9_]/g,'');
+  el.value = v;
+  document.getElementById('userIcon').textContent = v.length >= 3 ? '✅' : '👤';
+}
+
+// register.js da barcha funksiyalar ishlaydi
+</script>
+</body>
+</html>

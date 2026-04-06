@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnOlam Admin — Hamjamiyat</title>
+  <link rel="stylesheet" href="../style/globals.css">
+  <link rel="stylesheet" href="style/admin.css">
+  <style>
+.post-mod{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:18px 20px;margin-bottom:12px;transition:var(--t-md);}
+.post-mod:hover{border-color:var(--border-2);}
+.post-mod.flagged{border-color:rgba(255,71,87,.3);background:rgba(255,71,87,.02);}
+.pm-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.pm-av{width:32px;height:32px;border-radius:var(--r-md);border:1px solid var(--border);overflow:hidden;flex-shrink:0;}
+.pm-av img{width:100%;height:100%;object-fit:cover;}
+.pm-meta{flex:1;}
+.pm-meta h4{font-size:13px;font-weight:700;margin-bottom:1px;}
+.pm-meta p{font-size:10px;color:var(--text-3);}
+.pm-body{font-size:13px;color:var(--text-2);line-height:1.6;margin-bottom:12px;}
+.pm-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.comp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px;margin-bottom:12px;}
+.comp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.comp-header h4{font-size:14px;font-weight:700;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.lb-row:last-child{border-bottom:none;}
+.lb-rank{font-size:16px;width:24px;flex-shrink:0;text-align:center;}
+.lb-av{width:30px;height:30px;border-radius:var(--r-sm);border:1px solid var(--border);overflow:hidden;flex-shrink:0;}
+.lb-av img{width:100%;height:100%;object-fit:cover;}
+.lb-info{flex:1;}
+.lb-info h5{font-size:12px;font-weight:600;margin-bottom:2px;}
+.lb-info p{font-size:10px;color:var(--text-3);}
+.lb-pts{font-size:13px;font-weight:800;color:var(--neon);}
+  </style>
+</head>
+<body>
+<div class="admin-topbar">
+  <button class="mob-sidebar-btn" id="mobSidebarBtn">☰</button>
+  <a href="dashboard.html" class="admin-logo"><div class="logo-icon">⚡</div><div class="lname">On<span>Olam</span><span class="admin-badge">ADMIN</span></div></a>
+  <div class="topbar-search"><span>🔍</span><input type="text" placeholder="Post yoki user qidirish..."></div>
+  <div class="topbar-right">
+    <div class="topbar-icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="topbar-admin"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=admin" alt="admin"><div><div class="ta-name">Super Admin</div><div class="ta-role">admin.onolam.uz</div></div></div>
+  </div>
+</div>
+<div class="admin-wrap">
+  <aside class="admin-sidebar">
+    <div class="as-section"><span class="as-label">Asosiy</span>
+      <a href="dashboard.html" class="as-link"><span class="al-icon">📊</span> Dashboard</a>
+      <a href="users.html"     class="as-link"><span class="al-icon">👥</span> Foydalanuvchilar</a>
+      <a href="lessons.html"   class="as-link"><span class="al-icon">📚</span> Darslar</a>
+      <a href="payments.html"  class="as-link"><span class="al-icon">💳</span> To'lovlar</a>
+    </div>
+    <div class="as-section"><span class="as-label">Pro</span>
+      <a href="community.html" class="as-link active"><span class="al-icon">👥</span> Hamjamiyat</a>
+      <a href="ai-train.html"  class="as-link"><span class="al-icon">🤖</span> AI O'qitish</a>
+      <a href="analytics.html" class="as-link"><span class="al-icon">📡</span> Analytics <span class="al-badge">12</span></a>
+    </div>
+    <div class="as-section"><span class="as-label">Tizim</span>
+      <a href="settings.html" class="as-link"><span class="al-icon">⚙️</span> Sozlamalar</a>
+      <a href="index.html"    class="as-link danger"><span class="al-icon">↩</span> Chiqish</a>
+    </div>
+    <div class="as-bottom"><div class="as-version">OnOlam Admin v1.0.0</div></div>
+  </aside>
+  <main class="admin-main">
+
+    <div class="admin-page-header anim-up">
+      <div class="aph-left">
+        <div class="eyebrow">Pro Hamjamiyat</div>
+        <h1>Hamjamiyat Boshqaruvi 👥</h1>
+        <p>Postlar moderatsiya, musobaqalar, leaderboard va chat nazorati</p>
+      </div>
+      <div class="aph-right">
+        <button class="btn btn-ghost btn-sm" onclick="openModal('announceModal')">📢 E'lon yuborish</button>
+        <button class="btn btn-neon btn-sm" onclick="openModal('competModal')">🏆 Musobaqa yaratish</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="admin-stats anim-up anim-d1" style="grid-template-columns:repeat(4,1fr);">
+      <div class="astat"><div class="astat-icon">📝</div><div class="astat-num" data-target="1247">0</div><div class="astat-label">Jami postlar</div><span class="astat-change up">+14 bugun</span></div>
+      <div class="astat"><div class="astat-icon">🚩</div><div class="astat-num red" data-target="3">0</div><div class="astat-label">Shikoyat qilingan</div><span class="astat-change down">Ko'rib chiqing</span></div>
+      <div class="astat"><div class="astat-icon">🏆</div><div class="astat-num yellow" data-target="2">0</div><div class="astat-label">Faol musobaqalar</div></div>
+      <div class="astat"><div class="astat-icon">👥</div><div class="astat-num" data-target="240">0</div><div class="astat-label">Pro a'zolar</div><span class="astat-change up">+5 bugun</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:20px;" class="anim-up anim-d2">
+
+      <!-- Postlar moderatsiya -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <h3 style="font-size:14px;font-weight:700;">📌 Postlar moderatsiya</h3>
+          <div style="display:flex;gap:6px;">
+            <button class="tbl-btn active" onclick="this.style.color='var(--neon)'">Barchasi</button>
+            <button class="tbl-btn" style="color:var(--red-accent)">🚩 Shikoyatlar (3)</button>
+            <button class="tbl-btn">Bugun</button>
+          </div>
+        </div>
+
+        <!-- Shikoyat qilingan post -->
+        <div class="post-mod flagged">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:11px;font-weight:700;color:var(--red-accent);">🚩 SHIKOYAT — 2 foydalanuvchi tomonidan</div>
+          <div class="pm-header">
+            <div class="pm-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=anon"></div>
+            <div class="pm-meta"><h4>anon_user99 <span class="badge badge-pro">Pro</span></h4><p>#umumiy · 2 soat oldin</p></div>
+          </div>
+          <div class="pm-body">Bu platformaning darslar sifatsiz, pulimni qaytaring! [tashqi reklama havolasi]</div>
+          <div class="pm-actions">
+            <button class="tbl-btn danger" onclick="confirmAction('Postni o\'chirishni xohlaysizmi?',()=>toast('Post o\'chirildi','error'))">🗑 O'chirish</button>
+            <button class="tbl-btn warning" onclick="toast('Foydalanuvchiga ogohlantirish yuborildi','warning')">⚠ Ogohlantirish</button>
+            <button class="tbl-btn danger" onclick="confirmAction('Foydalanuvchini bloklashni xohlaysizmi?',()=>toast('Bloklandi','error'))">🚫 User blok</button>
+            <button class="tbl-btn" onclick="toast('Shikoyat yopildi','success')">✓ Yopish</button>
+          </div>
+        </div>
+
+        <!-- Normal post -->
+        <div class="post-mod">
+          <div class="pm-header">
+            <div class="pm-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=sardor"></div>
+            <div class="pm-meta"><h4>sardor_dev <span class="badge badge-pro">Pro</span></h4><p>#loyihalar · 3 soat oldin · ❤️ 24</p></div>
+          </div>
+          <div class="pm-body">Portfolio saytimni tugatdim! HTML va CSS kurslarini tugatgandan keyin yasadim 🎉</div>
+          <div class="pm-actions">
+            <button class="tbl-btn primary" onclick="toast('Post pinlandi ✓','success')">📌 Pin</button>
+            <button class="tbl-btn danger" onclick="confirmAction('Postni o\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">🗑 O'chirish</button>
+          </div>
+        </div>
+
+        <div class="post-mod">
+          <div class="pm-header">
+            <div class="pm-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=aziz"></div>
+            <div class="pm-meta"><h4>aziz_k <span class="badge badge-pro">Pro</span></h4><p>#resurslar · 1 kun oldin · ❤️ 41</p></div>
+          </div>
+          <div class="pm-body">Terminal uchun ajoyib resurslar ro'yxati: linuxcommand.org, explainshell.com, tldr.sh</div>
+          <div class="pm-actions">
+            <button class="tbl-btn primary" onclick="toast('Post pinlandi ✓','success')">📌 Pin</button>
+            <button class="tbl-btn danger" onclick="confirmAction('O\'chirishni xohlaysizmi?',()=>toast('O\'chirildi','error'))">🗑 O'chirish</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Leaderboard + Musobaqalar -->
+      <div>
+        <!-- Leaderboard -->
+        <div class="comp-card">
+          <div class="comp-header">
+            <h4>🏆 Leaderboard</h4>
+            <button class="tbl-btn primary" onclick="toast('Tozalandi','success')">Tozalash</button>
+          </div>
+          <div class="lb-row"><span class="lb-rank">🥇</span><div class="lb-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=aziz"></div><div class="lb-info"><h5>aziz_k</h5><p>6 kurs · 7 streak</p></div><span class="lb-pts">580</span></div>
+          <div class="lb-row"><span class="lb-rank">🥈</span><div class="lb-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=sardor"></div><div class="lb-info"><h5>sardor_dev</h5><p>5 kurs</p></div><span class="lb-pts">430</span></div>
+          <div class="lb-row"><span class="lb-rank">🥉</span><div class="lb-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=malika"></div><div class="lb-info"><h5>malika_b</h5><p>4 kurs</p></div><span class="lb-pts">310</span></div>
+          <div class="lb-row"><span class="lb-rank" style="color:var(--text-3);">4</span><div class="lb-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=jasur"></div><div class="lb-info"><h5>jasur_t</h5><p>3 kurs</p></div><span class="lb-pts">240</span></div>
+          <div class="lb-row"><span class="lb-rank" style="color:var(--text-3);">5</span><div class="lb-av"><img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=u1"></div><div class="lb-info"><h5>sherzod_d</h5><p>3 kurs</p></div><span class="lb-pts">185</span></div>
+        </div>
+
+        <!-- Faol musobaqalar -->
+        <div class="comp-card">
+          <div class="comp-header"><h4>🎯 Faol musobaqalar</h4><button class="btn btn-neon btn-sm" onclick="openModal('competModal')">+ Yangi</button></div>
+          <div style="background:var(--void-3);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">🌐 HTML Sprint</div>
+              <span class="chip chip-green">Faol</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">2 kun qoldi · 45 ishtirokchi</div>
+            <div class="progress"><div class="progress-fill" style="width:75%"></div></div>
+            <div style="display:flex;gap:6px;margin-top:10px;">
+              <button class="tbl-btn primary" onclick="toast('Musobaqa boshqaruvi','info')">Boshqarish</button>
+              <button class="tbl-btn danger" onclick="confirmAction('Musobaqani yakunlashni xohlaysizmi?',()=>toast('Yakunlandi','success'))">Yakunlash</button>
+            </div>
+          </div>
+          <div style="background:var(--void-3);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+              <div style="font-size:13px;font-weight:700;">🐍 Python Challenge</div>
+              <span class="chip chip-green">Faol</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">5 kun qoldi · 28 ishtirokchi</div>
+            <div class="progress"><div class="progress-fill" style="width:40%"></div></div>
+            <div style="display:flex;gap:6px;margin-top:10px;">
+              <button class="tbl-btn primary" onclick="toast('Musobaqa boshqaruvi','info')">Boshqarish</button>
+              <button class="tbl-btn danger" onclick="confirmAction('Musobaqani yakunlashni xohlaysizmi?',()=>toast('Yakunlandi','success'))">Yakunlash</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ANNOUNCE MODAL -->
+<div class="admin-modal" id="announceModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('announceModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:500px;">
+    <div class="modal-header"><h3>📢 E'lon yuborish</h3><div class="modal-close" onclick="closeModal('announceModal')">✕</div></div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Kimga yuborish</label>
+        <select class="input admin-select"><option>Barcha foydalanuvchilar</option><option>Faqat Pro foydalanuvchilar</option><option>Faqat Free foydalanuvchilar</option></select>
+      </div>
+      <div class="input-group"><label class="input-label">Sarlavha</label><input class="input" type="text" placeholder="E'lon sarlavhasi..."></div>
+      <div class="input-group"><label class="input-label">Xabar</label><textarea class="input" style="min-height:100px;" placeholder="E'lon matni..."></textarea></div>
+      <div class="input-group"><label class="input-label">Yuborish usuli</label>
+        <div style="display:flex;gap:12px;margin-top:6px;">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox" checked> 🔔 Bildirishnoma</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;"><input type="checkbox"> 📧 Email</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('announceModal')">Bekor</button>
+      <button class="btn btn-neon btn-sm" onclick="toast('E\'lon yuborildi ✔','success');closeModal('announceModal')">Yuborish</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPET MODAL -->
+<div class="admin-modal" id="competModal" onclick="if(event.target.classList.contains('admin-modal-bg'))closeModal('competModal')">
+  <div class="admin-modal-bg"></div>
+  <div class="admin-modal-box" style="max-width:480px;">
+    <div class="modal-header"><h3>🏆 Yangi musobaqa yaratish</h3><div class="modal-close" onclick="closeModal('competModal')">✕</div></div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Musobaqa nomi</label><input class="input" type="text" placeholder="Masalan: CSS Sprint 2026"></div>
+      <div class="input-group"><label class="input-label">Kurs bo'yicha</label>
+        <select class="input admin-select"><option>HTML</option><option>CSS</option><option>JavaScript</option><option>Python</option><option>Termux</option></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="input-group"><label class="input-label">Boshlanish</label><input class="input" type="datetime-local"></div>
+        <div class="input-group"><label class="input-label">Tugash</label><input class="input" type="datetime-local"></div>
+      </div>
+      <div class="input-group"><label class="input-label">Sovrin (1-o'rin)</label><input class="input" type="text" placeholder="Masalan: 1 oy bepul Pro"></div>
+      <div class="input-group"><label class="input-label">Tavsif</label><textarea class="input" style="min-height:70px;" placeholder="Musobaqa qoidalari..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('competModal')">Bekor</button>
+      <button class="btn btn-neon btn-sm" onclick="toast('Musobaqa yaratildi va e\'lon qilindi ✔','success');closeModal('competModal')">Yaratish va E'lon qilish</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container"></div>
+<script src="js/admin.js"></script>
+</body>
+</html>
