@@ -1,0 +1,46 @@
+# OnOlam Backend — Dependencies
+# O'rnatish: pip install -r requirements.txt
+
+# ── CORE ──
+Django==5.0.4
+djangorestframework==3.15.1
+djangorestframework-simplejwt==5.3.1
+
+# ── DATABASE ──
+psycopg2-binary==2.9.9
+# sqlite3 — development uchun (Django ichida tayyor)
+
+# ── CORS ──
+django-cors-headers==4.3.1
+
+# ── ENVIRONMENT ──
+python-decouple==3.8
+
+# ── MEDIA / FILES ──
+Pillow==10.3.0
+django-storages==1.14.2
+
+# ── PAYMENT ──
+requests==2.31.0
+
+# ── PDF sertifikat ──
+reportlab==4.1.0
+
+# ── CACHING ──
+django-redis==5.4.0
+redis==5.0.3
+
+# ── FILTERING ──
+django-filter==24.1
+
+# ── UTILITIES ──
+django-extensions==3.2.3
+django-cleanup==8.1.0
+
+# ── DEVELOPMENT ──
+ipython==8.24.0
+django-debug-toolbar==4.3.0
+
+# ── PRODUCTION ──
+gunicorn==22.0.0
+whitenoise==6.6.0
