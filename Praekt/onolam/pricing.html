@@ -6,347 +6,694 @@
   <title>OnOlam — Tariflar</title>
   <link rel="stylesheet" href="style/globals.css">
   <style>
-/* ── PRICING PAGE ── */
-.pricing-hero{padding:72px 0 60px;text-align:center;position:relative;overflow:hidden;}
-.pricing-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.35;}
-.pricing-hero::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(0,255,65,.05),transparent 70%);pointer-events:none;}
-.pricing-hero .container{position:relative;z-index:1;}
-.pricing-hero h1{font-size:clamp(28px,5vw,52px);font-weight:800;margin-bottom:14px;letter-spacing:-.04em;}
-.pricing-hero h1 span{color:var(--neon);}
-.pricing-hero p{font-size:16px;color:var(--text-2);max-width:480px;margin:0 auto 36px;}
-
-/* Toggle */
-.billing-toggle{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:52px;}
-.bt-label{font-size:13px;font-weight:600;color:var(--text-3);}
-.bt-label.active{color:var(--text-1);}
-.bt-switch{width:48px;height:26px;background:var(--surface-3);border-radius:13px;cursor:pointer;position:relative;border:1px solid var(--border);transition:.3s;}
-.bt-switch::before{content:'';position:absolute;width:18px;height:18px;background:var(--text-3);border-radius:50%;top:3px;left:3px;transition:.3s;}
-.bt-switch.yearly::before{transform:translateX(22px);background:var(--neon);}
-.bt-switch.yearly{background:rgba(0,255,65,.15);border-color:rgba(0,255,65,.3);}
-.save-badge{font-size:10px;font-weight:800;color:var(--neon);background:var(--neon-faint);border:1px solid rgba(0,255,65,.2);padding:2px 8px;border-radius:20px;letter-spacing:.04em;}
-
-/* Plans grid */
-.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:960px;margin:0 auto 80px;}
-
-.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:32px 28px;position:relative;transition:var(--t-md);display:flex;flex-direction:column;}
-.plan-card:hover{transform:translateY(-4px);}
-.plan-card.popular{border-color:rgba(0,255,65,.35);background:linear-gradient(160deg,var(--surface),rgba(0,255,65,.03));box-shadow:0 0 60px rgba(0,255,65,.06);}
-
-.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--neon);color:var(--void);font-size:10px;font-weight:800;padding:4px 14px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
-
-.plan-tier{font-size:10px;font-weight:800;color:var(--text-3);text-transform:uppercase;letter-spacing:.15em;margin-bottom:14px;}
-.plan-card.popular .plan-tier{color:var(--neon);}
-
-.plan-price{margin-bottom:8px;}
-.plan-price .amount{font-size:46px;font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--text-1);}
-.plan-price .currency{font-size:20px;color:var(--text-2);vertical-align:top;margin-top:8px;display:inline-block;}
-.plan-price .period{font-size:14px;color:var(--text-3);font-weight:400;}
-.plan-price .original{font-size:14px;color:var(--text-4);text-decoration:line-through;margin-left:8px;}
-
-.plan-desc{font-size:13px;color:var(--text-3);margin-bottom:24px;line-height:1.6;}
-
-.plan-features{flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
-.pf-row{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-2);}
-.pf-row .pi{flex-shrink:0;margin-top:1px;font-size:14px;}
+.pricing-hero{text-align:center;padding:40px 20px 28px;max-width:640px;margin:0 auto;}
+.pricing-hero h1{font-size:clamp(22px,4vw,34px);font-weight:900;margin-bottom:10px;}
+.pricing-hero p{font-size:14px;color:var(--text-3);line-height:1.7;}
+/* === TRIAL SECTION === */
+.trial-section{max-width:680px;margin:0 auto 36px;padding:0 20px;}
+.trial-card{background:linear-gradient(135deg,rgba(0,255,65,.06),rgba(0,255,65,.02));border:1px solid rgba(0,255,65,.25);border-radius:20px;padding:28px 24px;}
+.trial-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.trial-badge{background:rgba(0,255,65,.15);color:var(--neon);font-size:11px;font-weight:800;padding:3px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.08em;}
+.trial-card h2{font-size:22px;font-weight:900;margin-bottom:8px;}
+.trial-card>p{font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.7;}
+.trial-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+.ti-item{background:rgba(0,0,0,.2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+.ti-item .ti-label{font-size:11px;color:var(--text-4);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;}
+.ti-item .ti-val{font-size:13px;font-weight:600;color:var(--text-1);}
+.btn-trial-outline{background:transparent;border:1.5px solid rgba(0,255,65,.4);color:var(--neon);padding:12px 24px;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;transition:.2s;width:100%;}
+.btn-trial-outline:hover{background:rgba(0,255,65,.08);border-color:var(--neon);}
+.btn-trial-outline:disabled{opacity:.45;cursor:not-allowed;background:rgba(0,255,65,.05);}
+.trial-status-box{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+.trial-countdown{font-size:12px;font-weight:600;padding:8px 12px;border-radius:8px;text-align:center;}
+.trial-countdown.waiting{background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.2);color:#f0c040;}
+.trial-countdown.active{background:rgba(255,60,60,.08);border:1px solid rgba(255,60,60,.2);color:#ff6b6b;}
+.trial-key-banner{background:rgba(0,255,65,.06);border:1px solid rgba(0,255,65,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--neon);text-align:center;}
+.btn-cancel-sm{background:transparent;border:1px solid rgba(255,80,80,.3);color:#ff6b6b;padding:7px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font);transition:.2s;}
+.btn-cancel-sm:hover{background:rgba(255,80,80,.08);}
+.btn-key-sm{background:rgba(0,255,65,.1);border:1px solid rgba(0,255,65,.3);color:var(--neon);padding:7px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font);font-weight:700;transition:.2s;}
+.btn-key-sm:hover{background:rgba(0,255,65,.18);}
+/* === PLANS === */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:960px;margin:0 auto 48px;padding:0 20px;}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;position:relative;transition:.2s;}
+.plan-card:hover{transform:translateY(-2px);}
+.plan-card.popular{border-color:rgba(0,255,65,.35);background:linear-gradient(145deg,var(--surface),rgba(0,255,65,.04));}
+.plan-card.plan-disabled{opacity:.5;pointer-events:none;filter:grayscale(.4);}
+.popular-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--neon);color:#000;font-size:11px;font-weight:800;padding:4px 16px;border-radius:20px;white-space:nowrap;}
+.plan-tier{font-size:11px;font-weight:700;color:var(--text-4);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
+.plan-price{margin-bottom:14px;}
+.plan-price .amount{font-size:38px;font-weight:900;color:var(--text-1);}
+.plan-price .currency{font-size:17px;color:var(--text-3);vertical-align:top;margin-top:7px;display:inline-block;}
+.plan-price .period{font-size:13px;color:var(--text-4);}
+.plan-price .free-tag{font-size:26px;font-weight:900;color:var(--neon);}
+.plan-price .muz-tag{font-size:18px;font-weight:900;color:#f0c040;}
+.plan-desc{font-size:13px;color:var(--text-3);margin-bottom:18px;line-height:1.6;}
+.plan-features{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;flex:1;}
+.pf-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);}
 .pf-row .pi.on{color:var(--neon);}
 .pf-row .pi.off{color:var(--text-4);}
 .pf-row.off-item{color:var(--text-4);}
-
-.plan-sep{height:1px;background:var(--border);margin:20px 0;}
-
-/* FAQ */
-.faq-section{max-width:720px;margin:0 auto 80px;}
-.faq-section h2{font-size:24px;font-weight:800;text-align:center;margin-bottom:32px;}
-.faq-item{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:8px;}
-.faq-q{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;transition:var(--t);background:var(--surface);}
-.faq-q:hover{background:var(--surface-2);}
-.faq-q h4{font-size:14px;font-weight:600;}
-.faq-arr{font-size:14px;color:var(--text-3);transition:transform .2s;flex-shrink:0;}
-.faq-item.open .faq-arr{transform:rotate(180deg);color:var(--neon);}
-.faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s ease, padding .3s;}
-.faq-item.open .faq-a{max-height:200px;padding:0 20px 16px;}
-.faq-a p{font-size:13px;color:var(--text-2);line-height:1.7;}
-
-/* Compare table */
-.compare-section{max-width:860px;margin:0 auto 80px;}
-.compare-section h2{font-size:24px;font-weight:800;text-align:center;margin-bottom:32px;}
-.compare-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;}
-.compare-table th{padding:14px 20px;background:var(--void-3);font-size:12px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;text-align:left;border-bottom:1px solid var(--border);}
-.compare-table th:not(:first-child){text-align:center;}
-.compare-table td{padding:13px 20px;font-size:13px;color:var(--text-2);border-bottom:1px solid var(--border);}
-.compare-table td:not(:first-child){text-align:center;}
-.compare-table tr:last-child td{border-bottom:none;}
-.compare-table tr:hover td{background:var(--void-3);}
-.ct-yes{color:var(--neon);font-size:16px;}
-.ct-no{color:var(--text-4);font-size:16px;}
-.ct-partial{color:var(--yellow);font-size:12px;font-weight:600;}
-
-/* Guarantee */
-.guarantee{text-align:center;padding:48px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);max-width:560px;margin:0 auto 80px;}
-.guarantee .gi{font-size:48px;margin-bottom:16px;display:block;}
-.guarantee h3{font-size:20px;font-weight:800;margin-bottom:10px;}
-.guarantee p{font-size:13px;color:var(--text-2);line-height:1.7;}
-
-/* CTA */
-.pricing-cta{text-align:center;padding:64px 0;position:relative;}
-.pricing-cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(0,255,65,.05),transparent 70%);pointer-events:none;}
-.pricing-cta h2{font-size:clamp(24px,4vw,40px);font-weight:800;margin-bottom:14px;}
-.pricing-cta p{font-size:15px;color:var(--text-2);max-width:440px;margin:0 auto 32px;}
-.pricing-cta .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-
-@media(max-width:900px){.plans-grid{grid-template-columns:1fr;max-width:440px;}}
-@media(max-width:600px){.plan-price .amount{font-size:38px;}.compare-section{overflow-x:auto;}.compare-table{min-width:500px;}}
+.plan-sep{height:1px;background:var(--border);margin:6px 0;}
+.plan-note{text-align:center;margin-top:8px;font-size:11px;color:var(--text-4);}
+/* === SECTIONS === */
+.section-wrap{max-width:960px;margin:0 auto 48px;padding:0 20px;}
+.section-title{font-size:20px;font-weight:800;margin-bottom:8px;}
+.section-sub{font-size:13px;color:var(--text-3);margin-bottom:24px;}
+.compare-table{width:100%;border-collapse:collapse;font-size:13px;}
+.compare-table th{padding:10px 14px;text-align:center;font-weight:700;color:var(--text-3);border-bottom:2px solid var(--border);}
+.compare-table th:first-child{text-align:left;}
+.compare-table td{padding:10px 14px;text-align:center;border-bottom:1px solid var(--border);}
+.compare-table td:first-child{text-align:left;color:var(--text-2);}
+.ct-yes{color:var(--neon);font-weight:700;}
+.ct-no{color:var(--text-4);}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+.cbc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:.2s;display:flex;flex-direction:column;gap:6px;}
+.cbc:hover{border-color:rgba(0,255,65,.3);transform:translateY(-2px);}
+.cbc-icon{font-size:26px;}
+.cbc h4{font-size:13px;font-weight:700;}
+.cbc p{font-size:11px;color:var(--text-4);flex:1;}
+.cbc-price{font-size:13px;font-weight:700;color:var(--neon);}
+/* === FAQ === */
+.faq-wrap{max-width:640px;margin:0 auto 64px;padding:0 20px;}
+.faq-item{border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;}
+.faq-q{padding:14px 16px;cursor:pointer;font-size:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;user-select:none;}
+.faq-q::after{content:"\25BC";font-size:10px;color:var(--text-4);transition:.2s;}
+.faq-item.open .faq-q::after{transform:rotate(180deg);}
+.faq-a{display:none;padding:0 16px 14px;}
+.faq-item.open .faq-a{display:block;}
+.faq-a p{font-size:13px;color:var(--text-3);line-height:1.7;}
+/* === MODAL === */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;}
+.modal-box h3{font-size:18px;font-weight:900;margin-bottom:6px;}
+.modal-box>p{font-size:13px;color:var(--text-3);margin-bottom:20px;}
+.modal-close{float:right;background:none;border:none;color:var(--text-3);font-size:20px;cursor:pointer;margin-top:-4px;}
+.modal-label{font-size:12px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:block;}
+.radio-group{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.radio-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;user-select:none;}
+.radio-item:hover{border-color:rgba(0,255,65,.3);}
+.radio-item.selected{border-color:var(--neon);background:rgba(0,255,65,.06);}
+.radio-item input{display:none;}
+.radio-dot{width:14px;height:14px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;transition:.15s;}
+.radio-item.selected .radio-dot{border-color:var(--neon);background:var(--neon);}
+.radio-text{font-size:13px;}
+.modal-textarea{width:100%;background:var(--void);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text-1);font-family:var(--font);font-size:13px;resize:vertical;min-height:70px;box-sizing:border-box;margin-bottom:20px;}
+.modal-textarea:focus{outline:none;border-color:rgba(0,255,65,.3);}
+.modal-textarea::placeholder{color:var(--text-4);}
+.btn-modal-submit{width:100%;padding:13px;background:var(--neon);color:#000;border:none;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;transition:.2s;}
+.btn-modal-submit:disabled{opacity:.35;cursor:not-allowed;}
+.btn-modal-submit:not(:disabled):hover{opacity:.9;}
+/* === CONFIRM MODAL === */
+.confirm-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:22px;width:100%;max-width:360px;}
+.confirm-box h4{font-size:16px;font-weight:800;margin-bottom:8px;}
+.confirm-box p{font-size:13px;color:var(--text-3);margin-bottom:18px;}
+.confirm-btns{display:flex;gap:10px;}
+.confirm-btns button{flex:1;padding:10px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;border:none;transition:.2s;}
+.btn-confirm-yes{background:rgba(255,80,80,.15);color:#ff6b6b;border:1px solid rgba(255,80,80,.3)!important;}
+.btn-confirm-no{background:var(--surface-2,#1a1a1a);color:var(--text-2);border:1px solid var(--border)!important;}
+@media(max-width:700px){
+  .plans-grid{grid-template-columns:1fr;}
+  .trial-info-grid{grid-template-columns:1fr 1fr;}
+  .section-wrap{overflow-x:auto;}
+}
   </style>
 </head>
 <body>
-
-<nav class="navbar">
+<div class="page-wrap">
+  <nav class="navbar">
   <div class="container">
-    <a href="index.html" class="navbar-logo"><div class="logo-icon">⚡</div>On<span>Olam</span></a>
+    <a href="index.html" class="navbar-logo">
+      <div class="logo-icon">&#9889;</div>On<span>Olam</span>
+    </a>
     <div class="navbar-center">
-      <a href="index.html#courses"  class="nav-link">Kurslar</a>
-      <a href="pricing.html"        class="nav-link active">Tariflar</a>
-      <a href="dashboard.html"      class="nav-link">Dashboard</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="courses.html" class="nav-link">Kurslar</a>
+      <a href="pricing.html" class="nav-link active">Tariflar</a>
     </div>
     <div class="navbar-right">
-      <a href="login.html">   <button class="btn btn-ghost btn-sm">Kirish</button></a>
-      <a href="register.html"><button class="btn btn-neon  btn-sm">Boshlash →</button></a>
+      <span id="navUsername" style="font-size:12px;color:var(--text-3);margin-right:4px;"></span>
+      <span id="navProBadge" style="display:none;background:var(--neon);color:#000;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-right:6px;">PRO</span>
+      <span id="navFreeBadge" style="display:none;background:var(--surface);border:1px solid var(--border);color:var(--text-3);font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-right:6px;">FREE</span>
+      <div class="navbar-avatar" id="navAvatar" onclick="location.href='profile.html'">
+        <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=user" alt="av">
+      </div>
     </div>
     <button class="burger" id="burgerBtn" aria-label="Menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
-</nav>
+  </nav>
 
-<div class="drawer" id="drawer">
-  <div class="drawer-body">
-    <a href="index.html#courses" class="drawer-link"><span class="di">📚</span> Kurslar</a>
-    <a href="pricing.html"       class="drawer-link active"><span class="di">💳</span> Tariflar</a>
-    <a href="dashboard.html"     class="drawer-link"><span class="di">🏠</span> Dashboard</a>
-    <div class="drawer-sep"></div>
-    <div class="drawer-actions">
-      <a href="login.html">   <button class="btn btn-ghost btn-full">Kirish</button></a>
-      <a href="register.html"><button class="btn btn-neon  btn-full">Bepul boshlash →</button></a>
+  <div class="drawer" id="drawer">
+    <div class="drawer-user">
+      <div class="drawer-user-info">
+        <h4 id="drawerName">Foydalanuvchi</h4>
+        <span class="badge badge-free" id="drawerBadge">Free</span>
+      </div>
     </div>
+    <a href="dashboard.html" class="drawer-link">&#127968; Dashboard</a>
+    <a href="courses.html" class="drawer-link">&#128218; Kurslar</a>
+    <a href="pricing.html" class="drawer-link active">&#128142; Tariflar</a>
+    <a href="profile.html" class="drawer-link">&#128100; Profil</a>
+    <a href="#" class="drawer-link exit" id="logoutBtn">&#8617; Chiqish</a>
   </div>
-</div>
 
-<!-- HERO -->
-<div class="pricing-hero">
-  <div class="container">
-    <div class="eyebrow" style="justify-content:center;margin-bottom:16px;">Tariflar</div>
-    <h1>Bepul boshlang,<br><span>Pro</span> bilan kengaying</h1>
-    <p>Barcha matn darslar bepul. Terminal, video va sertifikat — Pro bilan. Har qachon bekor qilsa bo'ladi.</p>
+  <main class="main-content" style="padding-top:0;">
 
-    <div class="billing-toggle" id="billingToggle">
-      <span class="bt-label active" id="monthLabel">Oylik</span>
-      <div class="bt-switch" id="btSwitch" onclick="toggleBilling()"></div>
-      <span class="bt-label" id="yearLabel">Yillik</span>
-      <span class="save-badge" id="saveBadge" style="opacity:.4;">−30% tejash</span>
+    <div class="pricing-hero">
+      <div class="eyebrow">Tariflar</div>
+      <h1>O'zingizga mos <span style="color:var(--neon)">tarifni</span> tanlang</h1>
+      <p>Barcha matn darslar bepul. Terminal, video va AI chat — Pro bilan ochiladi.</p>
     </div>
 
-    <!-- Plans -->
-    <div class="plans-grid">
+    <!-- TRIAL SECTION -->
+    <div class="trial-section">
+      <div class="trial-card">
+        <div class="trial-top">
+          <span class="trial-badge">&#127873; Bepul sinov</span>
+        </div>
+        <h2>3 kunlik Pro sinov</h2>
+        <p>Platformaning barcha Pro imkoniyatlarini hech qanday to'lov talab qilinmasdan 3 kun davomida sinab ko'ring. Biror narsani yoqtirmasangiz — shunchaki davom eting, hech narsa o'zgarmaydi.</p>
+        <div class="trial-info-grid">
+          <div class="ti-item">
+            <div class="ti-label">Davomiyligi</div>
+            <div class="ti-val">&#128336; 3 kun</div>
+          </div>
+          <div class="ti-item">
+            <div class="ti-label">Nechinchi marta</div>
+            <div class="ti-val">&#127381; 1 marta</div>
+          </div>
+          <div class="ti-item">
+            <div class="ti-label">To'lov</div>
+            <div class="ti-val">&#10003; Talab qilinmaydi</div>
+          </div>
+          <div class="ti-item">
+            <div class="ti-label">Ishga tushishi</div>
+            <div class="ti-val">&#9889; 15 daqiqada</div>
+          </div>
+        </div>
+        <div id="trialActionArea">
+          <button class="btn-trial-outline" onclick="openTrialModal()">Bepul sinab ko'rish &#8594;</button>
+        </div>
+      </div>
+    </div>
 
-      <!-- Free -->
-      <div class="plan-card anim-up anim-d1">
+    <!-- PLAN CARDS -->
+    <div class="plans-grid">
+      <div class="plan-card" id="freeCard">
         <div class="plan-tier">Free</div>
-        <div class="plan-price">
-          <span class="currency">$</span><span class="amount">0</span>
-          <span class="period">/ oy</span>
-        </div>
-        <p class="plan-desc">Ro'yxatdan o'tganingizdan keyin darhol boshlang. Kredit karta shart emas.</p>
+        <div class="plan-price"><span class="free-tag">Bepul</span></div>
+        <p class="plan-desc">Platformani bepul sinang. Barcha matn darslar ochiq.</p>
         <div class="plan-features">
-          <div class="pf-row"><span class="pi on">✔</span> Barcha matn darslar</div>
-          <div class="pf-row"><span class="pi on">✔</span> 8 ta kurs yo'nalishi</div>
-          <div class="pf-row"><span class="pi on">✔</span> Brauzer kodi editoru</div>
-          <div class="pf-row"><span class="pi on">✔</span> Progress kuzatuvi</div>
-          <div class="pf-row"><span class="pi on">✔</span> AI Chat (3 ta/kun)</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Barcha matn darslar</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Brauzer kod editor</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Progress kuzatuvi</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> AI Chat (3 ta/kun)</div>
           <div class="plan-sep"></div>
-          <div class="pf-row off-item"><span class="pi off">✗</span> Video darslar</div>
-          <div class="pf-row off-item"><span class="pi off">✗</span> Terminal</div>
-          <div class="pf-row off-item"><span class="pi off">✗</span> Sertifikat</div>
-          <div class="pf-row off-item"><span class="pi off">✗</span> Pro Hamjamiyat</div>
+          <div class="pf-row off-item"><span class="pi off">&#10007;</span> Video darslar</div>
+          <div class="pf-row off-item"><span class="pi off">&#10007;</span> Linux terminali</div>
+          <div class="pf-row off-item"><span class="pi off">&#10007;</span> Pro hamjamiyat</div>
+          <div class="pf-row off-item"><span class="pi off">&#10007;</span> Sertifikat</div>
         </div>
-        <button class="btn btn-outline btn-full" id="payBtn-free" onclick="startPayment('free','payme')">Bepul boshlash</button>
+        <button class="btn btn-outline btn-full" id="freePlanBtn" disabled>Siz shu tarifdasiz</button>
       </div>
 
-      <!-- Pro -->
-      <div class="plan-card popular anim-up anim-d2">
-        <div class="popular-badge">🔥 Eng mashhur</div>
+      <div class="plan-card popular" id="proCard">
+        <div class="popular-badge">&#128293; Eng mashhur</div>
         <div class="plan-tier">Pro</div>
         <div class="plan-price">
-          <span class="currency">$</span>
-          <span class="amount" id="proAmount">9</span>
-          <span class="period">/ oy</span>
-          <span class="original" id="proOriginal" style="display:none;">$13</span>
+          <span class="currency">$</span><span class="amount">9</span><span class="period">/oy</span>
         </div>
-        <p class="plan-desc">Barcha imkoniyatlar — terminal, video, sertifikat, hamjamiyat. To'liq platforma.</p>
+        <p class="plan-desc">Terminal, video darslar, cheksiz AI va Pro hamjamiyat.</p>
         <div class="plan-features">
-          <div class="pf-row"><span class="pi on">✔</span> Barcha Free imkoniyatlar</div>
-          <div class="pf-row"><span class="pi on">✔</span> Video darslar (Full HD)</div>
-          <div class="pf-row"><span class="pi on">✔</span> To'liq Linux terminali</div>
-          <div class="pf-row"><span class="pi on">✔</span> Rasmiy sertifikatlar</div>
-          <div class="pf-row"><span class="pi on">✔</span> AI Chat (cheksiz)</div>
-          <div class="pf-row"><span class="pi on">✔</span> Pro Hamjamiyat</div>
-          <div class="pf-row"><span class="pi on">✔</span> Loyiha ulashish</div>
-          <div class="pf-row"><span class="pi on">✔</span> Ustoz bilan bog'lanish</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Barcha Free imkoniyatlar</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Video darslar (Full HD)</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Linux terminali</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> AI Chat (cheksiz)</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Pro hamjamiyat</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Sertifikat</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Loyiha ulashish</div>
         </div>
-        <button class="btn btn-neon btn-full btn-lg" id="payBtn-pro" onclick="startPayment('pro','payme')">Pro boshlash →</button>
-        <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--text-3);">7 kunlik bepul sinov · Har qachon bekor qilsa bo'ladi</div>
+        <button class="btn btn-neon btn-full btn-lg" id="proBuyBtn" onclick="buyPro()">Pro olish &#8594;</button>
+        <p class="plan-note">Telegram orqali to'lov &middot; Admin faollashtiradi</p>
       </div>
 
-      <!-- Team -->
-      <div class="plan-card anim-up anim-d3">
+      <div class="plan-card plan-disabled" id="teamCard">
         <div class="plan-tier">Jamoa</div>
-        <div class="plan-price">
-          <span class="currency">$</span>
-          <span class="amount" id="teamAmount">6</span>
-          <span class="period">/ kishi/oy</span>
-        </div>
-        <p class="plan-desc">5+ kishi uchun. Jamoa progressini kuzating, umumiy dashboard. Korporativ trening.</p>
+        <div class="plan-price"><span class="muz-tag">Tez kunda</span></div>
+        <p class="plan-desc">2 va undan ortiq kishi birgalikda o'rganadi. GitHub kabi jamoa bo'lib ishlash.</p>
         <div class="plan-features">
-          <div class="pf-row"><span class="pi on">✔</span> Barcha Pro imkoniyatlar</div>
-          <div class="pf-row"><span class="pi on">✔</span> Jamoa dashboard</div>
-          <div class="pf-row"><span class="pi on">✔</span> Progress tahlili</div>
-          <div class="pf-row"><span class="pi on">✔</span> Jamoa chat</div>
-          <div class="pf-row"><span class="pi on">✔</span> Korporativ hisob</div>
-          <div class="pf-row"><span class="pi on">✔</span> Ustoz tayinlash</div>
-          <div class="pf-row"><span class="pi on">✔</span> Maxsus kurslar</div>
-          <div class="pf-row"><span class="pi on">✔</span> 24/7 qo'llab-quvvatlash</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Barcha Pro imkoniyatlar</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Jamoa bo'lib ishlash</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Umumiy dashboard</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Progress tahlili</div>
+          <div class="pf-row"><span class="pi on">&#10004;</span> Maxsus narx</div>
         </div>
-        <button class="btn btn-outline btn-full" onclick="alert('Jamoa tarifi uchun aloqaga chiqing:\nhello@onolam.uz')">Bog'lanish →</button>
+        <button class="btn btn-outline btn-full" disabled>Tez kunda ishga tushadi</button>
+        <p class="plan-note">Hali qurilmoqda</p>
       </div>
-
     </div>
 
-    <!-- Guarantee -->
-    <div class="guarantee anim-up">
-      <span class="gi">🛡️</span>
-      <h3>7 kunlik pulni qaytarish kafolati</h3>
-      <p>Pro tarifga o'tganingizdan keyin 7 kun ichida qoniqmagan bo'lsangiz — to'liq pulni qaytarib beramiz. Hech qanday savol yo'q.</p>
-    </div>
-
-  </div>
-</div>
-
-<!-- COMPARE TABLE -->
-<div class="container">
-  <div class="compare-section anim-up">
-    <h2>Batafsil taqqoslash</h2>
-    <div style="overflow-x:auto;">
+    <!-- COMPARE TABLE -->
+    <div class="section-wrap">
+      <div class="section-title">Tariflarni taqqoslash</div>
       <table class="compare-table">
         <thead>
           <tr>
-            <th style="width:45%">Imkoniyat</th>
-            <th>Free</th>
-            <th>Pro</th>
-            <th>Jamoa</th>
+            <th>Imkoniyat</th><th>Free</th>
+            <th style="color:var(--neon)">Pro</th>
+            <th style="color:#f0c040">Jamoa</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>Matn darslar</td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Video darslar</td><td><span class="ct-no">✗</span></td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Brauzer kodi editoru</td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Linux terminali</td><td><span class="ct-no">✗</span></td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>AI Chat</td><td><span class="ct-partial">3/kun</span></td><td><span class="ct-yes">Cheksiz</span></td><td><span class="ct-yes">Cheksiz</span></td></tr>
-          <tr><td>Rasmiy sertifikat</td><td><span class="ct-no">✗</span></td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Pro Hamjamiyat</td><td><span class="ct-no">✗</span></td><td><span class="ct-yes">✔</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Jamoa dashboard</td><td><span class="ct-no">✗</span></td><td><span class="ct-no">✗</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Ustoz tayinlash</td><td><span class="ct-no">✗</span></td><td><span class="ct-no">✗</span></td><td><span class="ct-yes">✔</span></td></tr>
-          <tr><td>Pulni qaytarish kafolati</td><td>—</td><td><span class="ct-yes">7 kun</span></td><td><span class="ct-yes">14 kun</span></td></tr>
+          <tr><td>Matn darslar</td><td><span class="ct-yes">&#10004;</span></td><td><span class="ct-yes">&#10004;</span></td><td><span class="ct-yes">&#10004;</span></td></tr>
+          <tr><td>Video darslar</td><td><span class="ct-no">&#10007;</span></td><td><span class="ct-yes">&#10004;</span></td><td><span class="ct-yes">&#10004;</span></td></tr>
+          <tr><td>Linux terminali</td><td><span class="ct-no">&#10007;</span></td><td><span class="ct-yes">&#10004;</span></td><td><span class="ct-yes">&#10004;</span></td></tr>
+          <tr><td>AI Chat</td><td>3 ta/kun</td><td><span class="ct-yes">Cheksiz</span></td><td><span class="ct-yes">Cheksiz</span></td></tr>
+          <tr><td>Pro hamjamiyat</td><td><span class="ct-no">&#10007;</span></td><td><span class="ct-yes">&#10004;</span></td><td><span class="ct-yes">&#10004;</span></td></tr>
+          <tr><td>Sertifikat</td><td><span class="ct-no">&#10007;</span></td><td><span class="ct-yes">&#10004;</span></td><td><span class="ct-yes">&#10004;</span></td></tr>
+          <tr><td>Jamoa ishlash</td><td><span class="ct-no">&#10007;</span></td><td><span class="ct-no">&#10007;</span></td><td><span class="ct-yes">&#10004;</span></td></tr>
+          <tr><td>Narx</td><td>Bepul</td><td>$9/oy</td><td>Muzokarali</td></tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- FAQ -->
-  <div class="faq-section anim-up">
-    <h2>Ko'p so'raladigan savollar</h2>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFAQ(this)">
-        <h4>Bepul tarif qanchalik to'liq?</h4>
-        <span class="faq-arr">▾</span>
+    <!-- INDIVIDUAL COURSES -->
+    <div class="section-wrap">
+      <div class="section-title">&#127919; Alohida kurs sotib olish</div>
+      <p class="section-sub">Faqat bitta kurs kerakmi? Pro tarif olmay, aynan o'sha kursni sotib oling va o'sha kursning barcha imkoniyatlaridan foydalaning.</p>
+      <div class="courses-grid" id="coursesGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-3);">Yuklanmoqda...</div>
       </div>
-      <div class="faq-a"><p>Free tarif juda keng — barcha 8 ta kursning matn darslari to'liq bepul. Brauzer kodi editoru, progress kuzatuvi va AI Chat (kuniga 3 ta savol) ham bepul. Terminal, video darslar va sertifikat uchun Pro kerak.</p></div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFAQ(this)">
-        <h4>Pro tarifni qanday to'layman?</h4>
-        <span class="faq-arr">▾</span>
-      </div>
-      <div class="faq-a"><p>Hozircha kartа (Visa/Mastercard/Uzcard/Humo) va PayMe orqali to'lash mumkin. Kelajakda Click va Payme qo'shiladi.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFAQ(this)">
-        <h4>Obunani bekor qilsam nima bo'ladi?</h4>
-        <span class="faq-arr">▾</span>
-      </div>
-      <div class="faq-a"><p>Bekor qilsangiz — davrning oxirigacha Pro imkoniyatlaridan foydalanasiz. Keyin avtomatik Free tarifga tushadi. Ma'lumotlaringiz saqlanib qoladi.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFAQ(this)">
-        <h4>Sertifikat haqiqatda qimmatli emasmi?</h4>
-        <span class="faq-arr">▾</span>
-      </div>
-      <div class="faq-a"><p>OnOlam sertifikatlari ishga qabul qiluvchilar tomonidan tan olinadi. Sertifikat LinkedIn profilingizga qo'shilishi mumkin. Sertifikatda unikal ID va tekshirish havola bo'ladi.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q" onclick="toggleFAQ(this)">
-        <h4>Jamoa tarifi nechta kishidan boshlanadi?</h4>
-        <span class="faq-arr">▾</span>
-      </div>
-      <div class="faq-a"><p>Jamoa tarifi 5 kishidan boshlanadi. Narx har bir kishi uchun $6/oy (yillik) yoki $8/oy (oylik). 20+ kishi uchun maxsus narx beriladi.</p></div>
-    </div>
-  </div>
 
-  <!-- CTA -->
-  <div class="pricing-cta anim-up">
-    <div class="eyebrow" style="justify-content:center;margin-bottom:14px;">Hoziroq boshlang</div>
-    <h2>7 kun bepul sinab ko'ring</h2>
-    <p>Kredit karta shart emas. Pro tarifni 7 kun bepul ishlating. Yoqmasa — to'liq qaytaramiz.</p>
-    <div class="cta-btns">
-      <a href="register.html"><button class="btn btn-neon btn-lg">Pro boshlash — bepul sinov →</button></a>
-      <a href="register.html"><button class="btn btn-outline btn-lg">Bepul ro'yxatdan o'tish</button></a>
+    <!-- FAQ -->
+    <div class="faq-wrap">
+      <div class="section-title" style="text-align:center;margin-bottom:20px;">Ko'p so'raladigan savollar</div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFAQ(this)">Pro tarif qanday faollashtiriladi?</div>
+        <div class="faq-a"><p>"Pro olish" tugmasini bossangiz Telegram kanalga yo'naltirilasiz. Admin bilan muloqot qilib to'lovni amalga oshirgach, admin sizni Pro tarifga o'tkazadi.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFAQ(this)">3 kunlik bepul sinov qanday ishlaydi?</div>
+        <div class="faq-a"><p>Tugmani bossangiz kichik forma to'ldirasiz. To'ldirgandan so'ng 15 daqiqa ichida Pro imkoniyatlar ochiladi — terminal, video va cheksiz AI chat. 3 kun o'tgach, avtomatik Free tarifga qaytasiz.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFAQ(this)">Alohida kurs sotib olsam nima olaman?</div>
+        <div class="faq-a"><p>Faqat o'sha kursning video darslari, terminali va sertifikatini olasiz. Ko'p kurs kerak bo'lsa — Pro tarif tejamkorroq.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFAQ(this)">Free tarif nima beradi?</div>
+        <div class="faq-a"><p>Barcha kurslarning matn darslari to'liq bepul. Brauzer kod editor, progress va kuniga 3 ta AI chat savoli bepul. Video, terminal va sertifikat uchun Pro kerak.</p></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TRIAL MODAL -->
+<div class="modal-overlay" id="trialModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeTrialModal()">&#10005;</button>
+    <h3>&#127873; 3 kunlik bepul sinov</h3>
+    <p>Bir necha savolga javob bering — siz uchun eng yaxshi tajribani yaratamiz.</p>
+
+    <span class="modal-label">Men kimman?</span>
+    <div class="radio-group" id="whoGroup">
+      <label class="radio-item" data-group="who" onclick="selectRadio('who','curious',this)">
+        <input type="radio" name="who" value="curious">
+        <div class="radio-dot"></div>
+        <span class="radio-text">&#129300; Oddiy qiziquvchi</span>
+      </label>
+      <label class="radio-item" data-group="who" onclick="selectRadio('who','student',this)">
+        <input type="radio" name="who" value="student">
+        <div class="radio-dot"></div>
+        <span class="radio-text">&#127979; Talaba (student)</span>
+      </label>
+      <label class="radio-item" data-group="who" onclick="selectRadio('who','teacher',this)">
+        <input type="radio" name="who" value="teacher">
+        <div class="radio-dot"></div>
+        <span class="radio-text">&#128104;&#8205;&#127979; Ustoz / O'qituvchi</span>
+      </label>
+      <label class="radio-item" data-group="who" onclick="selectRadio('who','developer',this)">
+        <input type="radio" name="who" value="developer">
+        <div class="radio-dot"></div>
+        <span class="radio-text">&#128104;&#8205;&#128187; Dasturchi (developer)</span>
+      </label>
+    </div>
+
+    <span class="modal-label">Maqsadim nima?</span>
+    <div class="radio-group" id="purposeGroup">
+      <label class="radio-item" data-group="purpose" onclick="selectRadio('purpose','curious',this)">
+        <input type="radio" name="purpose" value="curious">
+        <div class="radio-dot"></div>
+        <span class="radio-text">&#128270; Shunchaki sinab ko'rish</span>
+      </label>
+      <label class="radio-item" data-group="purpose" onclick="selectRadio('purpose','learning',this)">
+        <input type="radio" name="purpose" value="learning">
+        <div class="radio-dot"></div>
+        <span class="radio-text">&#128218; Haqiqiy o'rganish — astoydil</span>
+      </label>
+    </div>
+
+    <span class="modal-label">Izoh <span style="color:var(--text-4);font-weight:400;text-transform:none">(ixtiyoriy — adminga biror savolingiz bo'lsa)</span></span>
+    <textarea class="modal-textarea" id="trialComment" placeholder="Masalan: Python kursini o'rganmoqchiman, sertifikat olay deb..."></textarea>
+
+    <button class="btn-modal-submit" id="trialSubmitBtn" onclick="submitTrial()" disabled>
+      Sinovni boshlash &#8594;
+    </button>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <h4 id="confirmTitle">Ishonchingiz komilmi?</h4>
+    <p id="confirmText">Sinovni bekor qilmoqchimisiz?</p>
+    <div class="confirm-btns">
+      <button class="btn-confirm-yes" id="confirmYesBtn">Ha, bekor qilish</button>
+      <button class="btn-confirm-no" onclick="closeConfirm()">Yo'q</button>
     </div>
   </div>
 </div>
 
-<div style="border-top:1px solid var(--border);padding:20px 0;">
-  <div class="container"><div class="footer-inner" style="padding:0;"><div class="footer-copy">© 2026 <span>OnOlam</span>. Barcha huquqlar himoyalangan.</div><div class="footer-links"><a href="#">Yordam</a><a href="#">Telegram</a></div></div></div>
+<!-- PRO RECOMMEND MODAL -->
+<div class="modal-overlay" id="proModal">
+  <div class="confirm-box">
+    <h4>&#128142; Pro tarifni ko'rib chiqing</h4>
+    <p>Sinovdan kechyapsiz — balki Pro tarif qiziqtirsa? Atigi $9/oy, barcha imkoniyatlar ochiq.</p>
+    <div class="confirm-btns">
+      <button class="btn-confirm-yes" style="background:rgba(0,255,65,.12);color:var(--neon);border-color:rgba(0,255,65,.3)!important;" onclick="closeProModal();buyPro()">Pro olish &#8594;</button>
+      <button class="btn-confirm-no" onclick="closeProModal()">Yo'q, rahmat</button>
+    </div>
+  </div>
 </div>
 
 <script src="js/burger.js"></script>
-<script src="js/api.js"></script>
-<script src="js/pricing.js"></script>
+<script src="js/api.js?v=99"></script>
 <script>
-let isYearly = false;
+const TG_URL = 'https://t.me/dasturlash_kiberhafsizlik';
+const TRIAL_KEY = 'onolam_trial';
+let countdownInterval = null;
+let trialForm = { who: '', purpose: '' };
 
-function toggleBilling(){
-  isYearly = !isYearly;
-  const sw     = document.getElementById('btSwitch');
-  const mLabel = document.getElementById('monthLabel');
-  const yLabel = document.getElementById('yearLabel');
-  const badge  = document.getElementById('saveBadge');
-
-  sw.classList.toggle('yearly', isYearly);
-  mLabel.classList.toggle('active', !isYearly);
-  yLabel.classList.toggle('active', isYearly);
-  badge.style.opacity = isYearly ? '1' : '.4';
-
-  document.getElementById('proAmount').textContent  = isYearly ? '6'  : '9';
-  document.getElementById('teamAmount').textContent = isYearly ? '4'  : '6';
-
-  const orig = document.getElementById('proOriginal');
-  orig.style.display = isYearly ? 'inline' : 'none';
+/* === HELPERS === */
+function getTrial() {
+  try { return JSON.parse(localStorage.getItem(TRIAL_KEY) || 'null'); } catch(e) { return null; }
+}
+function saveTrial(s) { localStorage.setItem(TRIAL_KEY, JSON.stringify(s)); }
+function isKey(form) { return form.who === 'student' && form.purpose === 'learning'; }
+function fmtDate(ms) {
+  const d = new Date(ms);
+  return d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' ' +
+    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+}
+function timeLeft(ms) {
+  const diff = ms - Date.now();
+  if (diff <= 0) return '0 s';
+  const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+  if (h > 0) return h + ' s ' + m + ' daq';
+  if (m > 0) return m + ' daqiqa ' + s + ' son';
+  return s + ' soniya';
 }
 
-function toggleFAQ(header){
-  const item = header.parentElement;
+/* === TRIAL RENDER === */
+function renderTrial() {
+  const state = getTrial();
+  const area = document.getElementById('trialActionArea');
+  if (!area) return;
+  const now = Date.now();
+
+  if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+
+  if (!state || state.status === 'none') {
+    area.innerHTML = '<button class="btn-trial-outline" onclick="openTrialModal()">Bepul sinab ko\'rish &rarr;</button>';
+    return;
+  }
+
+  /* WAITING state */
+  if (state.status === 'waiting') {
+    if (now >= state.activate_at) { state.status = 'active'; saveTrial(state); renderTrial(); return; }
+    const key = isKey(state.form);
+    area.innerHTML =
+      '<button class="btn-trial-outline" disabled>&#10004; Siz 3 kunlik sinovni oldingiz</button>' +
+      '<div class="trial-status-box">' +
+        '<div class="trial-countdown waiting" id="trialTimer">&#9203; Hisoblanmoqda...</div>' +
+        '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">' +
+          '<button class="btn-cancel-sm" onclick="cancelTrial()">Bekor qilish</button>' +
+        '</div>' +
+      '</div>';
+    countdownInterval = setInterval(function() {
+      const el = document.getElementById('trialTimer');
+      if (!el) { clearInterval(countdownInterval); return; }
+      const s2 = getTrial(); if (!s2) return;
+      const n2 = Date.now();
+      if (n2 >= s2.activate_at) { clearInterval(countdownInterval); s2.status = 'active'; saveTrial(s2); renderTrial(); return; }
+      el.innerHTML = '&#9203; ' + timeLeft(s2.activate_at) + ' dan keyin ishga tushadi &mdash; tugash: ' + fmtDate(s2.end_at);
+    }, 1000);
+    return;
+  }
+
+  /* ACTIVE state */
+  if (state.status === 'active') {
+    if (now >= state.end_at) { state.status = 'expired'; saveTrial(state); renderTrial(); return; }
+    const hasKey = isKey(state.form) && !state.key_used;
+    area.innerHTML =
+      '<button class="btn-trial-outline" disabled>&#10004; Siz 3 kunlik sinovni oldingiz</button>' +
+      (hasKey ? '<div class="trial-key-banner">&#128273; Siz kalitga egasiz! Sinovni 6 kunga uzaytira olasiz.</div>' : '') +
+      '<div class="trial-status-box">' +
+        '<div class="trial-countdown active" id="trialTimer">&#128308; Hisoblanmoqda...</div>' +
+        '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">' +
+          (hasKey ? '<button class="btn-key-sm" onclick="useKey()">&#128273; Kalitni ishlatish</button>' : '') +
+          '<button class="btn-cancel-sm" onclick="cancelTrial()">Bekor qilish</button>' +
+        '</div>' +
+      '</div>';
+    countdownInterval = setInterval(function() {
+      const el = document.getElementById('trialTimer');
+      if (!el) { clearInterval(countdownInterval); return; }
+      const s2 = getTrial(); if (!s2) return;
+      if (Date.now() >= s2.end_at) { clearInterval(countdownInterval); s2.status = 'expired'; saveTrial(s2); renderTrial(); return; }
+      el.innerHTML = '&#128308; Sinov tugaydi: ' + fmtDate(s2.end_at) + ' (' + timeLeft(s2.end_at) + ' qoldi)';
+    }, 1000);
+    return;
+  }
+
+  /* BONUS_ACTIVE state */
+  if (state.status === 'bonus_active') {
+    if (now >= state.bonus_end_at) { state.status = 'expired'; saveTrial(state); renderTrial(); return; }
+    area.innerHTML =
+      '<button class="btn-trial-outline" disabled>&#127381; Bonus sinov faol!</button>' +
+      '<div class="trial-status-box">' +
+        '<div class="trial-countdown active" id="trialTimer">&#128308; Hisoblanmoqda...</div>' +
+        '<button class="btn-cancel-sm" onclick="cancelTrial()">Bekor qilish</button>' +
+      '</div>';
+    countdownInterval = setInterval(function() {
+      const el = document.getElementById('trialTimer');
+      if (!el) { clearInterval(countdownInterval); return; }
+      const s2 = getTrial(); if (!s2) return;
+      if (Date.now() >= s2.bonus_end_at) { clearInterval(countdownInterval); s2.status = 'expired'; saveTrial(s2); renderTrial(); return; }
+      el.innerHTML = '&#128308; Bonus tugaydi: ' + fmtDate(s2.bonus_end_at) + ' (' + timeLeft(s2.bonus_end_at) + ' qoldi)';
+    }, 1000);
+    return;
+  }
+
+  /* EXPIRED state */
+  if (state.status === 'expired') {
+    const hasKey = isKey(state.form) && !state.key_used;
+    area.innerHTML =
+      '<button class="btn-trial-outline" disabled>Siz sinovni ishlatdingiz</button>' +
+      (hasKey ?
+        '<div class="trial-key-banner">&#128273; Sizda bonus sinov bor! Kalitni ishlatib yana 3 kun oling.</div>' +
+        '<div style="text-align:center;margin-top:8px">' +
+          '<button class="btn-key-sm" onclick="useKey()">&#128273; Kalitni ishlatish (bonus 3 kun)</button>' +
+        '</div>' : '');
+    return;
+  }
+}
+
+/* === MODAL === */
+function openTrialModal() {
+  const token = localStorage.getItem('onolam_access');
+  if (!token) { if(confirm('Sinov uchun avval tizimga kirish kerak. Kirasizmi?')) location.href='login.html'; return; }
+  const state = getTrial();
+  if (state && state.status !== 'none') { alert('Siz allaqachon sinovni oldingiz!'); return; }
+  trialForm = { who: '', purpose: '' };
+  document.querySelectorAll('.radio-item').forEach(function(el){ el.classList.remove('selected'); });
+  document.getElementById('trialComment').value = '';
+  document.getElementById('trialSubmitBtn').disabled = true;
+  document.getElementById('trialModal').classList.add('open');
+}
+function closeTrialModal() { document.getElementById('trialModal').classList.remove('open'); }
+
+function selectRadio(group, value, el) {
+  document.querySelectorAll('[data-group="' + group + '"]').forEach(function(r){ r.classList.remove('selected'); });
+  el.classList.add('selected');
+  if (group === 'who') trialForm.who = value;
+  if (group === 'purpose') trialForm.purpose = value;
+  document.getElementById('trialSubmitBtn').disabled = !(trialForm.who && trialForm.purpose);
+}
+
+function submitTrial() {
+  const token = localStorage.getItem('onolam_access');
+  if (!token) { closeTrialModal(); location.href='login.html'; return; }
+  const comment = document.getElementById('trialComment').value.trim();
+  const form = { who: trialForm.who, purpose: trialForm.purpose, comment: comment };
+  const key = isKey(form);
+  const now = Date.now();
+  const delayMs = key ? 24*60*60*1000 : 15*60*1000;
+  const activateAt = now + delayMs;
+  const endAt = activateAt + 3*24*60*60*1000;
+  const state = {
+    status: 'waiting', form: form, is_key: key, key_used: false,
+    submitted_at: now, activate_at: activateAt, end_at: endAt, bonus_end_at: null
+  };
+  saveTrial(state);
+  closeTrialModal();
+  const delayTxt = key ? '24 soatdan keyin' : '15 daqiqadan keyin';
+  alert('Sinov qabul qilindi!\n' + delayTxt + ' ishga tushadi.\nTugash vaqti: ' + fmtDate(endAt));
+  renderTrial();
+  if (key) {
+    const user = JSON.parse(localStorage.getItem('onolam_user')||'{}');
+    const msg = encodeURIComponent('Yangi kalit foydalanuvchi:\nKim: '+form.who+'\nMaqsad: '+form.purpose+'\nUsername: '+(user.username||'')+'\nEmail: '+(user.email||'')+'\nIzoh: '+(form.comment||'—'));
+    console.log('Key user: ' + msg);
+  }
+}
+
+/* === CANCEL === */
+function cancelTrial() {
+  const state = getTrial();
+  if (!state) return;
+  document.getElementById('confirmTitle').textContent = 'Sinovni bekor qilish';
+  document.getElementById('confirmText').textContent = 'Haqiqatan ham sinovni bekor qilmoqchimisiz?';
+  const yesBtn = document.getElementById('confirmYesBtn');
+  yesBtn.textContent = 'Ha, bekor qilish';
+  yesBtn.onclick = function() {
+    closeConfirm();
+    if (state.status === 'waiting') {
+      localStorage.removeItem(TRIAL_KEY);
+      renderTrial();
+    } else if (state.status === 'active' || state.status === 'bonus_active') {
+      document.getElementById('proModal').classList.add('open');
+      localStorage.removeItem(TRIAL_KEY);
+      renderTrial();
+    }
+  };
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeConfirm() { document.getElementById('confirmModal').classList.remove('open'); }
+function closeProModal() { document.getElementById('proModal').classList.remove('open'); }
+
+/* === KEY === */
+function useKey() {
+  const state = getTrial();
+  if (!state || !isKey(state.form) || state.key_used) return;
+  const now = Date.now();
+  state.key_used = true;
+  state.status = 'bonus_active';
+  state.bonus_end_at = now + 3*24*60*60*1000;
+  saveTrial(state);
+  alert('Kalit ishlatildi! Bonus 3 kunlik sinov boshlandi.\nTugash: ' + fmtDate(state.bonus_end_at));
+  renderTrial();
+}
+
+/* === PLAN CARDS === */
+function updatePlanCards() {
+  var user = JSON.parse(localStorage.getItem('onolam_user')||'{}');
+  var isPro = user.is_pro;
+  var freeBtn = document.getElementById('freePlanBtn');
+  var proBtn = document.getElementById('proBuyBtn');
+  var navBadge = document.getElementById('navProBadge');
+  var db = document.getElementById('drawerBadge');
+  var navUser = document.getElementById('navUsername');
+  var navFree = document.getElementById('navFreeBadge');
+  if (navUser && user.username) navUser.textContent = user.username;
+  if (isPro) {
+    if (navBadge) navBadge.style.display = 'inline-flex';
+    if (navFree) navFree.style.display = 'none';
+    if (freeBtn) { freeBtn.textContent = 'Free tarif'; freeBtn.disabled = true; freeBtn.style.opacity = '.5'; }
+    if (proBtn) { proBtn.textContent = 'Siz Pro foydalanuvchisiz'; proBtn.disabled = true; proBtn.style.opacity = '.5'; proBtn.onclick = null; }
+    if (db) { db.textContent = 'Pro'; db.className = 'badge badge-pro'; }
+    var trialArea = document.getElementById('trialActionArea');
+    if (trialArea) trialArea.innerHTML = '<button class="btn-trial-outline" disabled style="opacity:.4;cursor:not-allowed;">Siz Pro foydalanuvchisiz — sinov kerak emas</button>';
+  } else {
+    if (navBadge) navBadge.style.display = 'none';
+    if (navFree) navFree.style.display = 'inline-flex';
+    if (freeBtn) { freeBtn.textContent = 'Siz shu tarifdasiz'; freeBtn.disabled = true; freeBtn.style.opacity = '.5'; }
+    if (db) { db.textContent = 'Free'; db.className = 'badge badge-free'; }
+  }
+}
+
+/* === PRO BUY === */
+function buyPro() {
+  const token = localStorage.getItem('onolam_access');
+  if (!token) { if(confirm('Pro olish uchun avval kirish kerak. Kirasizmi?')) location.href='login.html'; return; }
+  const user = JSON.parse(localStorage.getItem('onolam_user')||'{}');
+  const msg = encodeURIComponent('Assalomu alaykum! Pro tarifni olmoqchiman.\nUsername: '+(user.username||'')+'\nEmail: '+(user.email||''));
+  window.open(TG_URL+'?text='+msg, '_blank');
+}
+
+/* === COURSE BUY === */
+function buyCourse(slug, title) {
+  const token = localStorage.getItem('onolam_access');
+  if (!token) { if(confirm('Kurs olish uchun avval kirish kerak. Kirasizmi?')) location.href='login.html'; return; }
+  const user = JSON.parse(localStorage.getItem('onolam_user')||'{}');
+  if (confirm('"'+ title +'" kursini sotib olmoqchimisiz?\nOK — Telegram ga yo\'naltirilasiz.')) {
+    const msg = encodeURIComponent('Assalomu alaykum! "'+title+'" kursini sotib olmoqchiman.\nUsername: '+(user.username||'')+'\nEmail: '+(user.email||''));
+    window.open(TG_URL+'?text='+msg, '_blank');
+  }
+}
+
+/* === FAQ === */
+function toggleFAQ(q) {
+  const item = q.parentElement;
   const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if(!isOpen) item.classList.add('open');
+  document.querySelectorAll('.faq-item').forEach(function(i){ i.classList.remove('open'); });
+  if (!isOpen) item.classList.add('open');
 }
+
+/* === INIT === */
+document.addEventListener('DOMContentLoaded', async function() {
+  updatePlanCards();
+  renderTrial();
+
+  const dn = document.getElementById('drawerName');
+  const user = JSON.parse(localStorage.getItem('onolam_user')||'{}');
+  if (dn && user.username) dn.textContent = user.username;
+
+  const token = localStorage.getItem('onolam_access');
+  const grid = document.getElementById('coursesGrid');
+  if (!token) {
+    if (grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-3);">Kurslarni ko\'rish uchun <a href="login.html" style="color:var(--neon)">kiring</a></div>';
+  } else {
+    try {
+      const res = await fetch(API_BASE + '/courses/', { headers: { 'Authorization': 'Bearer ' + token } });
+      const data = await res.json();
+      const courses = (data.results || data || []).filter(function(c){ return c.access_type === 'pro'; });
+      if (!grid) return;
+      if (!courses.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-3);">Hali Pro kurslar qo\'shilmagan</div>';
+      } else {
+        grid.innerHTML = courses.map(function(c) {
+          return '<div class="cbc" onclick="buyCourse(\''+ c.slug +'\',\''+ c.title +'\')">' +
+            '<div class="cbc-icon">'+(c.icon||'&#128218;')+'</div>' +
+            '<h4>'+c.title+'</h4>' +
+            '<p>'+(c.short_desc||'')+'</p>' +
+            '<div class="cbc-price">$5 / kurs</div>' +
+          '</div>';
+        }).join('');
+      }
+    } catch(e) { if(grid) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-3);">Kurslarni yuklashda xato</div>'; }
+  }
+
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('onolam_access'); localStorage.removeItem('onolam_refresh'); localStorage.removeItem('onolam_user');
+      location.href = 'login.html';
+    });
+  }
+});
 </script>
 </body>
 </html>
