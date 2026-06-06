@@ -73,7 +73,7 @@ window.startPayment = async function(plan, method) {
   if (btn) { btn.disabled = true; btn.textContent = 'Yuklanmoqda...'; }
 
   try {
-    const res  = await fetch('http://127.0.0.1:8000/api/v1/payments/create/', {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/payments/create/', {
       method:  'POST',
       headers: {
         'Authorization': 'Bearer ' + token,
