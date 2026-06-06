@@ -1,7 +1,3 @@
-
-
-
-
 document.addEventListener('DOMContentLoaded', async () => {
   const token = localStorage.getItem('onolam_access');
   if (!token) { window.location.href = 'login.html'; return; }
@@ -18,7 +14,7 @@ async function loadCourses() {
   if (!container) { console.error('coursesContainer topilmadi!'); return; }
 
   try {
-    const res  = await fetch('http://127.0.0.1:8000/api/v1/courses/', {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const data = await res.json();
@@ -152,7 +148,7 @@ window.openCoursePanel = async function(slug) {
     '<div style="padding:16px;color:var(--text-3);">Yuklanmoqda...</div>';
 
   try {
-    const res    = await fetch(`http://127.0.0.1:8000/api/v1/courses/${slug}/`, {
+    const res    = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/${slug}/`, {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const course = await res.json();
@@ -227,7 +223,7 @@ window.goToFirstLesson = function() {
 window.enrollCourse = async function(slug) {
   const token = localStorage.getItem('onolam_access');
   try {
-    const res  = await fetch(`http://127.0.0.1:8000/api/v1/courses/${slug}/enroll/`, {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/${slug}/enroll/`, {
       method:  'POST',
       headers: { 'Authorization': 'Bearer ' + token }
     });
