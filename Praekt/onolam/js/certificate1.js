@@ -33,14 +33,14 @@ async function loadCertificates() {
 
   try {
     // Sertifikatlar
-    const certRes  = await fetch('http://127.0.0.1:8000/api/v1/certificates/', {
+    const certRes  = await fetch('https://onolam-platforma.onrender.com/api/v1/certificates/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const certData = await certRes.json();
     const certs    = certData.certificates || [];
 
     // Kurslar (jarayonda hisoblash uchun)
-    const courseRes  = await fetch('http://127.0.0.1:8000/api/v1/courses/', {
+    const courseRes  = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const courseData = await courseRes.json();
@@ -218,7 +218,7 @@ window.downloadCert = async function(certId) {
   const token = localStorage.getItem('onolam_access');
   alert('PDF tayyorlanmoqda...');
   try {
-    const res  = await fetch(`http://127.0.0.1:8000/api/v1/certificates/${certId}/pdf/`, {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/certificates/${certId}/pdf/`, {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const blob = await res.blob();
