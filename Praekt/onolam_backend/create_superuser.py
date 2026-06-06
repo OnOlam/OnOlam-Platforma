@@ -8,12 +8,20 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-if not User.objects.filter(username='admin').exists():
+# Parolni environment variable'dan olish
+admin_password = os.environ.get('ADMIN_PASSWORD', 'default123')
+
+try:
+    admin = User.objects.get(username='admin')
+    admin.set_password(admin_password)
+    admin.is_superuser = True
+    admin.is_staff = True
+    admin.save()
+    print('Admin parol yangilandi!')
+except User.DoesNotExist:
     User.objects.create_superuser(
         username='admin',
         email='admin@onolam.uz',
-        password='Admin123!@#'
+        password=admin_password
     )
-    print('Superuser created!')
-else:
-    print('Superuser already exists.')
+    print('Admin yaratildi!')
