@@ -89,7 +89,7 @@ window.startPayment = async function(plan, method) {
         window.location.href = data.checkout_url;
       } else if (data.success || data.demo) {
         // Pro faollashdi — localStorage yangilash
-        const profileRes = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+        const profileRes = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         if (profileRes.ok) {
@@ -122,7 +122,7 @@ window.checkCoupon = async function() {
   if (btn) { btn.disabled = true; btn.textContent = 'Tekshirilmoqda...'; }
 
   try {
-    const res  = await fetch('http://127.0.0.1:8000/api/v1/payments/verify/', {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/payments/verify/', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ code })
