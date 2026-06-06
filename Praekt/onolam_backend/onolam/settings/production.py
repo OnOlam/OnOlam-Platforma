@@ -8,6 +8,8 @@ from .base import *
 
 DEBUG = False
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 # ── PostgreSQL ──
 DATABASES = {
     'default': dj_database_url.config(
@@ -67,9 +69,3 @@ LOGGING = {
         },
     },
 }
-
-
-
-# ── CORS ──
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
