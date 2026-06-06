@@ -7,19 +7,12 @@ from .base import *
 DEBUG = False
 
 # ── PostgreSQL ──
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME':     config('DB_NAME',     default='onolam_db'),
-        'USER':     config('DB_USER',     default='onolam_user'),
-        'PASSWORD': config('DB_PASSWORD', default=''),
-        'HOST':     config('DB_HOST',     default='localhost'),
-        'PORT':     config('DB_PORT',     default='5432'),
-        'CONN_MAX_AGE': 60,
-        'OPTIONS': {
-            'connect_timeout': 10,
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
 }
 
 # ── SECURITY ──
