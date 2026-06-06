@@ -47,18 +47,14 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
 # ── LOGGING ──
+import os
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/django.log',
-            'formatter': 'verbose',
-        },
-        'security_file': {
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs/security.log',
+        'console': {
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
     },
@@ -70,12 +66,12 @@ LOGGING = {
     },
     'loggers': {
         'django.security': {
-            'handlers': ['security_file'],
+            'handlers': ['console'],
             'level': 'WARNING',
             'propagate': False,
         },
         'onolam': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'INFO',
         },
     },
