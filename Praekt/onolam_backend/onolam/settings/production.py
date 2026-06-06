@@ -2,13 +2,13 @@
 OnOlam — Production Settings
 Server (onolam.uz) uchun sozlamalar
 """
+import os
+import dj_database_url
 from .base import *
 
 DEBUG = False
 
 # ── PostgreSQL ──
-import dj_database_url
-
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL')
@@ -40,8 +40,6 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
 # ── LOGGING ──
-import os
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
