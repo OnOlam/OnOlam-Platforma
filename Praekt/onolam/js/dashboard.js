@@ -10,7 +10,7 @@ async function loadDashboard() {
 
   // ── PROFIL ──
   try {
-    const res  = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     if (!res.ok) { localStorage.clear(); window.location.href = 'login.html'; return; }
@@ -63,7 +63,7 @@ async function loadDashboard() {
 
   // ── KURSLAR ──
   try {
-    const res     = await fetch('http://127.0.0.1:8000/api/v1/courses/', {
+    const res     = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const data    = await res.json();
