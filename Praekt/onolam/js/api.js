@@ -8,7 +8,7 @@
  */
 
 // ── SOZLAMA ──────────────────────────────────────────────
-const API_BASE = 'http://127.0.0.1:8000/api/v1';
+const API_BASE = 'https://onolam-platforma.onrender.com/api/v1';
 // Production da:
 // const API_BASE = 'https://api.onolam.uz/api/v1';
 
@@ -405,7 +405,7 @@ async function refreshUserProfile() {
   const token = localStorage.getItem('onolam_access');
   if (!token) return;
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/logout/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     if (res.ok) {
