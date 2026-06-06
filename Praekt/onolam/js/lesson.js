@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // AVVAL profil yangilaymiz
   try {
-    const profileRes = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const profileRes = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     if (profileRes.ok) {
@@ -54,7 +54,7 @@ async function loadLesson(id) {
   };
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/v1/courses/lessons/${id}/`, {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/lessons/${id}/`, {
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
@@ -97,7 +97,7 @@ async function loadLesson(id) {
     if (currentLesson.course_slug) {
       try {
         const courseRes = await fetch(
-          `http://127.0.0.1:8000/api/v1/courses/${currentLesson.course_slug}/`,
+          'https://onolam-platforma.onrender.com/api/v1/courses/${currentLesson.course_slug}/`,
           { headers: { 'Authorization': 'Bearer ' + token } }
         );
         if (courseRes.ok) {
@@ -327,7 +327,7 @@ window.completeLesson = async function() {
 
   try {
     const res  = await fetch(
-      `http://127.0.0.1:8000/api/v1/courses/lessons/${currentLesson.id}/complete/`,
+      `'https://onolam-platforma.onrender.com/api/v1/courses/lessons/${currentLesson.id}/complete/`,
       {
         method:  'POST',
         headers: {
@@ -403,7 +403,7 @@ window.sendAiMessage = async function() {
   }
 
   try {
-    const res  = await fetch('http://127.0.0.1:8000/api/v1/ai/chat/', {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/ai/chat/', {
       method:  'POST',
       headers: {
         'Authorization': 'Bearer ' + token,
