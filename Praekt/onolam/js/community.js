@@ -1,4 +1,4 @@
-const COMM_API = 'http://127.0.0.1:8000/api/v1';
+const COMM_API = 'https://onolam-platforma.onrender.com/api/v1';
 let currentChannel = 'umumiy';
 
 window.addEventListener('load', async () => {
@@ -32,7 +32,7 @@ window.addEventListener('load', async () => {
         const refresh = localStorage.getItem('onolam_refresh');
         if (token) {
           try {
-            await fetch('http://127.0.0.1:8000/api/v1/auth/logout/', {
+            await fetch('https://onolam-platforma.onrender.com/api/v1/auth/logout/', {
               method:  'POST',
               headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
               body:    JSON.stringify({ refresh_token: refresh || '' })
