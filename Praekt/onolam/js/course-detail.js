@@ -41,7 +41,7 @@ async function loadCourse(slug) {
   const set   = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val || ''; };
 
   try {
-    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/${slug}/`, {
+    const res  = await fetch(`https://onolam-platforma.onrender.com/api/v1/courses/${slug}/`, {
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
@@ -174,7 +174,7 @@ window.enrollOrContinue = async function() {
   // Yozilish
   try {
     const res  = await fetch(
-      'https://onolam-platforma.onrender.com/api/v1/courses/${currentCourse.slug}/enroll/`,
+      `https://onolam-platforma.onrender.com/api/v1/courses/${currentCourse.slug}/enroll/`,
       {
         method:  'POST',
         headers: { 'Authorization': 'Bearer ' + token }
