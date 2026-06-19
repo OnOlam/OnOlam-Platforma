@@ -405,7 +405,7 @@ async function refreshUserProfile() {
   const token = localStorage.getItem('onolam_access');
   if (!token) return;
   try {
-    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/logout/', {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     if (res.ok) {
