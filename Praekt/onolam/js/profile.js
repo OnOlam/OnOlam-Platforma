@@ -7,10 +7,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
+    // YANGI (to'g'ri):
     if (res.status === 401) {
       localStorage.clear();
       window.location.href = 'login.html';
       return;
+    }
+    if (!res.ok) {
+      console.error('Profile error:', res.status);
+      return; // logout QILMANG
     }
 
     const user = await res.json();
