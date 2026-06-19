@@ -125,20 +125,10 @@ window.openCoursePanel = async function(slug) {
   const token   = localStorage.getItem('onolam_access');
   const panel   = document.getElementById('detailPanel');
   const overlay = document.getElementById('panelOverlay');
+  
   // "Kursni to'liq ochish" havolasi
-   const detailLink = document.getElementById('panelDetailLink');
-    if (detailLink) detailLink.href = `course-detail.html?slug=${slug}`;
-  const btn = document.getElementById('panelBtn');
-    if (btn) {
-      if (course.is_enrolled) {
-        btn.innerHTML = `<button class="btn btn-neon btn-full btn-lg"
-          onclick="goToFirstLesson()">Davom ettirish →</button>`;
-      } else {
-        btn.innerHTML = `<button class="btn btn-neon btn-full btn-lg"
-          onclick="enrollCourse('${slug}')">Kursga yozilish →</button>`;
-      }
-    }
-  // Detail sahifasi havolasi
+  const detailLink = document.getElementById('panelDetailLink');
+  if (detailLink) detailLink.href = `course-detail.html?slug=${slug}`;
 
   if (!panel) return;
   panel.classList.add('open');
@@ -148,7 +138,8 @@ window.openCoursePanel = async function(slug) {
     '<div style="padding:16px;color:var(--text-3);">Yuklanmoqda...</div>';
 
   try {
-    const res    = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/${slug}/`, {
+    // ✅ BACKTICKS (`) ishlatildi!
+    const res = await fetch(`https://onolam-platforma.onrender.com/api/v1/courses/${slug}/`, {
       headers: { 'Authorization': 'Bearer ' + token }
     });
     const course = await res.json();
@@ -193,7 +184,7 @@ window.openCoursePanel = async function(slug) {
       `).join('');
     }
 
-    // Tugma
+    // ✅ Tugmani course yuklangandan KEYIN sozlash
     const btn = document.getElementById('panelBtn');
     if (btn) {
       if (course.is_enrolled) {
@@ -223,7 +214,8 @@ window.goToFirstLesson = function() {
 window.enrollCourse = async function(slug) {
   const token = localStorage.getItem('onolam_access');
   try {
-    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/courses/${slug}/enroll/`, {
+    // ✅ BACKTICKS (`) ishlatildi!
+    const res = await fetch(`https://onolam-platforma.onrender.com/api/v1/courses/${slug}/enroll/`, {
       method:  'POST',
       headers: { 'Authorization': 'Bearer ' + token }
     });
