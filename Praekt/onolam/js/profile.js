@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!token) { window.location.href = 'login.html'; return; }
 
   try {
-    const res  = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const res  = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
@@ -155,7 +155,7 @@ window.saveProfile = async function(btn) {
   if (btn) { btn.disabled = true; btn.textContent = 'Saqlanmoqda...'; }
 
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       method:  'PATCH',
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -199,7 +199,7 @@ window.changePassword = async function(btn) {
   if (btn) { btn.disabled = true; btn.textContent = 'O\'zgartirilmoqda...'; }
 
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/v1/auth/change-password/', {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/change-password/', {
       method:  'POST',
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -252,7 +252,7 @@ window.uploadAvatar = async function(input) {
   alert('Rasm yuklanmoqda...');
 
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       method:  'PATCH',
       headers: { 'Authorization': 'Bearer ' + token },
       body:    formData
@@ -284,7 +284,7 @@ window.deleteAvatar = async function() {
 
   const token = localStorage.getItem('onolam_access');
   try {
-    const res = await fetch('http://127.0.0.1:8000/api/v1/auth/profile/', {
+    const res = await fetch('https://onolam-platforma.onrender.com/api/v1/auth/profile/', {
       method:  'PATCH',
       headers: {
         'Authorization': 'Bearer ' + token,
