@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       headers: { 'Authorization': 'Bearer ' + token }
     });
 
-    if (!res.ok) {
+    if (res.status === 401) {
       localStorage.clear();
       window.location.href = 'login.html';
       return;
